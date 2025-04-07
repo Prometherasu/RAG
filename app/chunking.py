@@ -35,6 +35,6 @@ def process_all_markdown(input_folder="data/markdown", output_folder="data/chunk
             with open(json_path, "w", encoding="utf-8") as f:
                 json.dump(chunks, f, ensure_ascii=False, indent=2)
 
-            print(f" Chunks enregistrés : {json_path}")
+            print(f"Chunks enregistrés : {json_path}")
 
-process_all_markdown()
+#process_all_markdown()

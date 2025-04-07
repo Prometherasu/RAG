@@ -337,2498 +337,2379 @@
   },
   {
     "chunk_id": 48,
-    "content": "-----\n\n***Sufficient information***",
+    "content": "-----\n\n***Sufficient information***\n\n\n\n\nFigure 2: Classification of retrieval requirements for different tasks. In cases where information is\nnot provided, we differentiate tasks based on the functions of the model.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
     "chunk_id": 49,
-    "content": "|\"To be, or not to be, that is the \"The Renaissance was a question.\" cultural transformation in Please translate this sentence into European history, marking the French. < Translation > revival of arts, sciences, and humanistic thought. The \"Dave is attending his aunt's fervor of artists and",
-    "metadata": {
-      "source": "2407.01219v1.md"
-    }
-  },
-  {
-    "chunk_id": 50,
-    "content": "is attending his aunt's fervor of artists and scholars brother funeral today.\" propelled prosperity and Paraphrase the given information innovation in arts, literature, effectively. < Rewriting > and science.\" Give me a summary. < Summarization > Tom has three sisters, and each sister has a",
-    "metadata": {
-      "source": "2407.01219v1.md"
-    }
-  },
-  {
-    "chunk_id": 51,
-    "content": "> Tom has three sisters, and each sister has a brother. How many siblings are there in total? \"ChatGPT is a product of < Reasonning > OpenAI.\" Please provide the ownership Identify who is football players: relationship. Messi, Jordan, Kobe. < Information extraction > < Closed QA > Insufficient",
-    "metadata": {
-      "source": "2407.01219v1.md"
-    }
-  },
-  {
-    "chunk_id": 52,
-    "content": "extraction > < Closed QA > Insufficient information \"French.Washington played a Please find a novel that is as crucial role in the American famous as \"One Hundred Years Revolutionary War, leading the of Solitude\". < Search > Continental Army against the British. \" Please continue writing the Q: 3,1",
-    "metadata": {
-      "source": "2407.01219v1.md"
-    }
-  },
-  {
-    "chunk_id": 53,
-    "content": "the British. \" Please continue writing the Q: 3,1 A: 3 Q: 2,5 A: 5 above paragraph. Q: 5,7 A: ? < Continuation writing > < In-context learning > Background Knowledge|No Retrieval Needed Need to Retrieval Please give me a plan for holding a graduation party. < Planning > If I want to travel from Los",
-    "metadata": {
-      "source": "2407.01219v1.md"
-    }
-  },
-  {
-    "chunk_id": 54,
-    "content": "party. < Planning > If I want to travel from Los Angeles to New York and I want to choose the cheapest mode of transportation, should I drive or take a plane? < Decision making > I had a quarrel with my parents because they oppose my relationship with my boyfriend, but we genuinely love each other.",
-    "metadata": {
-      "source": "2407.01219v1.md"
-    }
-  },
-  {
-    "chunk_id": 55,
-    "content": "my boyfriend, but we genuinely love each other. How should I persuade my parents to accept our relationship? < Suggestion > Which city will the next World Cup be held? < Search > If you're currently a computer science student and your computer system encounters a malfunction, what should you do? <",
-    "metadata": {
-      "source": "2407.01219v1.md"
-    }
-  },
-  {
-    "chunk_id": 56,
-    "content": "encounters a malfunction, what should you do? < Role-play > Write an article about the geography of Europe, focusing on the changes in rainfall in the western part of the country. < Writing > No Background Knowledge|",
-    "metadata": {
-      "source": "2407.01219v1.md"
-    }
-  },
-  {
-    "chunk_id": 57,
-    "content": "|---|---|",
-    "metadata": {
-      "source": "2407.01219v1.md"
-    }
-  },
-  {
-    "chunk_id": 58,
-    "content": "Figure 2: Classification of retrieval requirements for different tasks. In cases where information is\nnot provided, we differentiate tasks based on the functions of the model.",
-    "metadata": {
-      "source": "2407.01219v1.md"
-    }
-  },
-  {
-    "chunk_id": 59,
     "content": "priate algorithm for practical implementation remains challenging. In this paper, we focus on best\npractices for applying RAG methods, advancing the understanding and application of RAG in LLMs.\n#### **3 RAG Workflow**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 60,
+    "chunk_id": 50,
     "content": "In this section, we detail the components of the RAG workflow. For each module, we review\ncommonly used approaches and select the default and alternative methods for our final pipeline.\nSection 4 will discuss best practices. Figure 1 presents the workflow and methods for each module.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 61,
+    "chunk_id": 51,
     "content": "Detailed experimental setups, including datasets, hyperparameters, and results are provided in\nAppendix A.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 62,
+    "chunk_id": 52,
     "content": "**3.1** **Query Classification**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 63,
+    "chunk_id": 53,
     "content": "Not all queries require retrieval-augmented due to the inherent capabilities of LLMs. While RAG can\nenhance information accuracy and reduce hallucinations, frequent retrieval can increase response\ntime. Therefore, we begin by classifying queries to determine the necessity of retrieval. Queries",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 64,
+    "chunk_id": 54,
     "content": "requiring retrieval proceed through the RAG modules; others are handled directly by LLMs.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 65,
+    "chunk_id": 55,
     "content": "Retrieval is generally recommended when knowledge beyond the model’s parameters is needed.\nHowever, the necessity of retrieval varies by task. For instance, an LLM trained up to 2023 can\nhandle a translation request for “ *Sora was developed by OpenAI* ” without retrieval. Conversely, an",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 66,
+    "chunk_id": 56,
     "content": "introduction request for the same topic would require retrieval to provide relevant information.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 67,
+    "chunk_id": 57,
     "content": "Therefore, we propose classifying tasks by type to determine if a query needs retrieval. We categorize\n\n15 tasks based on whether they provide sufficient information, with specific tasks and exam\n**Metrics**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 68,
+    "chunk_id": 58,
     "content": "ples illustrated in Figure 2. For tasks entirely **Model**\nbased on user-given information, we denote as Acc Prec Rec F1\n**“sufficient”**, which need not retrieval; otherwise, BERT-base-multilingual 0.95 0.96 0.94 0.95\nwe denote as **“insufficient”**, and retrieval may",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 69,
+    "chunk_id": 59,
     "content": "be necessary. We train a classifier to automate Table 1: Results of the Query Classifier.\nthis decision-making process. Experimental details are presented in Appendix A.1. Section 4\nexplores the impact of query classification on the workflow, comparing scenarios with and without\nclassification.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 70,
+    "chunk_id": 60,
     "content": "4\n\n\n-----\n\n**names** **p** **ace-Pt/msmarco**\n**Embedding Model**\n\nMRR@1 MRR@10 MRR@100 R@1 R@10 R@100",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 71,
+    "chunk_id": 61,
     "content": "BAAI/LLM-Embedder [20] 24 *.* 79 37 *.* 58 38 *.* 62 24 *.* 07 **66** ***.*** **45** **90** ***.*** **75**\nBAAI/bge-base-en-v1.5 [12] 23 *.* 34 35 *.* 80 36 *.* 94 22 *.* 63 64 *.* 12 90 *.* 13\nBAAI/bge-small-en-v1.5 [12] 23 *.* 27 35 *.* 78 36 *.* 89 22 *.* 65 63 *.* 92 89 *.* 80",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 72,
+    "chunk_id": 62,
     "content": "BAAI/bge-large-en-v1.5 [12] 24 *.* 63 37 *.* 48 38 *.* 59 23 *.* 91 65 *.* 57 90 *.* 60\nBAAI/bge-large-en [12] **24** ***.*** **84** **37** ***.*** **66** **38** ***.*** **73** **24** ***.*** **13** 66 *.* 09 90 *.* 64",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 73,
+    "chunk_id": 63,
     "content": "BAAI/bge-small-en [12] 23 *.* 28 35 *.* 79 36 *.* 91 22 *.* 62 63 *.* 96 89 *.* 67\nBAAI/bge-base-en [12] 23 *.* 47 35 *.* 94 37 *.* 07 22 *.* 73 64 *.* 17 90 *.* 14\nAlibaba-NLP/gte-large-en-v1.5 [21] 8 *.* 93 15 *.* 60 16 *.* 71 8 *.* 67 32 *.* 28 60 *.* 36",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 74,
+    "chunk_id": 64,
     "content": "thenlper/gte-base [21] 7 *.* 42 13 *.* 23 14 *.* 30 7 *.* 21 28 *.* 27 56 *.* 20\nthenlper/gte-small [21] 7 *.* 97 14 *.* 81 15 *.* 95 7 *.* 71 32 *.* 07 61 *.* 08\njinaai/jina-embeddings-v2-small-en [42] 8 *.* 07 15 *.* 02 16 *.* 12 7 *.* 87 32 *.* 55 60 *.* 36",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 75,
+    "chunk_id": 65,
     "content": "intfloat/e5-small-v2 [11] 10 *.* 04 18 *.* 23 19 *.* 41 9 *.* 74 38 *.* 92 68 *.* 42\nintfloat/e5-large-v2 [11] 9 *.* 58 17 *.* 94 19 *.* 03 9 *.* 35 39 *.* 00 66 *.* 11\nsentence-transformers/all-m p net-base-v2 5 *.* 80 11 *.* 26 12 *.* 26 5 *.* 66 25 *.* 57 50 *.* 94",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 76,
+    "chunk_id": 66,
     "content": "Table 2: Results for different embedding models on namespace-Pt/msmarco.\n\n**3.2** **Chunking**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 77,
+    "chunk_id": 67,
     "content": "**3.2** **Chunking**\n\nChunking documents into smaller segments is crucial for enhancing retrieval precision and avoiding\nlength issues in LLMs. This process can be applied at various levels of granularity, such as token,\nsentence, and semantic levels.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 78,
+    "chunk_id": 68,
     "content": "- **Token-level Chunking** is straightforward but may split sentences, affecting retrieval quality.\n\n- **Semantic-level Chunking** uses LLMs to determine breakpoints, context-preserving but timeconsuming.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 79,
+    "chunk_id": 69,
     "content": "- **Sentence-level Chunking** balances preserving text semantics with simplicity and efficiency.\n\nIn this study, we use **sentence-level chunkin** **g**, balancing simplicity and semantic preservation. We\nexamine chunking from four dimensions.\n\n**3.2.1** **Chunk Size**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 80,
+    "chunk_id": 70,
     "content": "**3.2.1** **Chunk Size**\n\nChunk size significantly impacts performance. Larger chunks provide more context, enhancing\ncomprehension but increasing process time. Smaller chunks improve retrieval recall and reduce time\nbut may lack sufficient context.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 81,
+    "chunk_id": 71,
     "content": "Finding the optimal chunk size involves a balance between some metrics such as faithfulness, and\nrelevancy. Faithfulness measures whether the response is hallucinated or matches the retrieved texts.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 82,
+    "chunk_id": 72,
     "content": "Relevancy measures whether the retrieved texts\nand responses match queries. We use the **l** **y** **ft_2021**\nevaluation module of LlamaIndex [ 43 ] to calculate the metrics above. For embedding, **Chunk Size** Average Average\nwe use the text-embedding-ada-002 [2] model, Faithfulness Relevanc y",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 83,
+    "chunk_id": 73,
     "content": "2048 80 *.* 37 91 *.* 11\n\nwhich supports long input length. We choose\n\n1024 94 *.* 26 95 *.* 56",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 84,
+    "chunk_id": 74,
     "content": "zephyr-7b-alpha [3] and gpt-3.5-turbo [4] as 512 **97** ***.*** **59** 97 *.* 41\ngeneration model and evaluation model respec- 256 97 *.* 22 **97** ***.*** **78**\ntively. The size of the chunk overlap is 20 tokens. 128 95 *.* 74 97 *.* 22\nFirst sixty pages of the document lyft_2021 [5]",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 85,
+    "chunk_id": 75,
     "content": "First sixty pages of the document lyft_2021 [5]\nare used as corpus, then prompting LLMs to Table 3: Comparison of different chunk sizes.\ngenerate about one hundred and seventy queries\naccording to chosen corpus. The impact of different chunk sizes is shown in Table 3.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 86,
+    "chunk_id": 76,
     "content": "2 [https://platform.openai.com/docs/guides/embeddings/embedding-models](https://platform.openai.com/docs/guides/embeddings/embedding-models)\n3 [https://huggingface.co/HuggingFaceH4/zephyr-7b-alpha](https://huggingface.co/HuggingFaceH4/zephyr-7b-alpha)",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 87,
+    "chunk_id": 77,
     "content": "4 [https://www.openai.com/](https://www.openai.com/)\n5 [https://raw.githubusercontent.com/run-llama/llama_index/main/docs/docs/examples/](https://raw.githubusercontent.com/run-llama/llama_index/main/docs/docs/examples/data/10k/lyft_2021.pdf)",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 88,
+    "chunk_id": 78,
     "content": "[data/10k/lyft_2021.pdf](https://raw.githubusercontent.com/run-llama/llama_index/main/docs/docs/examples/data/10k/lyft_2021.pdf)",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 89,
+    "chunk_id": 79,
     "content": "5\n\n\n-----\n\n**3.2.2** **Chunking Techniques**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 90,
+    "chunk_id": 80,
     "content": "Advanced techniques such as small-to-big and sliding window improve retrieval quality by organizing\nchunk block relationships. Small-sized blocks are used to match queries, and larger blocks that\ninclude the small ones along with contextual information are returned.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 91,
+    "chunk_id": 81,
     "content": "To demonstrate the effectiveness of advanced chunking techniques, we use the LLM-Embedder [ 20 ]\nmodel as an embedding model. The smaller chunk size is 175 tokens, the larger chunk size is 512\ntokens and the chunk overlap is 20 tokens. Techniques like small-to-big and sliding window improve",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 92,
+    "chunk_id": 82,
     "content": "retrieval quality by maintaining context and ensuring relevant information is retrieved. Detailed\nresults are shown in Table 4.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 93,
+    "chunk_id": 83,
     "content": "**3.2.3** **Embedding Model Selection**\n\nChoosing the right embedding model is crucial for effective semantic matching of queries\nand chunk blocks. We use the evaluation module of FlagEmbedding [6] which uses the dataset",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 94,
+    "chunk_id": 84,
     "content": "namespace-Pt/msmarco [7] as queries and\ndataset namespace-Pt/msmarco-corpus [8] as\n\n**l** **y** **ft_2021**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 95,
+    "chunk_id": 85,
     "content": "**l** **y** **ft_2021**\n\ncorpus to choose the appropriate open source\nembedding model. As shown in Table 2, **Chunk Skill** Average Average\nLLM-Embedder [ 20 ] achieves comparable Faithfulness Relevanc y\nresults with BAAI/bge-large-en [ 12 ], however, Original 95 *.* 74 95 *.* 37",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 96,
+    "chunk_id": 86,
     "content": "small2big 96 *.* 67 95 *.* 37\n\nthe size of the former is three times smaller\n\nslidin g window **97** ***.*** **41** **96** ***.*** **85**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 97,
+    "chunk_id": 87,
     "content": "than that of the latter. Thus, we select the\n**LLM** **-** **Embedder** [ 20 ] for its balance of Table 4: Comparison of different chunk skills.\nperformance and size.\n\n**3.2.4** **Metadata Addition**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 98,
+    "chunk_id": 88,
     "content": "Enhancing chunk blocks with metadata like titles, keywords, and hypothetical questions can improve\nretrieval, provide more ways to post-process retrieved texts, and help LLMs better understand\nretrieved information. A detailed study on metadata inclusion will be addressed in future work.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 99,
+    "chunk_id": 89,
     "content": "**3.3** **Vector Databases**\n\nVector databases store embedding vectors with their metadata, enabling efficient retrieval of documents relevant to queries through various indexing and approximate nearest neighbor (ANN)\nmethods.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 100,
+    "chunk_id": 90,
     "content": "To select an appropriate vector database for our research, we evaluated several options based on\nfour key criteria: multiple index types, billion-scale vector support, hybrid search, and cloud-native",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 101,
+    "chunk_id": 91,
     "content": "capabilities. These criteria were chosen for their\nimpact on flexibility, scalability, and ease of **Multiple** **Billion-** **Hybrid** **Cloud-**\ndeployment in modern, cloud-based infrastruc- **Index T** **yp** **e** **Scale** **Search** **Native**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 102,
+    "chunk_id": 92,
     "content": "tures. Multiple index types provide the flexibil- Weaviate ✗ ✗ ✓ ✓\nity to optimize searches based on different data Faiss ✓ ✗ ✗ ✗\ncharacteristics and use cases. Billion-scale vec- Chroma ✗ ✗ ✓ ✓\ntor support is crucial for handling large datasets Qdrant ✗ ✓ ✓ ✓",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 103,
+    "chunk_id": 93,
     "content": "in LLM applications. Hybrid search combines **Milvus** ✓ ✓ ✓ ✓\nvector search with traditional keyword search,",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 104,
-    "content": "|Database|Multiple Index Type|Billion- Scale|Hybrid Search|Cloud- Native|\n|---|---|---|---|---|\n|Weaviate Faiss Chroma Qdrant Milvus|✗ ✓ ✗ ✗ ✓|✗ ✗ ✗ ✓ ✓|✓ ✗ ✓ ✓ ✓|✓ ✗ ✓ ✓ ✓|\n\n\nTable 5: Comparison of Various Vector Databases",
+    "chunk_id": 94,
+    "content": "Table 5: Comparison of Various Vector Databases",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 105,
+    "chunk_id": 95,
     "content": "enhancing retrieval accuracy. Finally, cloudnative capabilities ensure seamless integration, scalability, and management in cloud environments.\nTable 5 presents a detailed comparison of five open-source vector databases: **Weaviate**, **Faiss**,\n**Chroma**, **Qdrant**, and **Milvus** .",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 106,
+    "chunk_id": 96,
     "content": "Our evaluation indicates that **Milvus** stands out as the most comprehensive solution among the\ndatabases evaluated, meeting all the essential criteria and outperforming other open-source options.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 107,
+    "chunk_id": 97,
     "content": "6 [https://github.com/FlagOpen/FlagEmbedding](https://github.com/FlagOpen/FlagEmbedding)\n7 [https://huggingface.co/datasets/namespace-Pt/msmarco](https://huggingface.co/datasets/namespace-Pt/msmarco)",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 108,
+    "chunk_id": 98,
     "content": "8 [https://huggingface.co/datasets/namespace-Pt/msmarco-corpus](https://huggingface.co/datasets/namespace-Pt/msmarco-corpus)",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 109,
+    "chunk_id": 99,
     "content": "6\n\n\n-----\n\n**TREC DL19** **TREC DL20**\n**Method**\n\nmAP nDCG@10 R@50 R@1k Latenc y mAP nDCG@10 R@50 R@1k Latenc y\n*unsupervised*\nBM25 30 *.* 13 50 *.* 58 38 *.* 32 75 *.* 01 **0** ***.*** **07** 28 *.* 56 47 *.* 96 46 *.* 18 78 *.* 63 **0** ***.*** **29**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 110,
+    "chunk_id": 100,
     "content": "Contriever 23 *.* 99 44 *.* 54 37 *.* 54 74 *.* 59 3 *.* 06 23 *.* 98 42 *.* 13 43 *.* 81 75 *.* 39 0 *.* 98",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 111,
+    "chunk_id": 101,
     "content": "*supervised*\nLLM-Embedder 44 *.* 66 70 *.* 20 49 *.* 06 84 *.* 48 2 *.* 61 45 *.* 60 68 *.* 76 61 *.* 36 84 *.* 41 0 *.* 71\n+ Query Rewriting 44 *.* 56 67 *.* 89 51 *.* 45 85 *.* 35 7 *.* 80 45 *.* 16 65 *.* 62 59 *.* 63 83 *.* 45 2 *.* 06",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 112,
+    "chunk_id": 102,
     "content": "+ Query Decomposition 41 *.* 93 66 *.* 10 48 *.* 66 82 *.* 62 14 *.* 98 43 *.* 30 64 *.* 95 57 *.* 74 84 *.* 18 2 *.* 01\n+ HyDE 50 *.* 87 **75** ***.*** **44** 54 *.* 93 88 *.* 76 7 *.* 21 50 *.* 94 **73** ***.*** **94** 63 *.* 80 88 *.* 03 2 *.* 14",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 113,
+    "chunk_id": 103,
     "content": "+ Hybrid Search 47 *.* 14 72 *.* 50 51 *.* 13 89 *.* 08 3 *.* 20 47 *.* 72 69 *.* 80 64 *.* 32 88 *.* 04 0 *.* 77",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 114,
+    "chunk_id": 104,
     "content": "+ H y DE + H y brid Search **52** ***.*** **13** 73 *.* 34 **55** ***.*** **38** **90** ***.*** **42** 11 *.* 16 **53** ***.*** **13** 72 *.* 72 **66** ***.*** **14** **90** ***.*** **67** 2 *.* 95",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 115,
+    "chunk_id": 105,
     "content": "Table 6: Results for different retrieval methods on TREC DL19/20. The best result for each method\n\nis made bold and the second is underlined.\n\n**TREC DL19** **TREC DL20**\n**Configuration**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 116,
+    "chunk_id": 106,
     "content": "mAP nDCG@10 R@50 R@1k latenc y mAP nDCG@10 R@50 R@1k Latenc y\nHyDE\nw/ 1 pseudo-doc 48 *.* 77 72 *.* 49 53 *.* 20 87 *.* 73 8 *.* 08 51 *.* 31 70 *.* 37 63 *.* 28 87 *.* 81 **2** ***.*** **09**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 117,
+    "chunk_id": 107,
     "content": "w/ 1 pseudo-doc + query 50 *.* 87 **75** ***.*** **44** **54** ***.*** **93** 88 *.* 76 **7** ***.*** **21** 50 *.* 94 **73** ***.*** **94** 63 *.* 80 88 *.* 03 2 *.* 14",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 118,
+    "chunk_id": 108,
     "content": "w/ 8 p seudo-doc + q uer y **51** ***.*** **64** 75 *.* 12 54 *.* 51 **89** ***.*** **17** 14 *.* 15 **53** ***.*** **14** 73 *.* 65 **65** ***.*** **79** **88** ***.*** **67** 3 *.* 44",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 119,
+    "chunk_id": 109,
     "content": "Table 7: HyDE with different concatenation of hypothetical documents and queries.\n\n**3.4** **Retrieval Methods**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 120,
+    "chunk_id": 110,
     "content": "Given a user query, the retrieval module selects the top- *k* relevant documents from a pre-built corpus\nbased on the similarity between the query and the documents. The generation model then uses\nthese documents to formulate an appropriate response to the query. However, original queries often",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 121,
+    "chunk_id": 111,
     "content": "underperform due to poor expression and lack of semantic information [ 6 ], negatively impacting the\nretrieval process. To address these issues, we evaluated three query transformation methods using the\nLLM-Embedder recommended in Section 3.2 as the query and document encoder:",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 122,
+    "chunk_id": 112,
     "content": "- **Query Rewriting** : Query rewriting refines queries to better match relevant documents. Inspired\nby the Rewrite-Retrieve-Read framework [ 9 ], we prompt an LLM to rewrite queries to enhance\nperformance.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 123,
+    "chunk_id": 113,
     "content": "- **Query Decomposition** : This approach involves retrieving documents based on sub-questions\nderived from the original query, which is more complex to comprehend and handle.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 124,
+    "chunk_id": 114,
     "content": "- **Pseudo-documents Generation** : This approach generates a hypothetical document based on the\nuser query and uses the embedding of hypothetical answers to retrieve similar documents. One\nnotable implement is HyDE [10],",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 125,
+    "chunk_id": 115,
     "content": "Recent studies, such as [ 44 ], indicate that combining lexical-based search with vector search significantly enhances performance. In this study, we use BM25 for sparse retrieval and Contriever [ 45 ], an",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 126,
+    "chunk_id": 116,
     "content": "unsupervised contrastive encoder, for dense retrieval, serving as two robust baselines based on Thakur\net al. [46].",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 127,
+    "chunk_id": 117,
     "content": "**3.4.1** **Results for different retrieval methods**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 128,
+    "chunk_id": 118,
     "content": "We evaluated the performance of different search methods on the TREC DL 2019 and 2020 passage\nranking datasets. The results presented in Table 6 show that supervised methods significantly\noutperformed unsupervised methods. Combining with HyDE and hybrid search, LLM-Embedder",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 129,
+    "chunk_id": 119,
     "content": "achieves the highest scores. However, query rewriting and query decomposition did not enhance\nretrieval performance as effectively. Considering the best performance and tolerated latency, we",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 130,
+    "chunk_id": 120,
     "content": "recommend **H** **y** **brid Search with H** **y** **DE** as the default retrieval method. Taking efficiency into\nconsideration, **Hybrid Search** combines sparse retrieval (BM25) and dense retrieval (Original\nembedding) and achieves notable performance with relatively low latency.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 131,
+    "chunk_id": 121,
     "content": "**3.4.2** **HyDE with Different Concatenation of Documents and Query**\n\nTable 7 shows the impact of different concatenation strategies for hypothetical documents and queries\nusing HyDE. Concatenating multiple pseudo-documents with the original query can significantly\n\n7\n\n\n-----",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 132,
+    "chunk_id": 122,
     "content": "7\n\n\n-----\n\n**TREC DL19** **TREC DL20**\n**Hyperparameter**\n\nmAP nDCG@10 R@50 R@1k latenc y mAP nDCG@10 R@50 R@1k Latenc y\nHybrid Search\n*α* = 0.1 46 *.* 00 70 *.* 87 49 *.* 24 88 *.* 89 2 *.* 98 46 *.* 54 69 *.* 05 63 *.* 36 87 *.* 32 0 *.* 90",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 133,
+    "chunk_id": 123,
     "content": "*α* = 0.3 47 *.* 14 **72** ***.*** **50** 51 *.* 13 **89** ***.*** **08** 3 *.* 20 **47** ***.*** **72** **69** ***.*** **80** 64 *.* 32 **88** ***.*** **04** **0** ***.*** **77**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 134,
+    "chunk_id": 124,
     "content": "*α* = 0.5 **47** ***.*** **36** 72 *.* 24 **52** ***.*** **71** 88 *.* 09 3 *.* 02 47 *.* 19 68 *.* 12 **64** ***.*** **90** 87 *.* 86 0 *.* 87\n\n*α* = 0.7 47 *.* 21 71 *.* 89 52 *.* 40 88 *.* 01 3 *.* 15 45 *.* 82 67 *.* 30 64 *.* 23 87 *.* 92 1 *.* 02",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 135,
+    "chunk_id": 125,
     "content": "*α* = 0.9 46 *.* 35 70 *.* 67 52 *.* 64 88 *.* 22 **2** ***.*** **74** 44 *.* 02 65 *.* 55 63 *.* 22 87 *.* 76 1 *.* 20\n\nTable 8: Results of hybrid search with different alpha values.\n\n**MS MARCO Passa** **g** **e rankin** **g**\n**Method**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 136,
-    "content": "Base Model # Params MRR@1 MRR@10 MRR@1k Hit Rate@10 Latenc y\n*w/o Reranking*\nRandom Ordering - - 0 *.* 011 0 *.* 027 0 *.* 068 0 *.* 092 BM25 - - 6 *.* 52 11 *.* 65 12 *.* 59 24 *.* 63 \n*DLM Reranking*\nmonoT5 T5-base 220M 21 *.* 62 31 *.* 78 32 *.* 40 54 *.* 07 **4** ***.*** **5**",
+    "chunk_id": 126,
+    "content": "Base Model # Params MRR@1 MRR@10 MRR@1k Hit Rate@10 Latenc y\n*w/o Reranking*\nRandom Ordering - - 0 *.* 011 0 *.* 027 0 *.* 068 0 *.* 092 BM25 - - 6 *.* 52 11 *.* 65 12 *.* 59 24 *.* 63\n*DLM Reranking*\nmonoT5 T5-base 220M 21 *.* 62 31 *.* 78 32 *.* 40 54 *.* 07 **4** ***.*** **5**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 137,
+    "chunk_id": 127,
     "content": "monoBERT BERT-large 340M 21 *.* 65 31 *.* 69 32 *.* 35 53 *.* 38 15 *.* 8\nRankLLaMA Llama-2-7b 7B **22** ***.*** **08** **32** ***.*** **35** **32** ***.*** **97** **54** ***.*** **53** 82 *.* 4",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 138,
+    "chunk_id": 128,
     "content": "*TILDE Reranking*\nTILDEv2 BERT-base 110M 18 *.* 57 27 *.* 83 28 *.* 60 49 *.* 07 **0** ***.*** **02**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 139,
+    "chunk_id": 129,
     "content": "Table 9: Results of different reranking methods on the dev set of the MS MARCO Passage ranking\ndataset. For each query, the top-1000 candidate passages retrieved by BM25 are reranked. Latency is\nmeasured in seconds per query.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 140,
+    "chunk_id": 130,
     "content": "enhance retrieval performance, though at the cost of increased latency, suggesting a trade-off between\nretrieval effectiveness and efficiency. However, indiscriminately increasing the number of hypothetical",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 141,
+    "chunk_id": 131,
     "content": "documents does not yield significant benefits and substantially raises latency, indicating that using a\nsingle hypothetical document is sufficient.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 142,
+    "chunk_id": 132,
     "content": "**3.4.3** **Hybrid Search with Different Weight on Sparse Retrieval**\n\nTable 8 presents the impact of different *α* values in hybrid search, where *α* controls the weighting\nbetween sparse retrieval and dense retrieval components. The relevance score is calculated as follows:",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 143,
+    "chunk_id": 133,
     "content": "*S* *h* = *α · S* *s* + *S* *d* (1)\n\nwhere *S* *s*, *S* *d* are the normalized relevance scores from sparse retrieval and dense retrieval respectively,\nand *S* *h* is the total retrieval score.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 144,
+    "chunk_id": 134,
     "content": "We evaluated five different *α* values to determine their influence on performance. The results indicate\nthat an *α* value of 0.3 yields the best performance, demonstrating that appropriate adjustment of",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 145,
+    "chunk_id": 135,
     "content": "*α* can enhance retrieval effectiveness to a certain extent. Therefore, we selected *α* = 0 *.* 3 for our\nretrieval and main experiments. Additional implementation details are presented in Appendix A.2.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 146,
+    "chunk_id": 136,
     "content": "**3.5** **Reranking Methods**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 147,
+    "chunk_id": 137,
     "content": "After the initial retrieval, a reranking phase is employed to enhance the relevance of the retrieved\ndocuments, ensuring that the most pertinent information appears at the top of the list. This phase uses",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 148,
+    "chunk_id": 138,
     "content": "more precise and time-intensive methods to reorder documents effectively, increasing the similarity\nbetween the query and the top-ranked documents.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 149,
+    "chunk_id": 139,
     "content": "We consider two approaches in our reranking module: **DLM Reranking**, which utilizes classification, and **TILDE Reranking**, which focuses on query likelihoods. These approaches prioritize\nperformance and efficiency, respectively.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 150,
+    "chunk_id": 140,
     "content": "- **DLM Reranking:** This method leverages deep language models (DLMs) [ 25 – 27 ] for reranking.\nThese models are fine-tuned to classify document relevancy to a query as “true” or “false”. During\nfine-tuning, the model is trained with concatenated query and document inputs, labeled by relevancy.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 151,
+    "chunk_id": 141,
     "content": "At inference, documents are ranked based on the probability of the “true” token.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 152,
+    "chunk_id": 142,
     "content": "- **TILDE Reranking:** TILDE [ 28, 29 ] calculates the likelihood of each query term independently\nby predicting token probabilities across the model’s vocabulary. Documents are scored by summing\n\n8\n\n\n-----",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 153,
+    "chunk_id": 143,
     "content": "8\n\n\n-----\n\n**N** **Q** **T** **Q** **A** **HotPot** **Q** **A**\n**Method** **Avg.** **Avg. Token**\nF1 #token F1 #token F1 #token\n\n*w/o Summarization*\nOri g in Prom p t 27 *.* 07 124 33 *.* 61 152 33 *.* 92 141 31 *.* 53 139\n*Extractive Method*",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 154,
+    "chunk_id": 144,
     "content": "BM25 27 *.* 97 40 32 *.* 44 59 28 *.* 00 63 29 *.* 47 54\n\nContriever 23 *.* 62 42 33 *.* 79 65 23 *.* 64 60 27 *.* 02 56\nRecom p ( extractive ) 27 *.* 84 34 35 *.* 32 60 29 *.* 46 58 30 *.* 87 51\n*Abstractive Method*",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 155,
+    "chunk_id": 145,
     "content": "SelectiveContext 25 *.* 05 65 34 *.* 25 70 **34** ***.*** **43** 66 31 *.* 24 67\nLongLLMlingua 21 *.* 32 51 32 *.* 81 56 30 *.* 79 57 28 *.* 29 55\nRecom p ( abstractive ) **33** ***.*** **68** 59 **35** ***.*** **87** 61 29 *.* 01 57 **32** ***.*** **85** 59",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 156,
+    "chunk_id": 146,
     "content": "Table 10: Comparison between different summarization methods.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 157,
+    "chunk_id": 147,
     "content": "the pre-calculated log probabilities of query tokens, allowing for rapid reranking at inference.\nTILDEv2 improves this by indexing only document-present tokens, using NCE loss, and expanding\ndocuments, thus enhancing efficiency and reducing index size.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 158,
+    "chunk_id": 148,
     "content": "Our experiments were conducted on the MS MARCO Passage ranking dataset [ 47 ], a large-scale\ndataset for machine reading comprehension. We follow and make modifications to the implementation\nprovided by PyGaggle [ 26 ] and TILDE [ 28 ], using the models monoT5, monoBERT, RankLLaMA",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 159,
+    "chunk_id": 149,
     "content": "and TILDEv2. Reranking results are shown in Table 9. We recommend **monoT5** as a comprehensive\nmethod balancing performance and efficiency. **RankLLaMA** is suitable for achieving the best\nperformance, while **TILDEv2** is ideal for the quickest experience on a fixed collection. Details on",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 160,
+    "chunk_id": 150,
     "content": "the experimental setup and results are presented in Appendix A.3.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 161,
+    "chunk_id": 151,
     "content": "**3.6** **Document Repacking**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 162,
+    "chunk_id": 152,
     "content": "The performance of subsequent processes, such as LLM response generation, may be affected by the\norder documents are provided. To address this issue, we incorporate a compact repacking module into",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 163,
+    "chunk_id": 153,
     "content": "the workflow after reranking, featuring three repacking methods: **“forward”**, **“reverse”** and **“sides”** .\nThe “forward” method repacks documents by descending relevancy scores from the reranking phase,",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 164,
+    "chunk_id": 154,
     "content": "whereas the “reverse” arranges them in ascending order. Inspired by Liu et al. [48], concluding that\noptimal performance is achieved when relevant information is placed at the head or tail of the input,\nwe also include a “sides” option.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 165,
+    "chunk_id": 155,
     "content": "Since the repacking method primarily affects subsequent modules, we select the best repacking\nmethod in Section 4 by testing it in combination with other modules. In this section, we choose the\n**“** **sides** **”** method as the default repacking method.\n\n**3.7** **Summarization**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 166,
+    "chunk_id": 156,
     "content": "Retrieval results may contain redundant or unnecessary information, potentially preventing LLMs\nfrom generating accurate responses. Additionally, long prompts can slow down the inference process.\nTherefore, efficient methods to summarize retrieved documents are crucial in the RAG pipeline.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 167,
+    "chunk_id": 157,
     "content": "Summarization tasks can be **extractive** or **abstractive** . Extractive methods segment text into sentences, then score and rank them based on importance. Abstractive compressors synthesize information from multiple documents to rephrase and generate a cohesive summary. These tasks can be",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 168,
+    "chunk_id": 158,
     "content": "query-based or non-query-based. In this paper, as RAG retrieves information relevant to queries, we\nfocus exclusively on query-based methods.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 169,
+    "chunk_id": 159,
     "content": "- **Recomp:** Recomp [ 23 ] has extractive and abstractive compressors. The extractive compressor\nselects useful sentences, while the abstractive compressor synthesizes information from multiple\ndocuments.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 170,
+    "chunk_id": 160,
     "content": "- **LongLLMLingua:** LongLLMLingua [ 49 ] improves LLMLingua by focusing on key information related to the query.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 171,
+    "chunk_id": 161,
     "content": "- **Selective Context** Selective Context enhances LLM efficiency by identifying and removing\nredundant information in the input context. It evaluates the informativeness of lexical units using\n\n9\n\n\n-----",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 172,
+    "chunk_id": 162,
     "content": "9\n\n\n-----\n\nself-information computed by a base causal language model. This method is non-query-based,\nallowing a comparison between query-based and non-query-based approaches.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 173,
+    "chunk_id": 163,
     "content": "We evaluate these methods on three benchmark datasets: NQ, TriviaQA, and HotpotQA. Comparative\nresults of different summarization methods are shown in Table 10. We recommend **Recom** **p** for\nits outstanding performance. LongLLMLingua does not perform well but demonstrates better",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 174,
+    "chunk_id": 164,
     "content": "generalization capabilities as it was not trained on these experimental datasets. Therefore, we consider\nit as an alternative method. Additional implementation details and discussions on non-query-based\nmethods are provided in Appendix A.4.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 175,
+    "chunk_id": 165,
     "content": "**3.8** **Generator Fine-tuning**\n\nIn this section, we focus on fine-tuning the generator while leaving retriever fine-tuning for future\nexploration. We aim to investigate the impact of fine-tuning, particularly the influence of relevant or\nirrelevant contexts on the generator’s performance.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 176,
+    "chunk_id": 166,
     "content": "Formally, we denote *x* as the query fed into the RAG system, and *D* as the contexts for this input.\nThe fine-tuning loss of the generator is the negative log-likelihood of the ground-truth output *y* .",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 177,
+    "chunk_id": 167,
     "content": "To explore the impact of fine-tuning, especially relevant and irrelevant contexts, we define *d* *gold* as a\ncontext relevant to the query, and *d* *random* as a randomly retrieved context. We train the model by\nvarying the composition of *D* as follows:",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 178,
+    "chunk_id": 168,
     "content": "- *D* *g* : The augmented context consists of query-relevant documents, denoted as *D* *g* = *{d* *gold* *}* .\n\n- *D* *r* : The context contains one randomly sampled document, denoted as *D* *r* = *{d* *random* *}* .",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 179,
+    "chunk_id": 169,
     "content": "- *D* *gr* : The augmented context comprises a relevant document and a randomly-selected one, denoted\nas *D* *gr* = *{d* *gold* *, d* *random* *}* .\n\n- *D* *gg* : The augmented context consists of two copies of a query-relevant document, denoted as\n*D* *gg* = *{d* *gold* *, d* *gold* *}* .",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 180,
+    "chunk_id": 170,
     "content": "We denote the base LM generator not fine-tuned as *M* *b*, and the model fine-tuned under the\ncorresponding *D* as *M* *g*, *M* *r*, *M* *gr*, *M* *gg* . We fine-tuned our model on several QA and reading",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 181,
+    "chunk_id": 171,
     "content": "comprehension datasets. Ground-truth coverage\nis used as our evaluation metric since QA task Models Trained with Different Method\n7B [ answers are relatively short. We select Llama-2- 50 ] as the base model. Similar to training, 100 MM bg MM rgr M gg",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 182,
+    "chunk_id": 172,
     "content": "we evaluate all trained models on validation sets 80\nwith *D* *g*, *D* *r*, *D* *gr*, and *D* ∅, where *D* ∅ indicates 60\ninference without retrieval. Figure 3 presents\nour main results. Models trained with a mix of 40\nrelevant and random documents ( *M* *gr* ) perform 20",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 183,
+    "chunk_id": 173,
     "content": "best when provided with either gold or mixed",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 184,
-    "content": "|Col1|Models Trained with Different Method Mb Mr Mgg Mg Mgr|\n|---|---|",
-    "metadata": {
-      "source": "2407.01219v1.md"
-    }
-  },
-  {
-    "chunk_id": 185,
+    "chunk_id": 174,
     "content": "contexts. This suggests that mixing relevant andrandom contexts during training can enhance the 0 D D g D r D gr\ngenerator’s robustness to irrelevant information\nwhile ensuring effective utilization of relevant Figure 3: Results of generator fine-tuning.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 186,
+    "chunk_id": 175,
     "content": "contexts. Therefore, we identify the practice of\naugmenting with a few **relevant and randoml** **y** **-selected documents durin** **g** **trainin** **g** as the best\napproach. Detailed dataset information, hyperparameters and experimental results can be found in\nAppendix A.5.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 187,
+    "chunk_id": 176,
     "content": "Appendix A.5.\n#### **4 Searching for Best RAG Practices**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 188,
+    "chunk_id": 177,
     "content": "In the following section, we investigate the optimal practices for implementing RAG. To begin\nwith, we used the default practice identified in Section 3 for each module. Following the workflow\ndepicted in Figure 1, we sequentially optimized individual modules and selected the most effective",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 189,
+    "chunk_id": 178,
     "content": "option among alternatives. This iterative process continued until we determined the best method for\nimplementing the final summarization module. Based on Section 3.8, we used the Llama2-7B-Chat\nmodel fine-tuned where each query was augmented by a few random-selected and relevant documents",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 190,
+    "chunk_id": 179,
     "content": "10\n\n\n-----\n\n**Method** **Commonsense** **Fact Check** **ODQA** **Multihop** **Medical** **RAG** **Avg.**\n\nAcc Acc EM F1 EM F1 Acc Score Score F1 Latenc y\n\n*classification module*, Hybrid with HyDE, monoT5, sides, Recomp",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 191,
+    "chunk_id": 180,
     "content": "w/o classification 0.719 0.505 0.391 **0.450** **0.212** 0.255 **0.528** 0.540 0.465 **0.353** 16.58\n+ **classifcation** **i** **0.727** **0.595** **0.393** **0.450** 0.207 **0.257** 0.460 **0.580** **0.478** **0.353** **11.71**\n\nwith classification, *retrieval module*, monoT5, sides, Recomp",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 192,
+    "chunk_id": 181,
     "content": "+ HyDE 0.718 **0.595** 0.320 0.373 0.170 0.213 0.400 0.545 0.443 0.293 11.58\n+ Original 0.721 0.585 0.300 0.350 0.153 0.197 0.390 0.486 0.428 0.273 **1.44**\n+ Hybrid 0.718 **0.595** 0.347 0.397 0.190 0.240 **0.750** 0.498 0.477 0.318 1.45",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 193,
+    "chunk_id": 182,
     "content": "+ **H** **y** **brid with H** **y** **DE** **0.727** **0.595** **0.393** **0.450** **0.207** **0.257** 0.460 **0.580** **0.478** **0.353** 11.71",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 194,
+    "chunk_id": 183,
     "content": "with classification, Hybrid with HyDE, *reranking module*, sides, Recomp\n\nw/o reranking 0.720 0.591 0.365 0.429 0.211 **0.260** **0.512** 0.530 0.470 0.334 **10.31**\n+ **monoT5** **0.727** 0.595 0.393 0.450 0.207 0.257 0.460 **0.580** **0.478** 0.353 11.71",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 195,
+    "chunk_id": 184,
     "content": "+ monoBERT 0.723 0.593 0.383 0.443 **0.217** 0.259 0.482 0.551 0.475 0.351 11.65\n\n+ RankLLaMA 0.723 **0.597** 0.382 0.443 0.197 0.240 0.454 0.558 0.470 0.342 13.51\n\n+ TILDEv2 0.725 0.588 **0.394** **0.456** 0.209 0.255 0.486 0.536 0.476 **0.355** 11.26",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 196,
+    "chunk_id": 185,
     "content": "with classification, Hybrid with HyDE, monoT5, *repacking module*, Recomp\n\n+ sides 0.727 0.595 **0.393** **0.450** 0.207 0.257 0.460 **0.580** 0.478 0.353 11.71\n\n+ forward 0.722 **0.599** 0.379 0.437 0.215 0.260 0.472 0.542 0.474 0.349 **11.68**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 197,
+    "chunk_id": 186,
     "content": "+ **reverse** **0.728** 0.592 0.387 0.445 **0.219** **0.263** **0.532** 0.560 **0.483** **0.354** 11.70\n\nwith classification, Hybrid with HyDE, monoT5, reverse, *summarization module*\n\nw/o summarization **0.729** 0.591 **0.402** **0.457** 0.205 0.252 0.528 0.533 0.480 **0.355** **10.97**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 198,
+    "chunk_id": 187,
     "content": "+ **Recom** **p** 0.728 **0.592** 0.387 0.445 **0.219** **0.263** **0.532** **0.560** **0.483** 0.354 11.70\n+ LongLLMLingua 0.713 0.581 0.362 0.423 0.199 0.245 0.530 0.539 0.466 0.334 16.17",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 199,
+    "chunk_id": 188,
     "content": "Table 11: Results of the search for optimal RAG practices. Modules enclosed in a boxed module\nare under investigation to determine the best method. The **underlined method** represents the selected\nimplementation. The “Avg” (average score) is calculated based on the Acc, EM, and RAG scores for",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 200,
+    "chunk_id": 189,
     "content": "all tasks, while the average latency is measured in seconds per query. The best scores are highlighted\nin **bold** .",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 201,
+    "chunk_id": 190,
     "content": "as the generator. We used Milvus to build a vector database that includes 10 million text of English\nWikipedia and 4 million text of medical data. We also investigated the impact of removing the Query\nClassification, Reranking, and Summarization modules to assess their contributions.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 202,
+    "chunk_id": 191,
     "content": "**4.1** **Comprehensive Evaluation**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 203,
+    "chunk_id": 192,
     "content": "We conducted extensive experiments across various NLP tasks and datasets to assess the performance of RAG systems. Specifically: (I) **Commonsense Reasoning** ; (II) **Fact Checking** ; (III)\n**Open-Domain QA** ; (IV) **MultiHop QA** ; (V) **Medical QA** . For further details on the tasks and",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 204,
+    "chunk_id": 193,
     "content": "their corresponding datasets, please refer to Appendix A.6. Furthermore, we evaluated the **RAG**\n**capabilities** on subsets extracted from these datasets, employing the metrics recommended in RAGAs [ 51 ], including Faithfulness, Context Relevancy, Answer Relevancy, and Answer Correctness.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 205,
+    "chunk_id": 194,
     "content": "Additionally, we measured Retrieval Similarity by computing the cosine similarity between retrieved\ndocuments and gold documents.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 206,
+    "chunk_id": 195,
     "content": "We used accuracy as the evaluation metric for the tasks of Commonsense Reasoning, Fact Checking,\nand Medical QA. For Open-Domain QA and Multihop QA, we employed token-level F1 score and\nExact Match (EM) score. The final RAG score was calculated by averaging the aforementioned five",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 207,
+    "chunk_id": 196,
     "content": "RAG capabilities. We followed Trivedi et al. [52] and sub-sampled up to 500 examples from each\ndataset.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 208,
+    "chunk_id": 197,
     "content": "**4.2** **Results and Analysis**\n\nBased on the experimental results presented in Table 11, the following key insights emerge:",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 209,
+    "chunk_id": 198,
     "content": "- **Query Classification Module:** This module is referenced and contributes to both effectiveness\nand efficiency, leading to an average improvement in the overall score from 0 *.* 428 to 0 *.* 443 and a\nreduction in latency time from 16 *.* 41 to 11 *.* 58 seconds per query.\n\n11\n\n\n-----",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 210,
+    "chunk_id": 199,
     "content": "- **Retrieval Module:** While the “Hybrid with HyDE” method attained the highest RAG score of\n0 *.* 58, it does so at a considerable computational cost with 11 *.* 71 second per query. Consequently,\nthe “Hybrid” or “Original” methods are recommended, as they reduce latency while maintaining",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 211,
+    "chunk_id": 200,
     "content": "comparable performance.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 212,
+    "chunk_id": 201,
     "content": "- **Reranking Module:** The absence of a reranking module led to a noticeable drop in performance,\nhighlighting its necessity. MonoT5 achieved the highest average score, affirming its efficacy in\naugmenting the relevance of retrieved documents. This indicates the critical role of reranking in",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 213,
+    "chunk_id": 202,
     "content": "enhancing the quality of generated responses.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 214,
+    "chunk_id": 203,
     "content": "- **Repacking Module:** The Reverse configuration exhibited superior performance, achieving an\nRAG score of 0 *.* 560 . This indicates that positioning more relevant context closer to the query leads\nto optimal outcomes.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 215,
+    "chunk_id": 204,
     "content": "- **Summarization Module:** Recomp demonstrated superior performance, although achieving comparable results with lower latency was possible by removing the summarization module. Nevertheless,\nRecomp remains the preferred choice due to its capability to address the generator’s maximum",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 216,
+    "chunk_id": 205,
     "content": "length constraints. In time-sensitive applications, removing summarization could effectively reduce\nresponse time.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 217,
+    "chunk_id": 206,
     "content": "The experimental results demonstrate that each module contributes uniquely to the overall performance of the RAG system. The query classification module enhances accuracy and reduces latency,\nwhile the retrieval and reranking modules significantly improve the system’s ability to handle diverse",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 218,
+    "chunk_id": 207,
     "content": "queries. The repacking and summarization modules further refine the system’s output, ensuring\nhigh-quality responses across different tasks.\n#### **5 Discussion**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 219,
+    "chunk_id": 208,
     "content": "**5.1** **Best Practices for Implementing RAG**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 220,
+    "chunk_id": 209,
     "content": "According to our experimental findings, we suggest two distinct recipes or practices for implementing\nRAG systems, each customized to address specific requirements: one focusing on maximizing\nperformance, and the other on striking a balance between efficiency and efficacy.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 221,
+    "chunk_id": 210,
     "content": "**Best Performance Practice:** To achieve the highest performance, it is recommended to incorporate\nquery classification module, use the “Hybrid with HyDE” method for retrieval, employ monoT5 for\nreranking, opt for Reverse for repacking, and leverage Recomp for summarization. This configuration",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 222,
+    "chunk_id": 211,
     "content": "yielded the highest average score of 0 *.* 483, albeit with a computationally-intensive process.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 223,
+    "chunk_id": 212,
     "content": "**Balanced Efficiency Practice:** In order to achieve a balance between performance and efficiency,\nit is recommended to incorporate the query classification module, implement the Hybrid method\nfor retrieval, use TILDEv2 for reranking, opt for Reverse for repacking, and employ Recomp for",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 224,
+    "chunk_id": 213,
     "content": "summarization. Given that the retrieval module accounts for the majority of processing time in the\nsystem, transitioning to the Hybrid method while keeping other modules unchanged can substantially\nreduce latency while preserving a comparable performance.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 225,
+    "chunk_id": 214,
     "content": "**5.2** **Multimodal Extension**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 226,
+    "chunk_id": 215,
     "content": "We have extended RAG to multimodal applications. Specifically, we have incorporated text2image\nand image2text retrieval capabilities into the system with a substantial collection of paired image and",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 227,
+    "chunk_id": 216,
     "content": "textual descriptions as a retrieval source. As depicted in Figure 4, the text2image capability speeds\nup the image generation process when a user query aligns well with the textual descriptions of stored",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 228,
+    "chunk_id": 217,
     "content": "images (i.e., “retrieval as generation” strategy), while the image2text functionality comes into play\nwhen a user provides an image and engages in conversation about the input image. These multimodal\nRAG capabilities offer the following advantages:",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 229,
+    "chunk_id": 218,
     "content": "- **Groundedness** : Retrieval methods provide information from verified multimodal materials, thereby\nensuring authenticity and specificity. In contrast, on-the-fly generation relies on models to generate\nnew content, which can occasionally result in factual errors or inaccuracies.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 230,
+    "chunk_id": 219,
     "content": "- **Efficiency** : Retrieval methods are typically more efficient, especially when the answer already\nexists in stored materials. Conversely, generation methods may require more computational\nresources to produce new content, particularly for images or lengthy texts.\n\n12\n\n\n-----",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 231,
+    "chunk_id": 220,
     "content": "12\n\n\n-----\n\nText2image Retrieval\n\nImage2text Retrieval\n\nA dog is sleeping.\n\n\n\n\n\nA dog is drinking water\n\nA dog is sleeping",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 232,
+    "chunk_id": 221,
     "content": "Figure 4: Workflow of multimodal retrieval. The upper section illustrates the text-to-image retrieval\nprocess. Initially, a text query is used to find images in the database with the highest similarity. If a",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 233,
+    "chunk_id": 222,
     "content": "high similarity is found, the image is returned directly. If not, an image generation model is employed\nto create and return an appropriate image. The lower section demonstrates the image-to-text retrieval",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 234,
+    "chunk_id": 223,
     "content": "process. Here, a user-provided image is matched with images in the database to find the highest\nsimilarity. If a high similarity is identified, the pre-stored caption of the matching image is returned.\nOtherwise, an image captioning model generates and returns a new caption.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 235,
+    "chunk_id": 224,
     "content": "- **Maintainability** : Generation models often necessitate careful fine-tuning to tailor them for new\napplications. In contrast, retrieval-based methods can be improved to address new demands by\nsimply enlarging the size and enhancing the quality of retrieval sources.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 236,
+    "chunk_id": 225,
     "content": "We plan to broaden the application of this strategy to include other modalities, such as video and\nspeech, while also exploring efficient and effective cross-modal retrieval techniques.\n#### **6 Conclusion**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 237,
+    "chunk_id": 226,
     "content": "In this study, we aim to identify optimal practices for implementing retrieval-augmented generation\nin order to improve the quality and reliability of content produced by large language models. We\nsystematically assessed a range of potential solutions for each module within the RAG framework",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 238,
+    "chunk_id": 227,
     "content": "and recommended the most effective approach for each module. Furthermore, we introduced a\ncomprehensive evaluation benchmark for RAG systems and conducted extensive experiments to\ndetermine the best practices among various alternatives. Our findings not only contribute to a deeper",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 239,
+    "chunk_id": 228,
     "content": "understanding of retrieval-augmented generation systems but also establish a foundation for future\nresearch.\n#### **Limitations**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 240,
+    "chunk_id": 229,
     "content": "We have evaluated the impact of various methods for fine-tuning LLM generators. Previous studies\nhave demonstrated the feasibility of training both the retriever and generator jointly. We would\nlike to explore this possibility in the future. In this study, we embraced the principle of modular\n\n13",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 241,
+    "chunk_id": 230,
     "content": "13\n\n\n-----",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 242,
+    "chunk_id": 231,
     "content": "design to simplify the search for optimal RAG implementations, thereby reducing complexity. Due\nto the daunting costs associated with constructing vector databases and conducting experiments, our\nevaluation was limited to investigating the effectiveness and influence of representative chunking",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 243,
+    "chunk_id": 232,
     "content": "techniques within the chunking module. It would be intriguing to further explore the impact of\ndifferent chunking techniques on the entire RAG systems. While we have discussed the application of\nRAG in the domain of NLP and extended its scope to image generation, an enticing avenue for future",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 244,
+    "chunk_id": 233,
     "content": "exploration would involve expanding this research to other modalities such as speech and video.\n#### **Acknowledgments**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 245,
+    "chunk_id": 234,
     "content": "The authors would like to thank the anonymous reviewers for their valuable comments. This work\nwas supported by National Natural Science Foundation of China (No. 62076068).\n#### **References**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 246,
+    "chunk_id": 235,
     "content": "[1] Long Ouyang, Jeff Wu, Xu Jiang, Diogo Almeida, Carroll L. Wainwright, Pamela Mishkin,\nChong Zhang, Sandhini Agarwal, Katarina Slama, Alex Ray, John Schulman, Jacob Hilton,\nFraser Kelton, Luke Miller, Maddie Simens, Amanda Askell, Peter Welinder, Paul Christiano,",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 247,
+    "chunk_id": 236,
     "content": "Jan Leike, and Ryan Lowe. Training language models to follow instructions with human\nfeedback. In *Proceedings of the Conference on Neural Information Processing Systems (NeurIPS*\n*2022)*, 2022.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 248,
+    "chunk_id": 237,
     "content": "[2] Rafael Rafailov, Archit Sharma, Eric Mitchell, Stefano Ermon, Christopher D Manning, and\nChelsea Finn. Direct preference optimization: Your language model is secretly a reward model.\n*arXiv preprint arXiv:2305.18290*, 2023.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 249,
+    "chunk_id": 238,
     "content": "[3] Yao Zhao, Rishabh Joshi, Tianqi Liu, Misha Khalman, Mohammad Saleh, and Peter J Liu. SLICHF: Sequence likelihood calibration with human feedback. *arXiv preprint arXiv:2305.10425*,\n2023.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 250,
+    "chunk_id": 239,
     "content": "[4] Zheng Yuan, Hongyi Yuan, Chuanqi Tan, Wei Wang, Songfang Huang, and Fei Huang. RRHF:\nRank responses to align language models with human feedback without tears. *arXiv preprint*\n*arXiv:2304.05302*, 2023.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 251,
+    "chunk_id": 240,
     "content": "[5] Wenhao Liu, Xiaohua Wang, Muling Wu, Tianlong Li, Changze Lv, Zixuan Ling, Jianhao Zhu,\nCenyuan Zhang, Xiaoqing Zheng, and Xuanjing Huang. Aligning large language models with\nhuman preferences through representation engineering. *arXiv preprint arXiv:2312.15997*, 2023.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 252,
+    "chunk_id": 241,
     "content": "[6] Yunfan Gao, Yun Xiong, Xinyu Gao, Kangxiang Jia, Jinliu Pan, Yuxi Bi, Yi Dai, Jiawei Sun,\nand Haofen Wang. Retrieval-augmented generation for large language models: A survey. *arXiv*\n*preprint arXiv:2312.10997*, 2023.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 253,
+    "chunk_id": 242,
     "content": "[7] Huayang Li, Yixuan Su, Deng Cai, Yan Wang, and Lemao Liu. A survey on retrieval-augmented\ntext generation. *arXiv preprint arXiv:2202.01110*, 2022.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 254,
+    "chunk_id": 243,
     "content": "[8] Deng Cai, Yan Wang, Lemao Liu, and Shuming Shi. Recent advances in retrieval-augmented\ntext generation. In *Proceedings of the 45th international ACM SIGIR conference on research*\n*and development in information retrieval*, pages 3417–3419, 2022.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 255,
+    "chunk_id": 244,
     "content": "[9] Xinbei Ma, Yeyun Gong, Pengcheng He, Hai Zhao, and Nan Duan. Query rewriting for\nretrieval-augmented large language models. *arXiv preprint arXiv:2305.14283*, 2023.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 256,
+    "chunk_id": 245,
     "content": "[10] Luyu Gao, Xueguang Ma, Jimmy Lin, and Jamie Callan. Precise zero-shot dense retrieval\nwithout relevance labels. *arXiv preprint arXiv:2212.10496*, 2022.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 257,
+    "chunk_id": 246,
     "content": "[11] Liang Wang, Nan Yang, Xiaolong Huang, Binxing Jiao, Linjun Yang, Daxin Jiang, Rangan\nMajumder, and Furu Wei. Text embeddings by weakly-supervised contrastive pre-training.\n*arXiv preprint arXiv:2212.03533*, 2022.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 258,
+    "chunk_id": 247,
     "content": "[12] Shitao Xiao, Zheng Liu, Peitian Zhang, and Niklas Muennighoff. C-pack: Packaged resources\nto advance general chinese embedding, 2023.\n\n14\n\n\n-----",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 259,
+    "chunk_id": 248,
     "content": "14\n\n\n-----\n\n[13] OpenAI. GPT-4 technical report. *CoRR*, abs/2303.08774, 2023. doi: 10.48550/ARXIV.2303.\n[08774. URL https://doi.org/10.48550/arXiv.2303.08774.](https://doi.org/10.48550/arXiv.2303.08774)",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 260,
+    "chunk_id": 249,
     "content": "[14] Hugo Touvron, Thibaut Lavril, Gautier Izacard, Xavier Martinet, Marie-Anne Lachaux, Timothée Lacroix, Baptiste Rozière, Naman Goyal, Eric Hambro, Faisal Azhar, et al. LLaMA: Open\nand efficient foundation language models. *arXiv preprint arXiv:2302.13971*, 2023.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 261,
+    "chunk_id": 250,
     "content": "[15] Yue Zhang, Yafu Li, Leyang Cui, Deng Cai, Lemao Liu, Tingchen Fu, Xinting Huang, Enbo\nZhao, Yu Zhang, Yulong Chen, et al. Siren’s song in the ai ocean: a survey on hallucination in\nlarge language models. *arXiv preprint arXiv:2309.01219*, 2023.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 262,
+    "chunk_id": 251,
     "content": "[16] Xiaohua Wang, Yuliang Yan, Longtao Huang, Xiaoqing Zheng, and Xuan-Jing Huang. Hallucination detection for generative large language models by bayesian sequential estimation. In\n*Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing*,\npages 15361–15371, 2023.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 263,
+    "chunk_id": 252,
     "content": "[17] Liang Wang, Nan Yang, and Furu Wei. Query2doc: Query expansion with large language\nmodels. *arXiv preprint arXiv:2303.07678*, 2023.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 264,
+    "chunk_id": 253,
     "content": "[18] Gangwoo Kim, Sungdong Kim, Byeongguk Jeon, Joonsuk Park, and Jaewoo Kang. Tree of\nclarifications: Answering ambiguous questions with retrieval-augmented large language models.\n*arXiv preprint arXiv:2310.14696*, 2023.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 265,
+    "chunk_id": 254,
     "content": "[[19] Jerry Liu. LlamaIndex, 11 2022. URL https://github.com/jerryjliu/llama_index.](https://github.com/jerryjliu/llama_index)\n\n[20] Peitian Zhang, Shitao Xiao, Zheng Liu, Zhicheng Dou, and Jian-Yun Nie. Retrieve anything to\naugment large language models. *arXiv preprint arXiv:2310.07554*, 2023.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 266,
+    "chunk_id": 255,
     "content": "[21] Zehan Li, Xin Zhang, Yanzhao Zhang, Dingkun Long, Pengjun Xie, and Meishan Zhang.\nTowards general text embeddings with multi-stage contrastive learning. *arXiv preprint*\n*arXiv:2308.03281*, 2023.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 267,
+    "chunk_id": 256,
     "content": "[22] Huiqiang Jiang, Qianhui Wu, Chin-Yew Lin, Yuqing Yang, and Lili Qiu. Llmlingua:\nCompressing prompts for accelerated inference of large language models. *arXiv preprint*\n*arXiv:2310.05736*, 2023.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 268,
+    "chunk_id": 257,
     "content": "[23] Fangyuan Xu, Weijia Shi, and Eunsol Choi. Recomp: Improving retrieval-augmented lms with\ncompression and selective augmentation. *arXiv preprint arXiv:2310.04408*, 2023.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 269,
+    "chunk_id": 258,
     "content": "[24] Zhiruo Wang, Jun Araki, Zhengbao Jiang, Md Rizwan Parvez, and Graham Neubig. Learning\nto filter context for retrieval-augmented generation. *arXiv preprint arXiv:2311.08377*, 2023.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 270,
+    "chunk_id": 259,
     "content": "[25] Rodrigo Nogueira, Wei Yang, Kyunghyun Cho, and Jimmy Lin. Multi-stage document ranking\nwith bert. *arXiv preprint arXiv:1910.14424*, 2019.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 271,
+    "chunk_id": 260,
     "content": "[26] Rodrigo Nogueira, Zhiying Jiang, and Jimmy Lin. Document ranking with a pretrained\nsequence-to-sequence model. *arXiv preprint arXiv:2003.06713*, 2020.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 272,
+    "chunk_id": 261,
     "content": "[27] Xueguang Ma, Liang Wang, Nan Yang, Furu Wei, and Jimmy Lin. Fine-tuning llama for\nmulti-stage text retrieval. *arXiv preprint arXiv:2310.08319*, 2023.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 273,
+    "chunk_id": 262,
     "content": "[28] Shengyao Zhuang and Guido Zuccon. Tilde: Term independent likelihood model for passage\nre-ranking. In *Proceedings of the 44th International ACM SIGIR Conference on Research and*\n*Development in Information Retrieval*, pages 1483–1492, 2021.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 274,
+    "chunk_id": 263,
     "content": "[29] Shengyao Zhuang and Guido Zuccon. Fast passage re-ranking with contextualized exact term\nmatching and efficient passage expansion. *arXiv preprint arXiv:2108.08513*, 2021.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 275,
+    "chunk_id": 264,
     "content": "[30] Hongyin Luo, Yung-Sung Chuang, Yuan Gong, Tianhua Zhang, Yoon Kim, Xixin Wu, Danny\nFox, Helen M. Meng, and James R. Glass. Sail: Search-augmented instruction learning.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 276,
+    "chunk_id": 265,
     "content": "In *Conference on Empirical Methods in Natural Language Processing*, 2023. URL [https:](https://api.semanticscholar.org/CorpusID:258865283)\n[//api.semanticscholar.org/CorpusID:258865283.](https://api.semanticscholar.org/CorpusID:258865283)",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 277,
+    "chunk_id": 266,
     "content": "15\n\n\n-----\n\n[31] Tianjun Zhang, Shishir G. Patil, Naman Jain, Sheng Shen, Matei A. Zaharia, Ion Stoica,\nand Joseph E. Gonzalez. Raft: Adapting language model to domain specific rag. *ArXiv*,\nabs/2403.10131, 2024.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 278,
+    "chunk_id": 267,
     "content": "[32] Zihan Liu, Wei Ping, Rajarshi Roy, Peng Xu, Chankyu Lee, Mohammad Shoeybi, and Bryan\nCatanzaro. Chatqa: Surpassing gpt-4 on conversational qa and rag. 2024. URL [https:](https://api.semanticscholar.org/CorpusID:267035133)",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 279,
+    "chunk_id": 268,
     "content": "[//api.semanticscholar.org/CorpusID:267035133.](https://api.semanticscholar.org/CorpusID:267035133)",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 280,
+    "chunk_id": 269,
     "content": "[33] Gautier Izacard, Patrick Lewis, Maria Lomeli, Lucas Hosseini, Fabio Petroni, Timo Schick,\nJane A. Yu, Armand Joulin, Sebastian Riedel, and Edouard Grave. Few-shot learning with\nretrieval augmented language models. *ArXiv*, abs/2208.03299, 2022.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 281,
+    "chunk_id": 270,
     "content": "[34] Lingxi Zhang, Yue Yu, Kuan Wang, and Chao Zhang. Arl2: Aligning retrievers for black-box\nlarge language models via self-guided adaptive relevance labeling. *ArXiv*, abs/2402.13542,\n2024.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 282,
+    "chunk_id": 271,
     "content": "[35] Weijia Shi, Sewon Min, Michihiro Yasunaga, Minjoon Seo, Rich James, Mike Lewis, Luke\nZettlemoyer, and Wen-tau Yih. Replug: Retrieval-augmented black-box language models. *arXiv*\n*preprint arXiv:2301.12652*, 2023.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 283,
+    "chunk_id": 272,
     "content": "[36] Kelvin Guu, Kenton Lee, Zora Tung, Panupong Pasupat, and Ming-Wei Chang. Realm:\nRetrieval-augmented language model pre-training. *ArXiv*, abs/2002.08909, 2020.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 284,
+    "chunk_id": 273,
     "content": "[37] Xi Victoria Lin, Xilun Chen, Mingda Chen, Weijia Shi, Maria Lomeli, Rich James, Pedro\nRodriguez, Jacob Kahn, Gergely Szilvasy, Mike Lewis, Luke Zettlemoyer, and Scott Yih.\nRa-dit: Retrieval-augmented dual instruction tuning. *ArXiv*, abs/2310.01352, 2023.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 285,
+    "chunk_id": 274,
     "content": "[38] Hamed Zamani and Michael Bendersky. Stochastic rag: End-to-end retrieval-augmented generation through expected utility maximization. 2024. URL [https://api.semanticscholar.](https://api.semanticscholar.org/CorpusID:269605438)",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 286,
+    "chunk_id": 275,
     "content": "[org/CorpusID:269605438.](https://api.semanticscholar.org/CorpusID:269605438)",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 287,
+    "chunk_id": 276,
     "content": "[39] Yizheng Huang and Jimmy Huang. A survey on retrieval-augmented text generation for large\nlanguage models. *arXiv preprint arXiv:2404.10981*, 2024.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 288,
+    "chunk_id": 277,
     "content": "[40] Ruochen Zhao, Hailin Chen, Weishi Wang, Fangkai Jiao, Xuan Long Do, Chengwei Qin,\nBosheng Ding, Xiaobao Guo, Minzhi Li, Xingxuan Li, et al. Retrieving multimodal information\nfor augmented generation: A survey. *arXiv preprint arXiv:2303.10868*, 2023.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 289,
+    "chunk_id": 278,
     "content": "[41] Penghao Zhao, Hailin Zhang, Qinhan Yu, Zhengren Wang, Yunteng Geng, Fangcheng Fu, Ling\nYang, Wentao Zhang, and Bin Cui. Retrieval-augmented generation for ai-generated content: A\nsurvey. *arXiv preprint arXiv:2402.19473*, 2024.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 290,
+    "chunk_id": 279,
     "content": "[42] Michael Günther, Jackmin Ong, Isabelle Mohr, Alaeddine Abdessalem, Tanguy Abel, Mohammad Kalim Akram, Susana Guzman, Georgios Mastrapas, Saba Sturua, Bo Wang, et al. Jina\nembeddings 2: 8192-token general-purpose text embeddings for long documents. *arXiv preprint*\n*arXiv:2310.19923*, 2023.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 291,
+    "chunk_id": 280,
     "content": "[[43] LlamaIndex. Llamaindex website. https://www.llamaindex.com. Accessed: 2024-06-08.](https://www.llamaindex.com)",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 292,
+    "chunk_id": 281,
     "content": "[44] Kunal Sawarkar, Abhilasha Mangal, and Shivam Raj Solanki. Blended rag: Improving rag\n(retriever-augmented generation) accuracy with semantic search and hybrid query-based retrievers. *arXiv preprint arXiv:2404.07220*, 2024.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 293,
+    "chunk_id": 282,
     "content": "[45] Gautier Izacard, Mathilde Caron, Lucas Hosseini, Sebastian Riedel, Piotr Bojanowski, Armand\nJoulin, and Edouard Grave. Unsupervised dense information retrieval with contrastive learning.\n*arXiv preprint arXiv:2112.09118*, 2021.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 294,
+    "chunk_id": 283,
     "content": "[46] Nandan Thakur, Nils Reimers, Andreas Rücklé, Abhishek Srivastava, and Iryna Gurevych. Beir:\nA heterogenous benchmark for zero-shot evaluation of information retrieval models. *arXiv*\n*preprint arXiv:2104.08663*, 2021.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 295,
+    "chunk_id": 284,
     "content": "[47] Payal Bajaj, Daniel Campos, Nick Craswell, Li Deng, Jianfeng Gao, Xiaodong Liu, Rangan\nMajumder, Andrew McNamara, Bhaskar Mitra, Tri Nguyen, et al. Ms marco: A human\ngenerated machine reading comprehension dataset. *arXiv preprint arXiv:1611.09268*, 2016.\n\n16\n\n\n-----",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 296,
+    "chunk_id": 285,
     "content": "16\n\n\n-----\n\n[48] Nelson F Liu, Kevin Lin, John Hewitt, Ashwin Paranjape, Michele Bevilacqua, Fabio Petroni,\nand Percy Liang. Lost in the middle: How language models use long contexts. *Transactions of*\n*the Association for Computational Linguistics*, 12:157–173, 2024.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 297,
+    "chunk_id": 286,
     "content": "[49] Huiqiang Jiang, Qianhui Wu, Xufang Luo, Dongsheng Li, Chin-Yew Lin, Yuqing Yang, and\nLili Qiu. Longllmlingua: Accelerating and enhancing llms in long context scenarios via prompt\ncompression. *arXiv preprint arXiv:2310.06839*, 2023.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 298,
+    "chunk_id": 287,
     "content": "[50] Hugo Touvron, Louis Martin, Kevin R. Stone, Peter Albert, Amjad Almahairi, Yasmine Babaei,\nNikolay Bashlykov, Soumya Batra, Prajjwal Bhargava, Shruti Bhosale, Daniel M. Bikel, Lukas\nBlecher, Cristian Cantón Ferrer, Moya Chen, Guillem Cucurull, David Esiobu, Jude Fernandes,",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 299,
+    "chunk_id": 288,
     "content": "Jeremy Fu, Wenyin Fu, Brian Fuller, Cynthia Gao, Vedanuj Goswami, Naman Goyal, Anthony S.\nHartshorn, Saghar Hosseini, Rui Hou, Hakan Inan, Marcin Kardas, Viktor Kerkez, Madian\nKhabsa, Isabel M. Kloumann, A. V. Korenev, Punit Singh Koura, Marie-Anne Lachaux, Thibaut",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 300,
+    "chunk_id": 289,
     "content": "Lavril, Jenya Lee, Diana Liskovich, Yinghai Lu, Yuning Mao, Xavier Martinet, Todor Mihaylov,\nPushkar Mishra, Igor Molybog, Yixin Nie, Andrew Poulton, Jeremy Reizenstein, Rashi Rungta,\nKalyan Saladi, Alan Schelten, Ruan Silva, Eric Michael Smith, R. Subramanian, Xia Tan, Binh",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 301,
+    "chunk_id": 290,
     "content": "Tang, Ross Taylor, Adina Williams, Jian Xiang Kuan, Puxin Xu, Zhengxu Yan, Iliyan Zarov,\nYuchen Zhang, Angela Fan, Melanie Kambadur, Sharan Narang, Aurelien Rodriguez, Robert\nStojnic, Sergey Edunov, and Thomas Scialom. Llama 2: Open foundation and fine-tuned chat",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 302,
+    "chunk_id": 291,
     "content": "models. *ArXiv*, abs/2307.09288, 2023.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 303,
+    "chunk_id": 292,
     "content": "[51] ES Shahul, Jithin James, Luis Espinosa Anke, and Steven Schockaert. Ragas: Automated\nevaluation of retrieval augmented generation. In *Conference of the European Chapter of the*",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 304,
+    "chunk_id": 293,
     "content": "*Association for Computational Linguistics*, 2023. URL [https://api.semanticscholar.org/](https://api.semanticscholar.org/CorpusID:263152733)\n[CorpusID:263152733.](https://api.semanticscholar.org/CorpusID:263152733)",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 305,
+    "chunk_id": 294,
     "content": "[52] Harsh Trivedi, Niranjan Balasubramanian, Tushar Khot, and Ashish Sabharwal. Musique:\nMultihop questions via single-hop question composition. *Transactions of the Association*\n*for Computational Linguistics*, page 539–554, May 2022. doi: 10.1162/tacl_a_00475. URL",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 306,
+    "chunk_id": 295,
     "content": "[http://dx.doi.org/10.1162/tacl_a_00475.](http://dx.doi.org/10.1162/tacl_a_00475)",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 307,
+    "chunk_id": 296,
     "content": "[53] Mike Conover, Matt Hayes, Ankit Mathur, Jianwei Xie, Jun Wan, Sam Shah, Ali Ghodsi,\nPatrick Wendell, Matei Zaharia, and Reynold Xin. Free dolly: Introducing the world’s first truly",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 308,
+    "chunk_id": 297,
     "content": "open instruction-tuned llm, 2023. URL [https://www.databricks.com/blog/2023/04/12/](https://www.databricks.com/blog/2023/04/12/dolly-first-open-commercially-viable-instruction-tuned-llm)",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 309,
+    "chunk_id": 298,
     "content": "[dolly-first-open-commercially-viable-instruction-tuned-llm.](https://www.databricks.com/blog/2023/04/12/dolly-first-open-commercially-viable-instruction-tuned-llm)",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 310,
+    "chunk_id": 299,
     "content": "[54] Nick Craswell, Bhaskar Mitra, Emine Yilmaz, Daniel Fernando Campos, and Ellen M. Voorhees.\nOverview of the trec 2019 deep learning track. *ArXiv*, abs/2003.07820, 2020. URL [https:](https://api.semanticscholar.org/CorpusID:253234683)",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 311,
+    "chunk_id": 300,
     "content": "[//api.semanticscholar.org/CorpusID:253234683.](https://api.semanticscholar.org/CorpusID:253234683)",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 312,
+    "chunk_id": 301,
     "content": "[55] Nick Craswell, Bhaskar Mitra, Emine Yilmaz, Daniel Fernando Campos, and Ellen M. Voorhees.\nOverview of the trec 2020 deep learning track. *ArXiv*, abs/2102.07662, 2021. URL [https:](https://api.semanticscholar.org/CorpusID:212737158)",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 313,
+    "chunk_id": 302,
     "content": "[//api.semanticscholar.org/CorpusID:212737158.](https://api.semanticscholar.org/CorpusID:212737158)",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 314,
+    "chunk_id": 303,
     "content": "[56] Jimmy Lin, Xueguang Ma, Sheng-Chieh Lin, Jheng-Hong Yang, Ronak Pradeep, and Rodrigo\nNogueira. Pyserini: A python toolkit for reproducible information retrieval research with sparse\nand dense representations. In *Proceedings of the 44th International ACM SIGIR Conference on*",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 315,
+    "chunk_id": 304,
     "content": "*Research and Development in Information Retrieval*, pages 2356–2362, 2021.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 316,
+    "chunk_id": 305,
     "content": "[57] Tom Kwiatkowski, Jennimaria Palomaki, Olivia Redfield, Michael Collins, Ankur P. Parikh,\nChris Alberti, Danielle Epstein, Illia Polosukhin, Jacob Devlin, Kenton Lee, Kristina Toutanova,\nLlion Jones, Matthew Kelcey, Ming-Wei Chang, Andrew M. Dai, Jakob Uszkoreit, Quoc V. Le,",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 317,
+    "chunk_id": 306,
     "content": "and Slav Petrov. Natural questions: A benchmark for question answering research. *Transactions*\n*of the Association for Computational Linguistics*, 7:453–466, 2019.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 318,
+    "chunk_id": 307,
     "content": "[58] Mandar Joshi, Eunsol Choi, Daniel S. Weld, and Luke Zettlemoyer. Triviaqa: A large scale\ndistantly supervised challenge dataset for reading comprehension. *ArXiv*, abs/1705.03551,\n2017.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 319,
+    "chunk_id": 308,
     "content": "[59] Zhilin Yang, Peng Qi, Saizheng Zhang, Yoshua Bengio, William W Cohen, Ruslan Salakhutdinov, and Christopher D Manning. Hotpotqa: A dataset for diverse, explainable multi-hop\nquestion answering. *arXiv preprint arXiv:1809.09600*, 2018.\n\n17\n\n\n-----",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 320,
+    "chunk_id": 309,
     "content": "17\n\n\n-----\n\n[60] Ivan Stelmakh, Yi Luan, Bhuwan Dhingra, and Ming-Wei Chang. Asqa: Factoid questions meet\nlong-form answers. *ArXiv*, abs/2204.06092, 2022.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 321,
+    "chunk_id": 310,
     "content": "[61] Tomáš Koˇcisky, Jonathan Schwarz, Phil Blunsom, Chris Dyer, Karl Moritz Hermann, Gábor `\nMelis, and Edward Grefenstette. The narrativeqa reading comprehension challenge. *Transac-*\n*tions of the Association for Computational Linguistics*, 6:317–328, 2018.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 322,
+    "chunk_id": 311,
     "content": "[62] Pranav Rajpurkar, Jian Zhang, Konstantin Lopyrev, and Percy Liang. Squad: 100,000+ questions\nfor machine comprehension of text. *arXiv preprint arXiv:1606.05250*, 2016.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 323,
+    "chunk_id": 312,
     "content": "[63] Stephanie Lin, Jacob Hilton, and Owain Evans. Truthfulqa: Measuring how models mimic\nhuman falsehoods. *arXiv preprint arXiv:2109.07958*, 2021.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 324,
+    "chunk_id": 313,
     "content": "[64] J. Edward Hu, Yelong Shen, Phillip Wallis, Zeyuan Allen-Zhu, Yuanzhi Li, Shean Wang, and\nWeizhu Chen. Lora: Low-rank adaptation of large language models. *ArXiv*, abs/2106.09685,\n2021.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 325,
+    "chunk_id": 314,
     "content": "[65] Dan Hendrycks, Collin Burns, Steven Basart, Andy Zou, Mantas Mazeika, Dawn Song, and\nJacob Steinhardt. Measuring massive multitask language understanding. *Cornell University -*\n*arXiv,Cornell University - arXiv*, Sep 2020.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 326,
+    "chunk_id": 315,
     "content": "[66] Peter Clark, Isaac Cowhey, Oren Etzioni, Tushar Khot, Ashish Sabharwal, Carissa Schoenick,",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 327,
+    "chunk_id": 316,
     "content": "and Oyvind Tafjord. Think you have solved question answering? try arc, the ai2 reasoning challenge. *ArXiv* [, abs/1803.05457, 2018. URL https://api.semanticscholar.org/CorpusID:](https://api.semanticscholar.org/CorpusID:3922816)\n[3922816.](https://api.semanticscholar.org/CorpusID:3922816)",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 328,
+    "chunk_id": 317,
     "content": "[67] Todor Mihaylov, Peter Clark, Tushar Khot, and Ashish Sabharwal. Can a suit of armor\nconduct electricity? a new dataset for open book question answering. In *Proceedings of*\n*the 2018 Conference on Empirical Methods in Natural Language Processing*, Jan 2018. doi:",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 329,
+    "chunk_id": 318,
     "content": "[10.18653/v1/d18-1260. URL http://dx.doi.org/10.18653/v1/d18-1260.](http://dx.doi.org/10.18653/v1/d18-1260)",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 330,
+    "chunk_id": 319,
     "content": "[68] James Thorne, Andreas Vlachos, Christos Christodoulopoulos, and Arpit Mittal. Fever: a\nlarge-scale dataset for fact extraction and verification. *ArXiv*, abs/1803.05355, 2018. URL\n[https://api.semanticscholar.org/CorpusID:4711425.](https://api.semanticscholar.org/CorpusID:4711425)",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 331,
+    "chunk_id": 320,
     "content": "[69] Tianhua Zhang, Hongyin Luo, Yung-Sung Chuang, Wei Fang, Luc Gaitskell, Thomas\nHartvigsen, Xixin Wu, Danny Fox, Helen M. Meng, and James R. Glass. Interpretable unified",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 332,
+    "chunk_id": 321,
     "content": "language checking. *ArXiv*, abs/2304.03728, 2023. URL [https://api.semanticscholar.](https://api.semanticscholar.org/CorpusID:258041307)\n[org/CorpusID:258041307.](https://api.semanticscholar.org/CorpusID:258041307)",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 333,
+    "chunk_id": 322,
     "content": "[70] Jonathan Berant, Andrew Chou, Roy Frostig, and Percy Liang. Semantic parsing on freebase\nfrom question-answer pairs. *Empirical Methods in Natural Language Processing,Empirical*\n*Methods in Natural Language Processing*, Oct 2013.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 334,
+    "chunk_id": 323,
     "content": "[71] Xanh Ho, A. Nguyen, Saku Sugawara, and Akiko Aizawa. Constructing a multi-hop qa\ndataset for comprehensive evaluation of reasoning steps. *ArXiv*, abs/2011.01060, 2020. URL\n[https://api.semanticscholar.org/CorpusID:226236740.](https://api.semanticscholar.org/CorpusID:226236740)",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 335,
+    "chunk_id": 324,
     "content": "[72] Ofir Press, Muru Zhang, Sewon Min, Ludwig Schmidt, NoahA. Smith, and Mike Lewis.\nMeasuring and narrowing the compositionality gap in language models. Oct 2022.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 336,
+    "chunk_id": 325,
     "content": "[73] Qiao Jin, Bhuwan Dhingra, Zhengping Liu, William W. Cohen, and Xinghua Lu. Pubmedqa: A\ndataset for biomedical research question answering. In *Conference on Empirical Methods in*",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 337,
+    "chunk_id": 326,
     "content": "*Natural Language Processing*, 2019. URL [https://api.semanticscholar.org/CorpusID:](https://api.semanticscholar.org/CorpusID:202572622)\n[202572622.](https://api.semanticscholar.org/CorpusID:202572622)",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 338,
+    "chunk_id": 327,
     "content": "[74] Akari Asai, Zeqiu Wu, Yizhong Wang, Avirup Sil, and Hannaneh Hajishirzi. Self-rag: Learning\nto retrieve, generate, and critique through self-reflection. *arXiv preprint arXiv:2310.11511*,\n2023.\n\n18\n\n\n-----\n\n#### **A Experimental Details**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 339,
+    "chunk_id": 328,
     "content": "18\n\n\n-----\n\n#### **A Experimental Details**\n\nIn this section, we provide detailed experimental settings for each module, covering dataset specifics,\ntraining parameters, and any additional experimental results.\n\n**A.1** **Query Classification**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 340,
+    "chunk_id": 329,
     "content": "**A.1** **Query Classification**\n\n**Datasets** We utilized a subset of the Databricks-Dolly-15K [ 53 ] and generated additional data\nusing GPT-4.The prompt template for generating questions is shown in Table 14.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 341,
+    "chunk_id": 330,
     "content": "**Implementation Details** We choose BERT-base-multilingual-cased as our classifier, with a batch\nsize of 16 and a learning rate of 1e-5. The evaluation of results is showcased in Table 1.\n\n**A.2** **Experimental Details of Retrieval Methods**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 342,
+    "chunk_id": 331,
     "content": "Implementation details of the comparative experiments of different retrieval methods are as below:",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 343,
+    "chunk_id": 332,
     "content": "**Datasets** We use the TREC DL 2019 [54] and 2020 [55] passage ranking datasets to evaluate the\nperformance of different retrieval methods.\n**Metrics** Widely-used evaluation metrics for retrieval include mAP, nDCG@10, R@50 and R@1k.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 344,
+    "chunk_id": 333,
     "content": "Both mAP and nDCG@10 are order-aware metrics that take the ranking of search results into account.\nIn contrast, R@k is an order-unaware metric. We also report the average latency incurred by each\nmethod per query.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 345,
+    "chunk_id": 334,
     "content": "method per query.\n**Implementation Details** For sparse retrieval, we use the BM25 algorithm, which relies on the TFIDF algorithm. For dense retrieval, we employ Contriever as our unsupervised contrastive text encoder.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 346,
+    "chunk_id": 335,
     "content": "Based on our evaluation of embedding models, we implement our supervised dense retrieval using\nLLM-Embedder. We use the default implementation of BM25 and Contriever from Pyserini [ 56 ].\nThe BM25 index is constructed using Lucene on MS MARCO collections, while the dense vector",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 347,
+    "chunk_id": 336,
     "content": "index is generated with Faiss employing Flat configuration on the same dataset. For query rewriting,\nwe prompt Zephyr-7b-alpha [9], a model trained to act as a helpful assistant, to rewrite the original\nquery. For query decomposition, we employ GPT-3.5-turbo-0125 to break down the original query",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 348,
+    "chunk_id": 337,
     "content": "into multiple sub-queries. We closely follow the implementation from HyDE [ 10 ], utilizing the more\nadvanced instruction-following language model, GPT-3.5-turbo-instruct, to generate hypothetical\nanswers. The model infers with a default temperature of 0.7, sampling up to a maximum of 512",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 349,
+    "chunk_id": 338,
     "content": "tokens. Retrieval experiments and evaluation are conducted using the Pyserini toolkit.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 350,
+    "chunk_id": 339,
     "content": "**A.3** **Experimental Details of Reranking Methods**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 351,
+    "chunk_id": 340,
     "content": "**Datasets** Our experiments utilize the MS MARCO Passage ranking dataset, a substantial corpus\ndesigned for machine reading comprehension tasks. This dataset comprises over 8.8 million passages\nand 1 million queries. The training set contains approximately 398M tuples of queries paired with",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 352,
+    "chunk_id": 341,
     "content": "corresponding positive and negative passages, while the development set comprises 6,980 queries,\npaired with their BM25 retrieval results, and preserves the top-1000 ranked candidate passages for\neach query. We evaluate the effectiveness of the methods on the development set, as the test set is not",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 353,
+    "chunk_id": 342,
     "content": "publicly available.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 354,
+    "chunk_id": 343,
     "content": "**Metrics** The evaluation metrics MRR@1, MRR@10, MRR@1k and Hit Rate@10 are used.\nMRR@10 is the official metric proposed by MS MARCO.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 355,
+    "chunk_id": 344,
     "content": "**Implementation Details** We follow and make modifications to the implementation provided by\nPyGaggle [ 26 ] and TILDE [ 28 ]. For DLM-based reranking, we use monoT5 [ 26 ] based on T5-base,\nmonoBERT [ 25 ] based on BERT-large and RankLLaMA [ 27 ] based on Llama-2-7b. For TILDE",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 356,
+    "chunk_id": 345,
     "content": "reranking, we use TILDEv2 [29] based on BERT-base.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 357,
+    "chunk_id": 346,
     "content": "Typically, 50 documents are retrieved as input for the reranking module. The documents remaining\nafter the reranking and repacking phase can be further concentrated by assigning a top-k value or a\nrelevancy score threshold.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 358,
+    "chunk_id": 347,
     "content": "**Result Analysis** Reranking results are shown in Table 9. We compare our results with a randomly\nshuffled ordering and the BM25 retrieval baseline. All reranking methods demonstrate a notable",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 359,
-    "content": "9 [https://huggingface.co/HuggingFaceH4/zephyr-7b-alpha](https://huggingface.co/HuggingFaceH4/zephyr-7b-alpha)\n\n19\n\n\n-----",
+    "chunk_id": 348,
+    "content": "9 [https://huggingface.co/HuggingFaceH4/zephyr-7b-alpha](https://huggingface.co/HuggingFaceH4/zephyr-7b-alpha)\n\n19\n\n\n-----\n\n\n\nTable 12: Results of the model augmented with different contexts on various QA datasets.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 360,
-    "content": "|Context|Model NQ TriviaQA HotpotQA ASQA Avg.|\n|---|---|\n|D ∅|M 29.78 60.44 23.73 37.89 37.96 b M 26.23 58.26 26.67 32.30 35.87 g M 31.10 61.37 28.40 39.96 40.21 r M 25.92 57.62 26.43 32.99 35.70 gr M 26.69 58.07 27.04 33.75 36.39 gg|",
-    "metadata": {
-      "source": "2407.01219v1.md"
-    }
-  },
-  {
-    "chunk_id": 361,
-    "content": "|D g|M 44.78 79.90 56.72 71.64 63.26 b M 85.72 88.16 79.82 85.51 84.80 g M 60.98 80.20 65.73 67.49 68.60 r M 87.60 87.94 81.07 87.58 86.05 gr M 86.72 88.35 79.59 83.44 84.53 gg|",
-    "metadata": {
-      "source": "2407.01219v1.md"
-    }
-  },
-  {
-    "chunk_id": 362,
-    "content": "|D r|M 16.49 50.03 21.57 28.79 29.22 b M 22.15 46.98 24.36 29.40 30.72 g M 36.92 58.42 29.64 39.54 41.13 r M 23.63 45.01 24.17 27.95 30.19 gr M 21.08 43.83 23.23 27.33 28.87 gg|",
-    "metadata": {
-      "source": "2407.01219v1.md"
-    }
-  },
-  {
-    "chunk_id": 363,
-    "content": "|D gr|M 34.65 81.27 52.75 65.42 58.52 b M 85.00 87.33 78.18 83.02 83.38 g M 60.28 79.32 63.82 67.29 67.68 r M 87.63 87.14 79.95 87.78 85.63 gr M 86.31 86.90 78.10 83.85 83.79 gg|",
-    "metadata": {
-      "source": "2407.01219v1.md"
-    }
-  },
-  {
-    "chunk_id": 364,
-    "content": "Table 12: Results of the model augmented with different contexts on various QA datasets.",
-    "metadata": {
-      "source": "2407.01219v1.md"
-    }
-  },
-  {
-    "chunk_id": 365,
+    "chunk_id": 349,
     "content": "increase in performance across all metrics. Approximately equal performance is achieved by monoT5\nand monoBERT, and RankLLaMA performs best, each ascending in latency. TILDEv2 is the fastest,\ntaking approximately 10 to 20 milliseconds per query at the cost of performance. Additionally,",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 366,
+    "chunk_id": 350,
     "content": "TILDEv2 requires that the passages reranked be identically included in the previously indexed\ncollection. Preprocessing must be redone at inference for new unseen passages, negating the efficiency\nadvantages.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 367,
+    "chunk_id": 351,
     "content": "**A.4** **Experimental Details of Summarization Methods**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 368,
+    "chunk_id": 352,
     "content": "**Selective Context** Selective Context enhances LLM efficiency by identifying and removing\nredundant information in the input context. It evaluates the informativeness of lexical units using\nself-information computed by a base causal language model. This method is non-query-based,",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 369,
+    "chunk_id": 353,
     "content": "allowing a comparison between query-based and non-query-based approaches.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 370,
+    "chunk_id": 354,
     "content": "**Datasets** We evaluated these methods on three datasets: Natural Questions (NQ) [ 57 ], TriviaQA [58], and HotpotQA [59].\n\n**Metrics** Evaluation metrics include the F1 score and the number of tokens changed after summarization to measure conciseness.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 371,
+    "chunk_id": 355,
     "content": "**Implementation Details** For all methods, we use Llama3-8B-Instruct as the generator model\nand set a summarization ratio of 0.4. For extractive methods, importance scores determine the\nsentences retained. For abstractive methods, we control the maximum generation length using the",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 372,
+    "chunk_id": 356,
     "content": "summarization ratio to align with extractive methods. Experiments are conducted on the NQ test set,\nTriviaQA test set, and HotpotQA development set.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 373,
+    "chunk_id": 357,
     "content": "**A.5** **Experimental Details of Generator Fine-tuning**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 374,
+    "chunk_id": 358,
     "content": "**Datasets** We fine-tune our model on several question answering(QA) and reading comprehension\ndatasets, including ASQA [ 60 ], HotpotQA [ 59 ], NarrativeQA [ 61 ], NQ [ 57 ], SQuAD [ 62 ], TriviaQA [ 58 ], TruthfulQA [ 63 ]. We use their train splits (for those containing significantly more data",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 375,
+    "chunk_id": 359,
     "content": "20\n\n\n-----\n\n**[Instruction]** Please generate ten descriptions for the continuation task.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 376,
+    "chunk_id": 360,
     "content": "**[Context]** For example:\n1.“French.Washington played a crucial role in the American Revolutionary War, leading\nthe Continental Army against the British.” Please continue writing the above paragraph.\n2.“The discovery of the double helix structure of DNA by James Watson and Francis",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 377,
+    "chunk_id": 361,
     "content": "Crick revolutionized the field of genetics, laying the foundation for modern molecular\nbiology and biotechnology.” Please continue by discussing recent developments in\ngenetic research, such as CRISPR gene editing, and their potential ethical implications.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 378,
+    "chunk_id": 362,
     "content": "Table 14: Template for generating task classification data.\n\nentries than others, we conducted a random sample). For evaluation, ASQA [ 60 ], HotpotQA [ 59 ],\nNQ [ 57 ], TriviaQA [ 58 ] are used. We evaluate our model on their validation splits or manually split a",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 379,
+    "chunk_id": 363,
     "content": "subset from the training set to avoid overlapping.\nThe exact number of entries in each train and **Dataset** # **Train** # **Eval**\ntest set is detailed in Table 13. ASQA 2 *,* 090 483",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 380,
+    "chunk_id": 364,
     "content": "We use the dataset-provided documents as for each data entry. To obtain *d* *random* we sam- *d* *gold* HotpotQATriviaQANQ 15159 *,,,* 000 000 000 768 *,,,* 405 368 006\nple the context of different entries within the NarrativeQA 7 *,* 000 *−−*",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 381,
+    "chunk_id": 365,
     "content": "same dataset, to make sure the distributions of SQuAD 67 *,* 00 *−−*\n*d* *random* and *d* *gold* are roughly similar. Truthful Q A 817 *−−*",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 382,
-    "content": "**Metrics** We use the ground-truth coverage\n\n|Dataset|#Train|#Eval|\n|---|---|---|\n|ASQA HotpotQA TriviaQA NQ NarrativeQA SQuAD TruthfulQA|2, 090 15, 000 9, 000 15, 000 7, 000 67, 00 817|483 7, 405 6, 368 8, 006 −− −− −−|\n\n\nTable 13: Number of examples in each Dataset",
+    "chunk_id": 366,
+    "content": "**Metrics** We use the ground-truth coverage\n\n\n\nTable 13: Number of examples in each Dataset\n\nas our evaluation metric, considering that the\n\nused in the fine-tuning experiments.\n\nanswers of QA tasks are relatively short, while\nthe generation length of the model is sometimes hard to limit.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 383,
-    "content": "Table 13: Number of examples in each Dataset\n\nas our evaluation metric, considering that the\n\nused in the fine-tuning experiments.\n\nanswers of QA tasks are relatively short, while\nthe generation length of the model is sometimes hard to limit.",
-    "metadata": {
-      "source": "2407.01219v1.md"
-    }
-  },
-  {
-    "chunk_id": 384,
+    "chunk_id": 367,
     "content": "**Implementation Details** We select Llama-2-7b [ 50 ] as the base model. For efficiency, we use\nLoRA [ 64 ] and int8 quantization during training. The prompt templates used for fine-tuning and\nevaluation mainly follow Lin et al. [37] . We train our generator for 3 epochs and constrain the",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 385,
+    "chunk_id": 368,
     "content": "maximum length of the sequence to 1600, using a batch size of 4 and a learning rate of 5e-5. During\ntesting, we use a zero-shot setting.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 386,
+    "chunk_id": 369,
     "content": "**Detailed Results** Table 12 shows our evaluation results on each dataset.\n\n**A.6** **Experimental Details of Comprehensive Evaluation**",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 387,
+    "chunk_id": 370,
     "content": "**Tasks and Datasets** We conducted extensive experiments across various NLP tasks and datasets to\nassess the performance of RAG systems. Specifically: (1) **Commonsense Reasoning** : We evaluated\non MMLU [ 65 ], ARC-Challenge [ 66 ], and OpenbookQA [ 67 ] datasets. (2) **Fact Checking** : Our",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 388,
+    "chunk_id": 371,
     "content": "evaluation encompassed the FEVER [ 68 ] and PubHealth [ 69 ] datasets. (3) **Open-Domain QA** :\nWe assessed on NQ [ 57 ], TriviaQA [ 58 ], and WebQuestions [ 70 ] datasets. (4) **MultiHop QA** :\nOur evaluation included the HotPotQA [ 59 ], 2WikiMultiHopQA [ 71 ], and MuSiQue [ 52 ] datasets.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 389,
+    "chunk_id": 372,
     "content": "For MuSiQue, we followed the approach outlined in [ 72 ] and focused solely on answerable 2-hop\nquestions. (5) **Medical QA** : We also assessed on the PubMedQA [ 73 ] dataset. In each dataset, we\nrandomly sub-sample 500 entries from the test set for our experiments. For datasets without test set,",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 390,
+    "chunk_id": 373,
     "content": "we use develop set instead.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 391,
+    "chunk_id": 374,
     "content": "To assess RAG capabilities, we evenly collect a total of 500 entries from NQ, TriviaQA, HotPotQA,\n2WikiMultiHopQA and MuSiQue. Each entry is a “question, gold document, gold answer” triple.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 392,
+    "chunk_id": 375,
     "content": "**Metrics** We use token-level F1 score and EM score for Open-Domain QA and MultiHop QA tasks,\nand accuracy for others. We use a more lenient EM score, which evaluates performance based on\nwhether the model generations include gold answers instead of strictly exact matching [74].",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 393,
+    "chunk_id": 376,
     "content": "Towards RAG capabilities evaluation, we adopt four metrics from RAGAs, including **Faithfulness**,\n**Context Relevancy**, **Answer Relevancy**, and **Answer Correctness** . Faithfulness measures how\nfactually consistent the generated answer is with the retrieved context. An answer is considered",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 394,
+    "chunk_id": 377,
     "content": "faithful if all claims made can be directly inferred from the provided context. Context Relevancy\nevaluates how relevant the retrieved context is to the original query. Answer Relevancy assesses the",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 395,
+    "chunk_id": 378,
     "content": "21\n\n\n-----",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 396,
+    "chunk_id": 379,
     "content": "pertinence of the generated answer to the original query. Answer Correctness involves the accuracy\nof the generated answer when compared to the ground truth. For example, Context Relevancy is\ncalculated from the proportion of sentences within the retrieved context that are relevant for answering",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 397,
+    "chunk_id": 380,
     "content": "the given question to all sentences:",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 398,
+    "chunk_id": 381,
     "content": "*|* *S* *|*\n*context relevancy* = (2)\n*|Total|*\n\nwhere *|S|* denotes the number of relevant sentences, *|Total|* denotes the total number of sentences\nretrieved. All these metrics are evaluated using the RAGAs framework, with GPT-4 serving as the\njudge.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 399,
+    "chunk_id": 382,
     "content": "Additionally, we compute the cosine similarity between the retrieved document and the gold document\nas **Retrieval Similarity** . The retrieved document and gold document are fed into an embedding\nmodel, then the resulting embeddings are used to compute the cosine similarity.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 400,
+    "chunk_id": 383,
     "content": "**Implementation Details** For Open-Domain QA and MultiHop QA datasets, we set the generation\nmodel’s maximum new token number to 100 tokens. For other datasets, we set it to 50 tokens. To\ndeal with excessively long retrieved documents, we truncated the documents to 2048 words when",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 401,
+    "chunk_id": 384,
     "content": "evaluating RankLLaMA and LongLLMLingua.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 402,
+    "chunk_id": 385,
     "content": "For all datasets, we use greedy decoding during generation. To better compare the capabilities of\ndifferent RAG modules, we adopt the 0-shot evaluation setting, i.e., no in-context examples are\noffered. In the multiple choice and fact checking tasks, answers generated by the model may take",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 403,
+    "chunk_id": 386,
     "content": "a variety of forms (e.g., “the answer is A” instead of “A”). Therefore, we preprocess the responses\ngenerated by the model, applying regular expression templates to match them with gold labels.",
     "metadata": {
       "source": "2407.01219v1.md"
     }
   },
   {
-    "chunk_id": 404,
+    "chunk_id": 387,
     "content": "22\n\n\n-----",
     "metadata": {
       "source": "2407.01219v1.md"

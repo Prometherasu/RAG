@@ -834,986 +834,972 @@
   },
   {
     "chunk_id": 119,
-    "content": "7\n\n\n-----\n\nPre p rint. Under review.\n\n**BGE-M3** **Gemma** **H-Gemma**\nC Metrics\n\n|Col1|Col2|5 10 20|5 10 20|5 10 20|\n|---|---|---|---|---|",
+    "content": "7\n\n\n-----\n\nPre p rint. Under review.\n\n**BGE-M3** **Gemma** **H-Gemma**\nC Metrics",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
     "chunk_id": 120,
-    "content": "|P|TriviaQA NQ PopQA Throughput|55.80 57.41 58.30 25.31 26.08 26.83 30.89 31.53 32.11 165.3 124.7 67.8|56.95 59.55 59.66 27.08 29.00 30.03 32.19 34.13 36.45 51.2 27.4 13.3|56.95 59.55 59.66 27.08 29.00 30.03 32.19 34.13 36.45 78.8 50.9 28.9|\n|---|---|---|---|---|",
-    "metadata": {
-      "source": "2504.02921v1.md"
-    }
-  },
-  {
-    "chunk_id": 121,
-    "content": "|D|TriviaQA NQ PopQA Throughput|56.15 56.92 57.33 25.13 25.87 26.60 29.98 30.62 31.21 75.8 69.0 41.7|56.91 58.77 59.05 26.55 28.47 29.50 29.98 32.02 34.21 28.4 15.2 7.5|56.91 58.77 59.05 26.55 28.47 29.50 29.98 32.02 34.21 48.7 36.2 21.1|\n|---|---|---|---|---|",
-    "metadata": {
-      "source": "2504.02921v1.md"
-    }
-  },
-  {
-    "chunk_id": 122,
     "content": "Table 1: Downstream Performance Evaluation: We report Exact Match (EM) scores on\nthree QA benchmarks along with throughput across different settings. The column labeled\nC denotes the corpus type: Passage-level (P) or Document-level (D). For each reranker",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 123,
+    "chunk_id": 121,
     "content": "model (BGE-M3 (of Artificial Intelligence, BAAI), Gemma (of Artificial Intelligence, BAAI),\nHyperRAG Gemma(H-Gemma)), we vary the number of retrieved documents involved in\nreranking (shown as 5, 10, and 20).",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 124,
+    "chunk_id": 122,
     "content": "indexing structure of the embedding retriever. Specifically, we group KV-cache entries by\nthe *coarse centroid ID* used in the FAISS IVF index. This means that all KV entries assigned\nto the same coarse cluster are stored within the same storage backend.",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 125,
+    "chunk_id": 123,
     "content": "This design offers a critical performance benefit: since approximate nearest neighbor (ANN)\nsearch during retrieval only probes a small number of centroid clusters, the corresponding\nKV-cache retrieval is limited to a single backend. As a result, we avoid cross-device fetching,",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 126,
+    "chunk_id": 124,
     "content": "reduce latency, and improve I/O locality.\n### **5 Experiment**",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 127,
+    "chunk_id": 125,
     "content": "In this section, we present the results of the benchmark and performance experiments.\n\n**5.1** **Experiment settings**\n\n**Corpus** :We evaluate HyperRAG under two different levels of retrieval granularity: passagelevel and document-level.",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 128,
+    "chunk_id": 126,
     "content": "*Passage-Level Corpus:* For the passage-level setting, we use the psgs multiset-100 dataset as\nour base corpus. To ensure consistent input lengths and improve KV cache reuse efficiency,\nwe rechunk all passages to a fixed size of approximately 200 words per chunk. In this case",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 129,
+    "chunk_id": 127,
     "content": "document tokens length is fixed as 256.",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 130,
+    "chunk_id": 128,
     "content": "*Document-Level Corpus:* For the document-level setting, we adopt the MS MARCO (Bajaj\net al., 2018) document dataset. Each document is chunked into fixed-length segments with a\nmaximum word length of 450. In this case document tokens length is fixed as 512.",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 131,
+    "chunk_id": 129,
     "content": "**Metrics** : To evaluate downstream performance, we utilized TriviaQA (Joshi et al., 2017),\nNaturalQA (Kwiatkowski et al., 2019), and PopQA (Mallen et al., 2023) as benchmarks\nfor performance evaluation. For the benchmark measurement, we collect the average",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 132,
+    "chunk_id": 130,
     "content": "throughput of RAG service(request per second) after warm-up for efficiency evaluation.",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 133,
+    "chunk_id": 131,
     "content": "**Model** : For the embedding model of index search, we used the contriever (Izacard et al.,\n2022) model. In the generation stage, we employed the Llama3.1-8B-Instruct model\n(Grattafiori et al., 2024).",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 134,
+    "chunk_id": 132,
     "content": "**Hardware** The experiments were conducted on a system equipped with 8 NVIDIA A100\nGPUs. For storage backend we use redis remote backend(4TB) and local nvme backend(4TB).\nWe store all the hot KV-cache that will be used during inference on the QA dataset and then",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 135,
+    "chunk_id": 133,
     "content": "fulfill the whole storage with random sampling.",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 136,
+    "chunk_id": 134,
     "content": "8\n\n\n-----\n\nPre p rint. Under review.\n\n**5.2** **Trade-off Performance**",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 137,
+    "chunk_id": 135,
     "content": "We conduct experiments to evaluate both downstream performance and system efficiency.\nThe results, presented in Table 1, demonstrate that HyperRAG maintains high-quality\ngeneration while achieving a 2–3× improvement in service throughput on average. These",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 138,
+    "chunk_id": 136,
     "content": "findings highlight HyperRAG’s ability to effectively balance generation quality and costefficiency, making it a robust and practical solution for RAG service.\n### **6 Discussion**",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 139,
+    "chunk_id": 137,
     "content": "In this section we will provide some key discussions around HyperRAG.\n\n**6.1** **RAG Service Framework**",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 140,
+    "chunk_id": 138,
     "content": "One of the recent hot topics in RAG research is enabling the generation model to better\nidentify and utilize the most relevant retrieved documents (Asai et al., 2023; Wei et al.,\n2025). HyperRAG aligns with this research direction, but with a key distinction: instead of",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 141,
+    "chunk_id": 139,
     "content": "relying solely on the generation model to perform this filtering, we delegate the relevance\ndiscrimination task to a powerful reranker. This reranker operates with similar mechanisms\nto large language models but is significantly more efficient due to its smaller size and the",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 142,
+    "chunk_id": 140,
     "content": "support of HyperRAG’s architecture. Moreover, this separation of relevance extraction\noffers greater flexibility during deployment.",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 143,
+    "chunk_id": 141,
     "content": "**6.2** **Real-World Application**",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 144,
+    "chunk_id": 142,
     "content": "Storing reranker KV caches introduces a significant storage requirement. For example, we\nestimate that storing the full KV cache for the Gemma-2B reranker over the MS MARCO\ndocument dataset would require more than 40TB of storage. This raises questions about",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 145,
+    "chunk_id": 143,
     "content": "the practicality of deploying HyperRAG in real-world settings. However, we argue that\nHyperRAG remains a viable and efficient solution for two main reasons.",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 146,
+    "chunk_id": 144,
     "content": "**Production Stack Design:** Figure 6 illustrates a potential distributed deployment\narchitecture for HyperRAG. In this setup,\nthe KV cache backend functions as a shared\nmemory store accessible by multiple RAG\nservice engines. This design allows the storage burden to be amortized across multiple",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 147,
+    "chunk_id": 145,
     "content": "applications and services, enabling efficient\nand centralized knowledge sharing at scale.",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 148,
+    "chunk_id": 146,
     "content": "**Financial Cost:** In practice, storage costs are\nnegligible compared to GPU infrastructure. Figure 6: Production Stack: The stored KV\nFor instance, on Amazon Web Services, the cache backend can be shared across multiple\ncost of provisioning 8×A100 GPUs far ex- RAG service engines.",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 149,
+    "chunk_id": 147,
     "content": "ceeds that of acquiring 40TB of persistent\nstorage. By introducing a relatively small additional cost for storage, HyperRAG achieves\nsignificantly higher throughput—making it a more cost-effective solution from the perspective of service providers aiming to optimize performance per dollar.",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 150,
+    "chunk_id": 148,
     "content": "### **References**",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 151,
+    "chunk_id": 149,
     "content": "Joshua Ainslie, James Lee-Thorp, Michiel de Jong, Yury Zemlyanskiy, Federico Lebron, ´\nand Sumit Sanghai. Gqa: Training generalized multi-query transformer models from\n[multi-head checkpoints, 2023. URL https://arxiv.org/abs/2305.13245.](https://arxiv.org/abs/2305.13245)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 152,
+    "chunk_id": 150,
     "content": "Jason Ansel, Edward Yang, Horace He, Natalia Gimelshein, Animesh Jain, Michael Voznesensky, Bin Bao, Peter Bell, David Berard, Evgeni Burovski, Geeta Chauhan, Anjali\nChourdia, Will Constable, Alban Desmaison, Zachary DeVito, Elias Ellison, Will Feng,\n\n9\n\n\n-----\n\nPre p rint. Under review.",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 153,
+    "chunk_id": 151,
     "content": "Jiong Gong, Michael Gschwind, Brian Hirsh, Sherlock Huang, Kshiteej Kalambarkar,\nLaurent Kirsch, Michael Lazos, Mario Lezcano, Yanbo Liang, Jason Liang, Yinghai Lu,\nC. K. Luk, Bert Maher, Yunjie Pan, Christian Puhrsch, Matthias Reso, Mark Saroufim,",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 154,
+    "chunk_id": 152,
     "content": "Marcos Yukio Siraichi, Helen Suk, Shunting Zhang, Michael Suo, Phil Tillet, Xu Zhao,\nEikan Wang, Keren Zhou, Richard Zou, Xiaodong Wang, Ajit Mathews, William Wen,\nGregory Chanan, Peng Wu, and Soumith Chintala. Pytorch 2: Faster machine learning",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 155,
+    "chunk_id": 153,
     "content": "through dynamic python bytecode transformation and graph compilation. In *Proceedings*\n*of the 29th ACM International Conference on Architectural Support for Programming Languages*",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 156,
+    "chunk_id": 154,
     "content": "*and Operating Systems, Volume 2*, ASPLOS ’24, pp. 929–947, New York, NY, USA, 2024. Association for Computing Machinery. ISBN 9798400703850. doi: 10.1145/3620665.3640366.\n[URL https://doi.org/10.1145/3620665.3640366.](https://doi.org/10.1145/3620665.3640366)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 157,
+    "chunk_id": 155,
     "content": "Akari Asai, Zeqiu Wu, Yizhong Wang, Avirup Sil, and Hannaneh Hajishirzi. Self-rag:\nLearning to retrieve, generate, and critique through self-reflection, 2023. URL [https:](https://arxiv.org/abs/2310.11511)\n[//arxiv.org/abs/2310.11511.](https://arxiv.org/abs/2310.11511)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 158,
+    "chunk_id": 156,
     "content": "Payal Bajaj, Daniel Campos, Nick Craswell, Li Deng, Jianfeng Gao, Xiaodong Liu, Rangan\nMajumder, Andrew McNamara, Bhaskar Mitra, Tri Nguyen, Mir Rosenberg, Xia Song,\nAlina Stoica, Saurabh Tiwary, and Tong Wang. Ms marco: A human generated machine",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 159,
+    "chunk_id": 157,
     "content": "[reading comprehension dataset, 2018. URL https://arxiv.org/abs/1611.09268.](https://arxiv.org/abs/1611.09268)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 160,
+    "chunk_id": 158,
     "content": "Jianlv Chen, Shitao Xiao, Peitian Zhang, Kun Luo, Defu Lian, and Zheng Liu. Bge\nm3-embedding: Multi-lingual, multi-functionality, multi-granularity text embeddings\n[through self-knowledge distillation, 2024. URL https://arxiv.org/abs/2402.03216.](https://arxiv.org/abs/2402.03216)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 161,
+    "chunk_id": 159,
     "content": "Yihua Cheng, Kuntai Du, Jiayi Yao, and Junchen Jiang. Do large language models need a\ncontent delivery network? *arXiv preprint arXiv:2409.13761*, 2024.",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 162,
+    "chunk_id": 160,
     "content": "Alexis Conneau, Kartikay Khandelwal, Naman Goyal, Vishrav Chaudhary, Guillaume\nWenzek, Francisco Guzman, Edouard Grave, Myle Ott, Luke Zettlemoyer, and Veselin ´\nStoyanov. Unsupervised cross-lingual representation learning at scale, 2020. URL [https:](https://arxiv.org/abs/1911.02116)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 163,
+    "chunk_id": 161,
     "content": "[//arxiv.org/abs/1911.02116.](https://arxiv.org/abs/1911.02116)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 164,
+    "chunk_id": 162,
     "content": "DeepSeek-AI, Aixin Liu, Bei Feng, Bin Wang, Bingxuan Wang, Bo Liu, Chenggang Zhao,\nChengqi Dengr, Chong Ruan, Damai Dai, Daya Guo, Dejian Yang, Deli Chen, Dongjie Ji,\nErhang Li, Fangyun Lin, Fuli Luo, Guangbo Hao, Guanting Chen, Guowei Li, H. Zhang,",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 165,
+    "chunk_id": 163,
     "content": "Hanwei Xu, Hao Yang, Haowei Zhang, Honghui Ding, Huajian Xin, Huazuo Gao, Hui\nLi, Hui Qu, J. L. Cai, Jian Liang, Jianzhong Guo, Jiaqi Ni, Jiashi Li, Jin Chen, Jingyang\nYuan, Junjie Qiu, Junxiao Song, Kai Dong, Kaige Gao, Kang Guan, Lean Wang, Lecong",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 166,
+    "chunk_id": 164,
     "content": "Zhang, Lei Xu, Leyi Xia, Liang Zhao, Liyue Zhang, Meng Li, Miaojun Wang, Mingchuan\nZhang, Minghua Zhang, Minghui Tang, Mingming Li, Ning Tian, Panpan Huang, Peiyi\nWang, Peng Zhang, Qihao Zhu, Qinyu Chen, Qiushi Du, R. J. Chen, R. L. Jin, Ruiqi Ge,",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 167,
+    "chunk_id": 165,
     "content": "Ruizhe Pan, Runxin Xu, Ruyi Chen, S. S. Li, Shanghao Lu, Shangyan Zhou, Shanhuang\nChen, Shaoqing Wu, Shengfeng Ye, Shirong Ma, Shiyu Wang, Shuang Zhou, Shuiping\nYu, Shunfeng Zhou, Size Zheng, T. Wang, Tian Pei, Tian Yuan, Tianyu Sun, W. L. Xiao,",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 168,
+    "chunk_id": 166,
     "content": "Wangding Zeng, Wei An, Wen Liu, Wenfeng Liang, Wenjun Gao, Wentao Zhang, X. Q.\nLi, Xiangyue Jin, Xianzu Wang, Xiao Bi, Xiaodong Liu, Xiaohan Wang, Xiaojin Shen,\nXiaokang Chen, Xiaosha Chen, Xiaotao Nie, Xiaowen Sun, Xiaoxiang Wang, Xin Liu,",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 169,
+    "chunk_id": 167,
     "content": "Xin Xie, Xingkai Yu, Xinnan Song, Xinyi Zhou, Xinyu Yang, Xuan Lu, Xuecheng Su,\nY. Wu, Y. K. Li, Y. X. Wei, Y. X. Zhu, Yanhong Xu, Yanping Huang, Yao Li, Yao Zhao,\nYaofeng Sun, Yaohui Li, Yaohui Wang, Yi Zheng, Yichao Zhang, Yiliang Xiong, Yilong",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 170,
+    "chunk_id": 168,
     "content": "Zhao, Ying He, Ying Tang, Yishi Piao, Yixin Dong, Yixuan Tan, Yiyuan Liu, Yongji Wang,\nYongqiang Guo, Yuchen Zhu, Yuduan Wang, Yuheng Zou, Yukun Zha, Yunxian Ma,\nYuting Yan, Yuxiang You, Yuxuan Liu, Z. Z. Ren, Zehui Ren, Zhangli Sha, Zhe Fu, Zhen",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 171,
+    "chunk_id": 169,
     "content": "Huang, Zhen Zhang, Zhenda Xie, Zhewen Hao, Zhihong Shao, Zhiniu Wen, Zhipeng Xu,\nZhongyu Zhang, Zhuoshu Li, Zihan Wang, Zihui Gu, Zilin Li, and Ziwei Xie. Deepseekv2: A strong, economical, and efficient mixture-of-experts language model, 2024. URL",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 172,
+    "chunk_id": 170,
     "content": "[https://arxiv.org/abs/2405.04434.](https://arxiv.org/abs/2405.04434)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 173,
+    "chunk_id": 171,
     "content": "Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova. Bert: Pre-training of\ndeep bidirectional transformers for language understanding, 2019. URL [https://arxiv.](https://arxiv.org/abs/1810.04805)\n[org/abs/1810.04805.](https://arxiv.org/abs/1810.04805)\n\n10\n\n\n-----",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 174,
+    "chunk_id": 172,
     "content": "10\n\n\n-----\n\nPre p rint. Under review.\n\nMatthijs Douze, Alexandr Guzhva, Chengqi Deng, Jeff Johnson, Gergely Szilvasy, PierreEmmanuel Mazare, Maria Lomeli, Lucas Hosseini, and Herv ´ e J ´ egou. The faiss library, ´\n[2025. URL https://arxiv.org/abs/2401.08281.](https://arxiv.org/abs/2401.08281)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 175,
+    "chunk_id": 173,
     "content": "Hugging Face. cross-encoder/ms-marco-minilm-l6-v2. [https://huggingface.co/](https://huggingface.co/cross-encoder/ms-marco-MiniLM-L6-v2)\n[cross-encoder/ms-marco-MiniLM-L6-v2, 2025. Accessed: March 29, 2025.](https://huggingface.co/cross-encoder/ms-marco-MiniLM-L6-v2)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 176,
+    "chunk_id": 174,
     "content": "Luyu Gao and Jamie Callan. Long document re-ranking with modular re-ranker. In\n*Proceedings of the 45th International ACM SIGIR Conference on Research and Development in*\n*Information Retrieval*, SIGIR ’22, pp. 2371–2376. ACM, July 2022. doi: 10.1145/3477495.",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 177,
+    "chunk_id": 175,
     "content": "[3531860. URL http://dx.doi.org/10.1145/3477495.3531860.](http://dx.doi.org/10.1145/3477495.3531860)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 178,
+    "chunk_id": 176,
     "content": "Yunfan Gao, Yun Xiong, Xinyu Gao, Kangxiang Jia, Jinliu Pan, Yuxi Bi, Yi Dai, Jiawei Sun,\nMeng Wang, and Haofen Wang. Retrieval-augmented generation for large language\n[models: A survey, 2024. URL https://arxiv.org/abs/2312.10997.](https://arxiv.org/abs/2312.10997)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 179,
+    "chunk_id": 177,
     "content": "In Gim, Guojun Chen, Seung-seob Lee, Nikhil Sarda, Anurag Khandelwal, and Lin Zhong.\nPrompt cache: Modular attention reuse for low-latency inference. *Proceedings of Machine*\n*Learning and Systems*, 6:325–338, 2024.",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 180,
+    "chunk_id": 178,
     "content": "Aaron Grattafiori, Abhimanyu Dubey, Abhinav Jauhri, Abhinav Pandey, Abhishek Kadian,\nAhmad Al-Dahle, Aiesha Letman, Akhil Mathur, Alan Schelten, Alex Vaughan, Amy\nYang, Angela Fan, Anirudh Goyal, Anthony Hartshorn, Aobo Yang, Archi Mitra, Archie",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 181,
+    "chunk_id": 179,
     "content": "Sravankumar, Artem Korenev, Arthur Hinsvark, Arun Rao, Aston Zhang, Aurelien Rodriguez, Austen Gregerson, Ava Spataru, Baptiste Roziere, Bethany Biron, Binh Tang, Bobbie Chern, Charlotte Caucheteux, Chaya Nayak, Chloe Bi, Chris Marra, Chris McConnell,",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 182,
+    "chunk_id": 180,
     "content": "Christian Keller, Christophe Touret, Chunyang Wu, Corinne Wong, Cristian Canton Ferrer,\nCyrus Nikolaidis, Damien Allonsius, Daniel Song, Danielle Pintz, Danny Livshits, Danny\nWyatt, David Esiobu, Dhruv Choudhary, Dhruv Mahajan, Diego Garcia-Olano, Diego",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 183,
+    "chunk_id": 181,
     "content": "Perino, Dieuwke Hupkes, Egor Lakomkin, Ehab AlBadawy, Elina Lobanova, Emily Dinan,\nEric Michael Smith, Filip Radenovic, Francisco Guzman, Frank Zhang, Gabriel Synnaeve, ´\nGabrielle Lee, Georgia Lewis Anderson, Govind Thattai, Graeme Nail, Gregoire Mialon,",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 184,
+    "chunk_id": 182,
     "content": "Guan Pang, Guillem Cucurell, Hailey Nguyen, Hannah Korevaar, Hu Xu, Hugo Touvron,\nIliyan Zarov, Imanol Arrieta Ibarra, Isabel Kloumann, Ishan Misra, Ivan Evtimov, Jack\nZhang, Jade Copet, Jaewon Lee, Jan Geffert, Jana Vranes, Jason Park, Jay Mahadeokar,",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 185,
+    "chunk_id": 183,
     "content": "Jeet Shah, Jelmer van der Linde, Jennifer Billock, Jenny Hong, Jenya Lee, Jeremy Fu,\nJianfeng Chi, Jianyu Huang, Jiawen Liu, Jie Wang, Jiecao Yu, Joanna Bitton, Joe Spisak,\nJongsoo Park, Joseph Rocca, Joshua Johnstun, Joshua Saxe, Junteng Jia, Kalyan Vasuden",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 186,
+    "chunk_id": 184,
     "content": "Alwala, Karthik Prasad, Kartikeya Upasani, Kate Plawiak, Ke Li, Kenneth Heafield, Kevin\nStone, Khalid El-Arini, Krithika Iyer, Kshitiz Malik, Kuenley Chiu, Kunal Bhalla, Kushal\nLakhotia, Lauren Rantala-Yeary, Laurens van der Maaten, Lawrence Chen, Liang Tan, Liz",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 187,
+    "chunk_id": 185,
     "content": "Jenkins, Louis Martin, Lovish Madaan, Lubo Malo, Lukas Blecher, Lukas Landzaat, Luke\nde Oliveira, Madeline Muzzi, Mahesh Pasupuleti, Mannat Singh, Manohar Paluri, Marcin\nKardas, Maria Tsimpoukelli, Mathew Oldham, Mathieu Rita, Maya Pavlova, Melanie",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 188,
+    "chunk_id": 186,
     "content": "Kambadur, Mike Lewis, Min Si, Mitesh Kumar Singh, Mona Hassan, Naman Goyal,\nNarjes Torabi, Nikolay Bashlykov, Nikolay Bogoychev, Niladri Chatterji, Ning Zhang,\nOlivier Duchenne, Onur C¸ elebi, Patrick Alrassy, Pengchuan Zhang, Pengwei Li, Petar",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 189,
+    "chunk_id": 187,
     "content": "Vasic, Peter Weng, Prajjwal Bhargava, Pratik Dubal, Praveen Krishnan, Punit Singh Koura,\nPuxin Xu, Qing He, Qingxiao Dong, Ragavan Srinivasan, Raj Ganapathy, Ramon Calderer,",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 190,
+    "chunk_id": 188,
     "content": "Ricardo Silveira Cabral, Robert Stojnic, Roberta Raileanu, Rohan Maheswari, Rohit Girdhar, Rohit Patel, Romain Sauvestre, Ronnie Polidoro, Roshan Sumbaly, Ross Taylor, Ruan\nSilva, Rui Hou, Rui Wang, Saghar Hosseini, Sahana Chennabasappa, Sanjay Singh, Sean",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 191,
+    "chunk_id": 189,
     "content": "Bell, Seohyun Sonia Kim, Sergey Edunov, Shaoliang Nie, Sharan Narang, Sharath Raparthy, Sheng Shen, Shengye Wan, Shruti Bhosale, Shun Zhang, Simon Vandenhende,",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 192,
+    "chunk_id": 190,
     "content": "Soumya Batra, Spencer Whitman, Sten Sootla, Stephane Collot, Suchin Gururangan, Sydney Borodinsky, Tamar Herman, Tara Fowler, Tarek Sheasha, Thomas Georgiou, Thomas\nScialom, Tobias Speckbacher, Todor Mihaylov, Tong Xiao, Ujjwal Karn, Vedanuj Goswami,",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 193,
+    "chunk_id": 191,
     "content": "Vibhor Gupta, Vignesh Ramanathan, Viktor Kerkez, Vincent Gonguet, Virginie Do, Vish\nVogeti, V ´ ıtor Albiero, Vladan Petrovic, Weiwei Chu, Wenhan Xiong, Wenyin Fu, Whitney\nMeers, Xavier Martinet, Xiaodong Wang, Xiaofang Wang, Xiaoqing Ellen Tan, Xide Xia,",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 194,
+    "chunk_id": 192,
     "content": "11\n\n\n-----\n\nPre p rint. Under review.",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 195,
+    "chunk_id": 193,
     "content": "Xinfeng Xie, Xuchao Jia, Xuewei Wang, Yaelle Goldschlag, Yashesh Gaur, Yasmine Babaei,\nYi Wen, Yiwen Song, Yuchen Zhang, Yue Li, Yuning Mao, Zacharie Delpierre Coudert,\nZheng Yan, Zhengxing Chen, Zoe Papakipos, Aaditya Singh, Aayushi Srivastava, Abha",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 196,
+    "chunk_id": 194,
     "content": "Jain, Adam Kelsey, Adam Shajnfeld, Adithya Gangidi, Adolfo Victoria, Ahuva Goldstand,\nAjay Menon, Ajay Sharma, Alex Boesenberg, Alexei Baevski, Allie Feinstein, Amanda\nKallet, Amit Sangani, Amos Teo, Anam Yunus, Andrei Lupu, Andres Alvarado, Andrew",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 197,
+    "chunk_id": 195,
     "content": "Caples, Andrew Gu, Andrew Ho, Andrew Poulton, Andrew Ryan, Ankit Ramchandani,\nAnnie Dong, Annie Franco, Anuj Goyal, Aparajita Saraf, Arkabandhu Chowdhury, Ashley\nGabriel, Ashwin Bharambe, Assaf Eisenman, Azadeh Yazdan, Beau James, Ben Maurer,",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 198,
+    "chunk_id": 196,
     "content": "Benjamin Leonhardi, Bernie Huang, Beth Loyd, Beto De Paola, Bhargavi Paranjape, Bing\nLiu, Bo Wu, Boyu Ni, Braden Hancock, Bram Wasti, Brandon Spence, Brani Stojkovic,",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 199,
+    "chunk_id": 197,
     "content": "Brian Gamido, Britt Montalvo, Carl Parker, Carly Burton, Catalina Mejia, Ce Liu, Changhan Wang, Changkyu Kim, Chao Zhou, Chester Hu, Ching-Hsiang Chu, Chris Cai, Chris\nTindal, Christoph Feichtenhofer, Cynthia Gao, Damon Civin, Dana Beaty, Daniel Kreymer,",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 200,
+    "chunk_id": 198,
     "content": "Daniel Li, David Adkins, David Xu, Davide Testuggine, Delia David, Devi Parikh, Diana\nLiskovich, Didem Foss, Dingkang Wang, Duc Le, Dustin Holland, Edward Dowling, Eissa\nJamil, Elaine Montgomery, Eleonora Presani, Emily Hahn, Emily Wood, Eric-Tuan Le, Erik",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 201,
+    "chunk_id": 199,
     "content": "Brinkman, Esteban Arcaute, Evan Dunbar, Evan Smothers, Fei Sun, Felix Kreuk, Feng\nTian, Filippos Kokkinos, Firat Ozgenel, Francesco Caggioni, Frank Kanayet, Frank Seide,\nGabriela Medina Florez, Gabriella Schwarz, Gada Badeer, Georgia Swee, Gil Halpern,",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 202,
+    "chunk_id": 200,
     "content": "Grant Herman, Grigory Sizov, Guangyi, Zhang, Guna Lakshminarayanan, Hakan Inan,\nHamid Shojanazeri, Han Zou, Hannah Wang, Hanwen Zha, Haroun Habeeb, Harrison\nRudolph, Helen Suk, Henry Aspegren, Hunter Goldman, Hongyuan Zhan, Ibrahim",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 203,
+    "chunk_id": 201,
     "content": "Damlaj, Igor Molybog, Igor Tufanov, Ilias Leontiadis, Irina-Elena Veliche, Itai Gat, Jake\nWeissman, James Geboski, James Kohli, Janice Lam, Japhet Asher, Jean-Baptiste Gaya,\nJeff Marcus, Jeff Tang, Jennifer Chan, Jenny Zhen, Jeremy Reizenstein, Jeremy Teboul,",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 204,
+    "chunk_id": 202,
     "content": "Jessica Zhong, Jian Jin, Jingyi Yang, Joe Cummings, Jon Carvill, Jon Shepard, Jonathan\nMcPhie, Jonathan Torres, Josh Ginsburg, Junjie Wang, Kai Wu, Kam Hou U, Karan Saxena,\nKartikay Khandelwal, Katayoun Zand, Kathy Matosich, Kaushik Veeraraghavan, Kelly",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 205,
+    "chunk_id": 203,
     "content": "Michelena, Keqian Li, Kiran Jagadeesh, Kun Huang, Kunal Chawla, Kyle Huang, Lailin\nChen, Lakshya Garg, Lavender A, Leandro Silva, Lee Bell, Lei Zhang, Liangpeng Guo,\nLicheng Yu, Liron Moshkovich, Luca Wehrstedt, Madian Khabsa, Manav Avalani, Manish",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 206,
+    "chunk_id": 204,
     "content": "Bhatt, Martynas Mankus, Matan Hasson, Matthew Lennie, Matthias Reso, Maxim Groshev, Maxim Naumov, Maya Lathi, Meghan Keneally, Miao Liu, Michael L. Seltzer, Michal\nValko, Michelle Restrepo, Mihir Patel, Mik Vyatskov, Mikayel Samvelyan, Mike Clark,",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 207,
+    "chunk_id": 205,
     "content": "Mike Macey, Mike Wang, Miquel Jubert Hermoso, Mo Metanat, Mohammad Rastegari,\nMunish Bansal, Nandhini Santhanam, Natascha Parks, Natasha White, Navyata Bawa,\nNayan Singhal, Nick Egebo, Nicolas Usunier, Nikhil Mehta, Nikolay Pavlovich Laptev,",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 208,
+    "chunk_id": 206,
     "content": "Ning Dong, Norman Cheng, Oleg Chernoguz, Olivia Hart, Omkar Salpekar, Ozlem\nKalinli, Parkin Kent, Parth Parekh, Paul Saab, Pavan Balaji, Pedro Rittner, Philip Bontrager, Pierre Roux, Piotr Dollar, Polina Zvyagina, Prashant Ratanchandani, Pritish Yuvraj,",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 209,
+    "chunk_id": 207,
     "content": "Qian Liang, Rachad Alao, Rachel Rodriguez, Rafi Ayub, Raghotham Murthy, Raghu\nNayani, Rahul Mitra, Rangaprabhu Parthasarathy, Raymond Li, Rebekkah Hogan, Robin\nBattey, Rocky Wang, Russ Howes, Ruty Rinott, Sachin Mehta, Sachin Siby, Sai Jayesh",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 210,
+    "chunk_id": 208,
     "content": "Bondu, Samyak Datta, Sara Chugh, Sara Hunt, Sargun Dhillon, Sasha Sidorov, Satadru\nPan, Saurabh Mahajan, Saurabh Verma, Seiji Yamamoto, Sharadh Ramaswamy, Shaun\nLindsay, Shaun Lindsay, Sheng Feng, Shenghao Lin, Shengxin Cindy Zha, Shishir Patil,",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 211,
+    "chunk_id": 209,
     "content": "Shiva Shankar, Shuqiang Zhang, Shuqiang Zhang, Sinong Wang, Sneha Agarwal, Soji\nSajuyigbe, Soumith Chintala, Stephanie Max, Stephen Chen, Steve Kehoe, Steve Satterfield, Sudarshan Govindaprasad, Sumit Gupta, Summer Deng, Sungmin Cho, Sunny Virk,",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 212,
+    "chunk_id": 210,
     "content": "Suraj Subramanian, Sy Choudhury, Sydney Goldman, Tal Remez, Tamar Glaser, Tamara\nBest, Thilo Koehler, Thomas Robinson, Tianhe Li, Tianjun Zhang, Tim Matthews, Timothy\nChou, Tzook Shaked, Varun Vontimitta, Victoria Ajayi, Victoria Montanez, Vijai Mohan,",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 213,
+    "chunk_id": 211,
     "content": "Vinay Satish Kumar, Vishal Mangla, Vlad Ionescu, Vlad Poenaru, Vlad Tiberiu Mihailescu,\nVladimir Ivanov, Wei Li, Wenchen Wang, Wenwen Jiang, Wes Bouaziz, Will Constable,\nXiaocheng Tang, Xiaojian Wu, Xiaolan Wang, Xilun Wu, Xinbo Gao, Yaniv Kleinman,",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 214,
+    "chunk_id": 212,
     "content": "Yanjun Chen, Ye Hu, Ye Jia, Ye Qi, Yenda Li, Yilin Zhang, Ying Zhang, Yossi Adi, Youngjin\nNam, Yu, Wang, Yu Zhao, Yuchen Hao, Yundi Qian, Yunlu Li, Yuzi He, Zach Rait, Zachary\nDeVito, Zef Rosnbrick, Zhaoduo Wen, Zhenyu Yang, Zhiwei Zhao, and Zhiyu Ma. The",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 215,
+    "chunk_id": 213,
     "content": "12\n\n\n-----\n\nPre p rint. Under review.\n\n[llama 3 herd of models, 2024. URL https://arxiv.org/abs/2407.21783.](https://arxiv.org/abs/2407.21783)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 216,
+    "chunk_id": 214,
     "content": "Song Han, Huizi Mao, and William J. Dally. Deep compression: Compressing deep neural\nnetworks with pruning, trained quantization and huffman coding, 2016. URL [https:](https://arxiv.org/abs/1510.00149)\n[//arxiv.org/abs/1510.00149.](https://arxiv.org/abs/1510.00149)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 217,
+    "chunk_id": 215,
     "content": "Gautier Izacard, Mathilde Caron, Lucas Hosseini, Sebastian Riedel, Piotr Bojanowski, Armand Joulin, and Edouard Grave. Unsupervised dense information retrieval with con[trastive learning, 2022. URL https://arxiv.org/abs/2112.09118.](https://arxiv.org/abs/2112.09118)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 218,
+    "chunk_id": 216,
     "content": "Bowen Jin, Jinsung Yoon, Jiawei Han, and Sercan O. Arik. Long-context llms meet rag:\nOvercoming challenges for long inputs in rag, 2024a. URL [https://arxiv.org/abs/2410.](https://arxiv.org/abs/2410.05983)\n[05983.](https://arxiv.org/abs/2410.05983)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 219,
+    "chunk_id": 217,
     "content": "Chao Jin, Zili Zhang, Xuanlin Jiang, Fangyue Liu, Xin Liu, Xuanzhe Liu, and Xin Jin.\nRagcache: Efficient knowledge caching for retrieval-augmented generation. *arXiv preprint*\n*arXiv:2404.12457*, 2024b.",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 220,
+    "chunk_id": 218,
     "content": "Mandar Joshi, Eunsol Choi, Daniel S. Weld, and Luke Zettlemoyer. Triviaqa: A large\nscale distantly supervised challenge dataset for reading comprehension, 2017. URL\n[https://arxiv.org/abs/1705.03551.](https://arxiv.org/abs/1705.03551)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 221,
+    "chunk_id": 219,
     "content": "Urvashi Khandelwal, Omer Levy, Dan Jurafsky, Luke Zettlemoyer, and Mike Lewis. Generalization through memorization: Nearest neighbor language models, 2020. URL\n[https://arxiv.org/abs/1911.00172.](https://arxiv.org/abs/1911.00172)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 222,
+    "chunk_id": 220,
     "content": "Tom Kwiatkowski, Jennimaria Palomaki, Olivia Redfield, Michael Collins, Ankur Parikh,\nChris Alberti, Danielle Epstein, Illia Polosukhin, Jacob Devlin, Kenton Lee, Kristina",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 223,
+    "chunk_id": 221,
     "content": "Toutanova, Llion Jones, Matthew Kelcey, Ming-Wei Chang, Andrew M. Dai, Jakob Uszkoreit, Quoc Le, and Slav Petrov. Natural questions: A benchmark for question answering\nresearch. *Transactions of the Association for Computational Linguistics*, 7:452–466, 2019. doi:",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 224,
+    "chunk_id": 222,
     "content": "[10.1162/tacl a 00276. URL https://aclanthology.org/Q19-1026/.](https://aclanthology.org/Q19-1026/)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 225,
+    "chunk_id": 223,
     "content": "Patrick Lewis, Ethan Perez, Aleksandra Piktus, Fabio Petroni, Vladimir Karpukhin, Naman Goyal, Heinrich Kuttler, Mike Lewis, Wen tau Yih, Tim Rockt ¨ aschel, Sebastian Riedel, and ¨\nDouwe Kiela. Retrieval-augmented generation for knowledge-intensive nlp tasks, 2021.",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 226,
+    "chunk_id": 224,
     "content": "[URL https://arxiv.org/abs/2005.11401.](https://arxiv.org/abs/2005.11401)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 227,
+    "chunk_id": 225,
     "content": "Ji Lin, Jiaming Tang, Haotian Tang, Shang Yang, Wei-Ming Chen, Wei-Chen Wang, Guangxuan Xiao, Xingyu Dang, Chuang Gan, and Song Han. Awq: Activation-aware weight\nquantization for llm compression and acceleration, 2024. URL [https://arxiv.org/abs/](https://arxiv.org/abs/2306.00978)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 228,
+    "chunk_id": 226,
     "content": "[2306.00978.](https://arxiv.org/abs/2306.00978)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 229,
+    "chunk_id": 227,
     "content": "Yuhan Liu, Hanchen Li, Yihua Cheng, Siddhant Ray, Yuyang Huang, Qizheng Zhang, Kuntai\nDu, Jiayi Yao, Shan Lu, Ganesh Ananthanarayanan, Michael Maire, Henry Hoffmann, Ari\nHoltzman, and Junchen Jiang. Cachegen: Kv cache compression and streaming for fast",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 230,
+    "chunk_id": 228,
     "content": "[large language model serving. 2024. URL https://arxiv.org/abs/2310.07240.](https://arxiv.org/abs/2310.07240)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 231,
+    "chunk_id": 229,
     "content": "Xueguang Ma, Liang Wang, Nan Yang, Furu Wei, and Jimmy Lin. Fine-tuning llama for\n[multi-stage text retrieval, 2023. URL https://arxiv.org/abs/2310.08319.](https://arxiv.org/abs/2310.08319)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 232,
+    "chunk_id": 230,
     "content": "Yu. A. Malkov and D. A. Yashunin. Efficient and robust approximate nearest neighbor\nsearch using hierarchical navigable small world graphs, 2018. URL [https://arxiv.org/](https://arxiv.org/abs/1603.09320)\n[abs/1603.09320.](https://arxiv.org/abs/1603.09320)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 233,
+    "chunk_id": 231,
     "content": "Alex Mallen, Akari Asai, Victor Zhong, Rajarshi Das, Daniel Khashabi, and Hannaneh\nHajishirzi. When not to trust language models: Investigating effectiveness of parametric\n[and non-parametric memories, 2023. URL https://arxiv.org/abs/2212.10511.](https://arxiv.org/abs/2212.10511)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 234,
+    "chunk_id": 232,
     "content": "Beijing Academy of Artificial Intelligence (BAAI). Baai general embedding (bge) reranker\nv2 gemma. [https://huggingface.co/BAAI/bge-reranker-v2-gemma](https://huggingface.co/BAAI/bge-reranker-v2-gemma), 2025a. Accessed:\nMarch 29, 2025.\n\n13\n\n\n-----\n\nPre p rint. Under review.",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 235,
+    "chunk_id": 233,
     "content": "13\n\n\n-----\n\nPre p rint. Under review.\n\nBeijing Academy of Artificial Intelligence (BAAI). Baai general embedding (bge) reranker\nv2 m3. [https://huggingface.co/BAAI/bge-reranker-v2-m3](https://huggingface.co/BAAI/bge-reranker-v2-m3), 2025b. Accessed: March 29,\n2025.",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 236,
+    "chunk_id": 234,
     "content": "Ronak Pradeep, Sahel Sharifymoghaddam, and Jimmy Lin. RankZephyr: Effective and\nrobust zero-shot listwise reranking is a breeze! *arXiv:2312.02724*, 2023.",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 237,
+    "chunk_id": 235,
     "content": "Ori Ram, Yoav Levine, Itay Dalmedigos, Dor Muhlgay, Amnon Shashua, Kevin LeytonBrown, and Yoav Shoham. In-context retrieval-augmented language models, 2023. URL\n[https://arxiv.org/abs/2302.00083.](https://arxiv.org/abs/2302.00083)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 238,
+    "chunk_id": 236,
     "content": "Nils Reimers and Iryna Gurevych. Sentence-bert: Sentence embeddings using siamese bertnetworks. In *Proceedings of the 2019 Conference on Empirical Methods in Natural Language*",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 239,
+    "chunk_id": 237,
     "content": "*Processing* . Association for Computational Linguistics, 11 2019. URL [https://arxiv.org/](https://arxiv.org/abs/1908.10084)\n[abs/1908.10084.](https://arxiv.org/abs/1908.10084)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 240,
+    "chunk_id": 238,
     "content": "Stephen Robertson and Hugo Zaragoza. The probabilistic relevance framework: Bm25\nand beyond. *Foundations and Trends in Information Retrieval*, 3:333–389, 01 2009. doi:\n10.1561/1500000019.",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 241,
+    "chunk_id": 239,
     "content": "Rulin Shao, Jacqueline He, Akari Asai, Weijia Shi, Tim Dettmers, Sewon Min, Luke Zettlemoyer, and Pang Wei Koh. Scaling retrieval-based language models with a trillion-token\n[datastore, 2024. URL https://arxiv.org/abs/2407.12854.](https://arxiv.org/abs/2407.12854)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 242,
+    "chunk_id": 240,
     "content": "Liang Wang, Nan Yang, Xiaolong Huang, Binxing Jiao, Linjun Yang, Daxin Jiang, Rangan Majumder, and Furu Wei. Text embeddings by weakly-supervised contrastive pre-training,\n[2024. URL https://arxiv.org/abs/2212.03533.](https://arxiv.org/abs/2212.03533)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 243,
+    "chunk_id": 241,
     "content": "Zhepei Wei, Wei-Lin Chen, and Yu Meng. Instructrag: Instructing retrieval-augmented gen[eration via self-synthesized rationales, 2025. URL https://arxiv.org/abs/2406.13629.](https://arxiv.org/abs/2406.13629)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 244,
+    "chunk_id": 242,
     "content": "Guangxuan Xiao, Ji Lin, Mickael Seznec, Hao Wu, Julien Demouth, and Song Han.\nSmoothquant: Accurate and efficient post-training quantization for large language mod[els, 2024. URL https://arxiv.org/abs/2211.10438.](https://arxiv.org/abs/2211.10438)",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 245,
+    "chunk_id": 243,
     "content": "Jiayi Yao, Hanchen Li, Yuhan Liu, Siddhant Ray, Yihua Cheng, Qizheng Zhang, Kuntai Du,\nShan Lu, and Junchen Jiang. Cacheblend: Fast large language model serving with cached\nknowledge fusion. *arXiv preprint arXiv:2405.16444*, 2024.\n### **A Prompt Template**",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 246,
+    "chunk_id": 244,
     "content": "Following Jin et al. (2024a)’s work, we utilize the prompt template for Generation Without\nRAG as follows:\n\n<|begin_of_text|><|start_header_id|>system<|end_header_id|>",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 247,
+    "chunk_id": 245,
     "content": "Answer the question based on your own knowledge. Only give me the answer\nand do not output any other words.<|eot_id|><|start_header_id|>user<|end_header_id|>\n\nQuestion: {question}<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\nThe prompt template used for RAG is shown below:",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 248,
+    "chunk_id": 246,
     "content": "The prompt template used for RAG is shown below:\n\n<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\nAnswer the question based on the given document. Only give me the answer\nand do not output any other words.\nThe following are given documents.",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 249,
+    "chunk_id": 247,
     "content": "Doc {doc_id} (Title: {doc_title}) {doc_text}\n\n14\n\n\n-----\n\nPre p rint. Under review.",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 250,
+    "chunk_id": 248,
     "content": "14\n\n\n-----\n\nPre p rint. Under review.\n\nDoc {doc_id} (Title: {doc_title}) {doc_text}\nDoc {doc_id} (Title: {doc_title}) {doc_text}\nDoc {doc_id} (Title: {doc_title}) {doc_text}\nDoc {doc_id} (Title: {doc_title}) {doc_text}\nDoc {doc_id} (Title: {doc_title}) {doc_text}",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 251,
+    "chunk_id": 249,
     "content": "<|eot_id|><|start_header_id|>user<|end_header_id|>\n\nQuestion: {question}<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n### **B Quantization**",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 252,
+    "chunk_id": 250,
     "content": "To maintain compatibility with downstream operations (e.g., softmax), the KV cache is dequantized back to 16-bit precision after loading into GPU memory. This approach allows us\nto reduce I/O volume without introducing significant overhead during inference. However,",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 253,
+    "chunk_id": 251,
     "content": "in the HyperRAG we do not apply quantization because of two reasons. The first reason is\naround the downstream performance degradation. The second reason is that the original\nKV-cache of reranker model like Gemma-2B reranker is small enough. The introduction of",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 254,
+    "chunk_id": 252,
     "content": "quantization will introduce worse bandwidth performance.\n### **C Reranker Finetune**",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 255,
+    "chunk_id": 253,
     "content": "To improve reranking quality in our pipeline, we fine-tune all reranker models using a\nsimple yet effective strategy: formatting the input as [document] + [query] rather than\nthe original [query] + [document] format. This reversed input order aligns better with the",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 256,
+    "chunk_id": 254,
     "content": "decoder-based reranker architecture, which benefits from having the query appear later in\nthe sequence—allowing it to attend over the full document context.",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 257,
+    "chunk_id": 255,
     "content": "We use the open-source FlagEmbedding repository [1] as our fine-tuning framework. It supports a wide range of reranker backbones and provides efficient training tools. The rerankers\nare trained on the BGE-M3 training dataset, which contains multi-granularity positive and",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 258,
+    "chunk_id": 256,
     "content": "negative pairs curated for passage and document-level retrieval tasks. We follow the standard contrastive training setup, using positive and hard negative document pairs with a\nmaximum sequence length of 512 tokens.",
     "metadata": {
       "source": "2504.02921v1.md"
     }
   },
   {
-    "chunk_id": 259,
+    "chunk_id": 257,
     "content": "This fine-tuning strategy not only improves reranking performance but also makes the input\nformat compatible with our static attention layout for KV cache reuse.\n\n1 [https://github.com/FlagOpen/FlagEmbedding](https://github.com/FlagOpen/FlagEmbedding)\n\n15\n\n\n-----",
     "metadata": {
       "source": "2504.02921v1.md"

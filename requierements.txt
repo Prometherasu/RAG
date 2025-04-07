@@ -1,0 +1,15 @@
+# Fichiers et extraction
+pymupdf4llm>=0.1.6
+pymupdf>=1.22.5
+
+# LLM locaux ou HF
+transformers>=4.36.0
+torch>=2.0.0
+accelerate>=0.20.0
+
+# Recherche
+elasticsearch>=8.12.0
+
+# Splitter Markdown
+langchain>=0.1.0
+

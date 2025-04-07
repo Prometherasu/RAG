@@ -799,7 +799,7 @@
   },
   {
     "chunk_id": 114,
-    "content": "6\n\n\n-----\n\n|Whatis the top recommended item for user_235 who interacted with|item_1009,|item_g|2oo2d9s8,it|em_1109,|\n|---|---|---|---|---|",
+    "content": "6\n\n\n-----",
     "metadata": {
       "source": "2504.02458v1.md"
     }
@@ -834,7 +834,7 @@
   },
   {
     "chunk_id": 119,
-    "content": "¯ **x** = arg min *D* ( *R* *θ* (C(ˆ **x** )) *,* **y** ) *,* (4)\n\nwhere C(ˆ **x** ) represents purifying input ˆ **x** containing perturbations into a benign prompt ¯ **x** .\n\n### **4 Methodology**\n\n**4.1** **An Overview of the RETURN**",
+    "content": "¯ **x** = arg min *D* ( *R* *θ* (C(ˆ **x** )) *,* **y** ) *,* (4)\n\n\nwhere C(ˆ **x** ) represents purifying input ˆ **x** containing perturbations into a benign prompt ¯ **x** .\n### **4 Methodology**\n\n\n**4.1** **An Overview of the RETURN**",
     "metadata": {
       "source": "2504.02458v1.md"
     }
@@ -1856,1280 +1856,1238 @@
   },
   {
     "chunk_id": 265,
-    "content": "13\n\n\n-----\n\n|Col1|Col2|Col3|Col4|Col5|Col6|Col7|Col8|Col9|\n|---|---|---|---|---|---|---|---|---|\n||||||||||\n||||||||||\n||||||||||\n||||||||||\n||||||||||",
+    "content": "13\n\n\n-----\n\n\n\n\n\n\n\nBenign 0.0404 0.0606 0.0265 0.0331 / / / / / / / /\n\nPA 0.0064 0.0147 0.0032 0.0060 0.8409 0.7576 0.8777 0.8187 0.0000 0.0000 0.0000 0.0000\n\nRETURN 0.0248 0.0376 0.0148 0.0189 0.3864 0.3788 0.4423 0.4280 0.5405 0.5000 0.4961 0.4772",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
     "chunk_id": 266,
-    "content": "|Col1|Col2|Col3|Col4|Col5|Col6|Col7|Col8|Col9|\n|---|---|---|---|---|---|---|---|---|\n||||||||||\n||||||||||\n||||||||||\n||||||||||\n||||(a) A|UC||F|igu||",
-    "metadata": {
-      "source": "2504.02458v1.md"
-    }
-  },
-  {
-    "chunk_id": 267,
-    "content": "|Benign CheatAgent PD RPD RTD RD LLMSI ICL RDE RETURN 0.7 0.5 60 0.6 0.4 50 0.5 0.3 40 0.4 0.2 30 0.3 0.1 20 0.2 0.0 10 (a) AUC (b) ASR-A (c) D-A (%) Figure 3: Defense Performance on TALLRec Table 3: The defense performance of the proposed RETURN with respect to different attack",
-    "metadata": {
-      "source": "2504.02458v1.md"
-    }
-  },
-  {
-    "chunk_id": 268,
-    "content": "proposed RETURN with respect to different attack methods|Col2|Col3|Col4|Col5|Col6|Col7|Col8|Col9|Col10|Col11|",
-    "metadata": {
-      "source": "2504.02458v1.md"
-    }
-  },
-  {
-    "chunk_id": 269,
-    "content": "|---|---|---|---|---|---|---|---|---|---|---|\n||||||||||||\n||||||||||||\n||||||||||||\n||||||||||||\n||||||||||||\n|||||(c|) D-A (||%)||||\n|||||||nt a|||||\n|Methods H@5 H@10 N@5 N@10 A-H@5 A-H@10 A-N@5 A-N@10 D-H@5 D-H@10|||||||D-N@5 D-N@10||||",
-    "metadata": {
-      "source": "2504.02458v1.md"
-    }
-  },
-  {
-    "chunk_id": 270,
-    "content": "Benign 0.0404 0.0606 0.0265 0.0331 / / / / / / / /\n\nPA 0.0064 0.0147 0.0032 0.0060 0.8409 0.7576 0.8777 0.8187 0.0000 0.0000 0.0000 0.0000\n\nRETURN 0.0248 0.0376 0.0148 0.0189 0.3864 0.3788 0.4423 0.4280 0.5405 0.5000 0.4961 0.4772",
-    "metadata": {
-      "source": "2504.02458v1.md"
-    }
-  },
-  {
-    "chunk_id": 271,
     "content": "RA 0.0376 0.0587 0.0251 0.0317 0.0682 0.0303 0.0540 0.0405 0.0000 0.0000 0.0000 0.0000\n\nRETURN 0.0394 0.0587 0.0257 0.0318 0.0227 0.0303 0.0326 0.0377 0.6667 0.0000 0.3957 0.0679",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 272,
+    "chunk_id": 267,
     "content": "CheatAgent 0.0138 0.0239 0.0084 0.0117 0.6591 0.6061 0.6820 0.6471 0.0000 0.0000 0.0000 0.0000\nRETURN 0.0266 0.0385 0.0169 0.0207 0.3409 0.3636 0.3613 0.3731 0.4828 0.4000 0.4703 0.4234\n\n**5.3** **Model Analysis**",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 273,
+    "chunk_id": 268,
     "content": "**5.3** **Model Analysis**\n\n**5.3.1** **Attack Scenarios: Clickbait and vulnerabilities of LLM-empowered RecSys.**",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 274,
+    "chunk_id": 269,
     "content": "The attack discussed in this paper mirrors a real-world phenomenon, commonly known as clickbait [ 72, 61 ]. Clickbait refers to the scenario in which attackers might post products with enticing\nimages and titles to attract user clicks on an e-commerce platform. Users are easily drawn to these",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 275,
+    "chunk_id": 270,
     "content": "clickbait products and interact with them, even though the content of these goods may not truly\nalign with their preferences [ 72, 61 ]. However, existing studies [ 45 ] have demonstrated that LLMempowered RecSys is vulnerable to minor perturbations in user historical interactions. If users are",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 276,
+    "chunk_id": 271,
     "content": "attracted by clickbait products and engage with them, minor perturbations will be introduced to their\nhistorical interactions. Such minor perturbations (e.g., irrelevant items) can easily lead the LLMempowered RecSys to misunderstand the user preferences by capturing the collaborative knowledge",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 277,
+    "chunk_id": 272,
     "content": "from the user’s historical interactions. This leads to inaccurate recommendations, affecting user\nexperience and engagement and consequently diminishing company profits. Therefore, enhancing\nthe robustness of the LLM-empowered RecSys is crucial to mitigate the clickbait issue, which is a",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 278,
+    "chunk_id": 273,
     "content": "practical necessity.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 279,
+    "chunk_id": 274,
     "content": "During experiments, to simulate the worst-case scenario, we adopt CheatAgent [ 45 ], which is\na powerful attacker, to insert perturbations to the user’s historical sequences. Besides, we also\nemploy various attack methods and perturbation intensities to simulate the scenario in which the",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 280,
+    "chunk_id": 275,
     "content": "user’s historical interactions contain minor perturbations. We adopt two other methods to generate\nadversarial perturbations: PA [69] adopts an LLM to generate perturbations, and RA [45] randomly\nselects the items from the item pool as the perturbations.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 281,
+    "chunk_id": 276,
     "content": "As shown in Table 3, we can observe that the proposed defense method significantly reduces the\neffectiveness of various attack methods (i.e., CheatAgent, PA). This implies that even if users\ninteract with clickbait items that trigger vulnerabilities in the recommendation system, the proposed",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 282,
+    "chunk_id": 277,
     "content": "RETURN method can effectively cleanse these malicious disturbances, ensuring the correctness of\nrecommendations. Regarding RA, its attack capability is constrained, and it is aimed at simulating\nscenarios where perturbation items do not cause the RecSys to misinterpret user preferences. In",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 283,
+    "chunk_id": 278,
     "content": "this case, RETURN still improves or maintains the recommendation performance of the RecSys.\nThis demonstrates the robustness of the proposed RETURN against different attack intensities and\nscenarios.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 284,
+    "chunk_id": 279,
     "content": "**5.3.2** **Ablation Study**",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 285,
+    "chunk_id": 280,
     "content": "Three variants **RETURN-ROP**, **RETURN-RR**, and **RETURN-w/o Ens** are employed for comparison: 1) **RETURN-ROP** randomly creates the collaborative item graphs to demonstrate the\neffectiveness and importance of introducing the external database. 2) **RETURN-RR** directly deletes\n\n14\n\n\n-----",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 286,
+    "chunk_id": 281,
     "content": "14\n\n\n-----\n\nTable 4: Com p arison between RETURN and its variants on three datasets\n\n**Datasets** **Methods** **H@5↑** **H@10↑** **N@5↑** **N@10↑** **A-H@5↓** **A-H@10↓** **A-N@5↓** **A-N@10↓** **D-H@5↑** **D-H@10↑** **D-N@5↑** **D-N@10↑**",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 287,
+    "chunk_id": 282,
     "content": "Benign 0.2116 0.3055 0.1436 0.1737 / / / /\nCheatAgent 0.0646 0.1171 0.0405 0.0573 0.6948 0.6168 0.7181 0.6699 0.0000 0.0000 0.0000 0.0000\n\n**ML1M** RETURN **0.1384** **0.2091** **0.0915** **0.1142** **0.3459** **0.3154** **0.3630** **0.3427** **0.5023** **0.4886** **0.4945** **0.4885**",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 288,
+    "chunk_id": 283,
     "content": "–ROP 0.0747 0.1286 0.0467 0.0639 0.6471 0.5789 0.6747 0.6321 0.0687 0.0615 0.0604 0.0564\n\n–RR 0.1093 0.1705 0.0701 0.0898 0.4836 0.4417 0.5119 0.4831 0.3041 0.2838 0.2872 0.2788\n\n–w/o Ens 0.1185 0.1889 0.0783 0.1010 0.4397 0.3816 0.4546 0.4184 0.3671 0.3814 0.3670 0.3754",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 289,
+    "chunk_id": 284,
     "content": "Benign 0.0404 0.0606 0.0265 0.0331 / / / /\nCheatAgent 0.0138 0.0239 0.0084 0.0117 0.6591 0.6061 0.6820 0.6471 0.0000 0.0000 0.0000 0.0000\n\n**LastFM** RETURN **0.0266** **0.0385** **0.0169** **0.0207** **0.3409** **0.3636** **0.3613** **0.3731** **0.4828** **0.4000** **0.4703** **0.4234**",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 290,
+    "chunk_id": 285,
     "content": "–ROP 0.0165 0.0321 0.0115 0.0164 0.5909 0.4697 0.5683 0.5044 0.1034 0.2250 0.1667 0.2205\n\n–RR 0.0248 0.0339 0.0147 0.0176 0.3864 0.4394 0.4466 0.4674 0.4138 0.2750 0.3452 0.2778\n\n–w/o Ens 0.0248 0.0367 0.0151 0.0188 0.3864 0.3939 0.4304 0.4309 0.4138 0.3500 0.3689 0.3342",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 291,
+    "chunk_id": 286,
     "content": "Benign 0.1420 0.1704 0.1100 0.1191 / / / /\nCheatAgent 0.0863 0.1099 0.0615 0.0690 0.3922 0.3548 0.4409 0.4207 0.0000 0.0000 0.0000 0.0000\n\n**Taobao** RETURN **0.1124** **0.1384** **0.0890** **0.0975** **0.2088** **0.1875** **0.1904** **0.1817** **0.4676** **0.4715** **0.5682** **0.5680**",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 292,
+    "chunk_id": 287,
     "content": "–ROP 0.1008 0.1222 0.0749 0.0819 0.2907 0.2827 0.3185 0.3126 0.2588 0.2033 0.2776 0.2570\n\n–RR 0.1122 0.1376 0.0882 0.0964 0.2099 0.1923 0.1981 0.1911 0.4647 0.4580 0.5508 0.5457\n\n–w/o Ens 0.1006 0.1250 0.0765 0.0843 0.2918 0.2663 0.3046 0.2925 0.2559 0.2493 0.3093 0.3048\n\n\n0.05\n\n0.04\n\n0.03\n\n0.02",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 293,
-    "content": "0.05\n\n0.04\n\n0.03\n\n0.02\n\n0.00\n\n|Col1|Col2|Col3|Col4|\n|---|---|---|---|\n|||||\n|H@5 H@10 N@5 N@10||||\n\n5 10 15 20 25\n\n(a) H@ *k* and N@ *k* w.r.t. *m*\n\n\n20\n\n|Col1|Col2|Col3|D-H@5 D-H@10 D-N@5|\n|---|---|---|---|\n||||D-N@10|\n|||||\n\n5 10 15 20 25\n\n(b) D-H@ *k* and D-N@ *k* w.r.t. *m*\n\n\n70\n\n60\n\n50\n\n40",
+    "chunk_id": 288,
+    "content": "0.05\n\n0.04\n\n0.03\n\n0.02\n\n0.00\n\n\n5 10 15 20 25\n\n(a) H@ *k* and N@ *k* w.r.t. *m*\n\n\n20\n\n\n5 10 15 20 25\n\n(b) D-H@ *k* and D-N@ *k* w.r.t. *m*\n\n\n70\n\n60\n\n50\n\n40\n\n30\n\n\n\nFigure 4: Effect of the hyper-parameters *m* .",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 294,
-    "content": "70\n\n60\n\n50\n\n40\n\n30\n\n\n\nFigure 4: Effect of the hyper-parameters *m* .",
-    "metadata": {
-      "source": "2504.02458v1.md"
-    }
-  },
-  {
-    "chunk_id": 295,
+    "chunk_id": 289,
     "content": "all items with low occurrence probabilities. 3) **RETURN-w/o Ens** generates recommendations\nwithout using the ensemble strategy and only creates one purified prompt by processing a fixed\nnumber of items. The results are summarised in Table 4. RETURN-ROP generates recommendations",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 296,
+    "chunk_id": 290,
     "content": "without constructing collaborative item graphs from the external database, resulting in a significant\ndecrease in its defense performance. This highlights the importance of introducing accurate collaborative knowledge from the external database. Since directly deleting all items with low occurrence",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 297,
+    "chunk_id": 291,
     "content": "probabilities may result in the RecSys failing to capture users’ preferences effectively, especially\nfor users with limited interactions, there is a significant decrease in the defense performance of\nRETURN-RR, illustrating the importance of employing the retrieval-augmented denoising strategy.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 298,
+    "chunk_id": 292,
     "content": "Since the number of the perturbations is unknown, RETURN-w/o Ens fixes the number of purification\nitems. This approach usually leads to information loss if an excessive number of items are deleted, or",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 299,
+    "chunk_id": 293,
     "content": "incomplete purification if not all perturbations are eliminated, demonstrating the importance of the\nrobust ensemble recommendation strategy.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 300,
+    "chunk_id": 294,
     "content": "**5.3.3** **Parameter Analysis**",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 301,
+    "chunk_id": 295,
     "content": "We investigate the sensitivity of RETURN to the hyperparameter *m* . We sample varying values for\n*m* and test the defense performance of the proposed method. and the results are illustrated in Figure 4.\nWe observe that as *m* increases, the recommendation performance and the defense capability of",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 302,
+    "chunk_id": 296,
     "content": "RETURN fluctuate within a small range, demonstrating the robustness of the proposed method to\nhyperparameters.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 303,
+    "chunk_id": 297,
     "content": "**5.3.4** **The Robustness to the Perturbation Intensity**",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 304,
+    "chunk_id": 298,
     "content": "In this subsection, we investigate the robustness of RETURN to the perturbation intensity *△* . We\ninsert varying numbers of perturbations into benign users and evaluate the defense performance\nof the proposed method. As shown in Table 5, the proposed method significantly enhances the",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 305,
+    "chunk_id": 299,
     "content": "recommendation performance of LLM-empowered RecSys regardless of the number of perturbations\ninserted into the input. This is attributed to robust recommendation generation strategies that avoid\nintroducing fixed thresholds, thereby improving the robustness of the proposed RETURN to the",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 306,
+    "chunk_id": 300,
     "content": "number of perturbations.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 307,
+    "chunk_id": 301,
     "content": "15\n\n\n-----\n\nTable 5: The defense p erformance of RETURN with res p ect to the p erturbation intensit y *△*\n\n**Methods** **H@5↑** **H@10↑** **N@5↑** **N@10↑** **A-H@5↓** **A-H@10↓** **A-N@5↓** **A-N@10↓** **D-H@5↑** **D-H@10↑** **D-N@5↑** **D-N@10↑**",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 308,
+    "chunk_id": 302,
     "content": "Benign 0.0404 0.0606 0.0265 0.0331 / / / / / / / /\n\n*△* =1 0.0183 0.0394 0.0122 0.0190 0.5455 0.3485 0.5390 0.4265 0.0000 0.0000 0.0000 0.0000\n\nRETURN 0.0303 0.0486 0.0208 0.0265 0.2500 0.1970 0.2149 0.1974 0.5417 0.4348 0.6013 0.5373",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 309,
+    "chunk_id": 303,
     "content": "*△* =2 0.0138 0.0257 0.0090 0.0128 0.6591 0.5758 0.6621 0.6120 0.0000 0.0000 0.0000 0.0000\n\nRETURN 0.0248 0.0367 0.0148 0.0185 0.3864 0.3939 0.4432 0.4406 0.4138 0.3158 0.3307 0.2801\n\n*△* =3 0.0138 0.0239 0.0084 0.0117 0.6591 0.6061 0.6820 0.6471 0.0000 0.0000 0.0000 0.0000",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 310,
+    "chunk_id": 304,
     "content": "RETURN 0.0266 0.0385 0.0169 0.0207 0.3409 0.3636 0.3613 0.3731 0.4828 0.4000 0.4703 0.4234\n\n*△* =4 0.0119 0.0202 0.0082 0.0109 0.7045 0.6667 0.6893 0.6704 0.0000 0.0000 0.0000 0.0000\n\nRETURN 0.0248 0.0349 0.0162 0.0194 0.3864 0.4242 0.3879 0.4146 0.4516 0.3636 0.4372 0.3816",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 311,
+    "chunk_id": 305,
     "content": "*△* =5 0.0119 0.0211 0.0068 0.0098 0.7045 0.6515 0.7425 0.7048 0.0000 0.0000 0.0000 0.0000\n\nRETURN 0.0211 0.0284 0.0149 0.0173 0.4773 0.5303 0.4385 0.4771 0.3226 0.1860 0.4094 0.3231\n\n**5.3.5** **Impact on Benign Users**",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 312,
+    "chunk_id": 306,
     "content": "It is crucial that defense algorithms should not affect the recommendation performance of RecSys\nfor users whose interaction histories contain no perturbations. Therefore, in this subsection, the\nimpact of RETURN on benign users is investigated, and the results are shown in Table 6. We can",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 313,
+    "chunk_id": 307,
     "content": "observe that if the users’ profiles consist of no perturbations, RETURN can almost maintain the\nrecommendation performance even though RETURN deletes or replaces some items. Note that\nthe deletion or replacement operations are implemented based on the collaborative co-occurrence",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 314,
+    "chunk_id": 308,
     "content": "frequency, indicating that the selected items usually fail to align with the users’ preferences. Therefore,\nRETURN has little impact on the recommendation effectiveness for benign users, which demonstrates\nits practical applicability in enhancing the robustness of LLM-empowered RecSys.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 315,
+    "chunk_id": 309,
     "content": "Table 6: Recommendation p erformance when users’ p rofiles contain no p erturbation\n\n**Indexing** **Datasets** **Methods** **H@5↑** **H@10↑** **N@5↑** **N@10↑**\n\nBenign 0.2116 0.3055 0.1436 0.1737\nML1M RETURN 0.1675 0.2498 0.1131 0.1397\n\nBenign 0.0404 0.0606 0.0265 0.0331",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 316,
+    "chunk_id": 310,
     "content": "Benign 0.0404 0.0606 0.0265 0.0331\n\n**Sequential** LastFM RETURN 0.0376 0.0569 0.0232 0.0293\n\nBenign 0.1420 0.1704 0.1100 0.1191\nTaobao RETURN 0.1006 0.1250 0.0765 0.0843\n\nBenign 0.1058 0.1533 0.0693 0.0847\nML1M RETURN 0.0944 0.1406 0.0611 0.0760\n\nBenign 0.0128 0.0248 0.0072 0.0110",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 317,
+    "chunk_id": 311,
     "content": "Benign 0.0128 0.0248 0.0072 0.0110\n\n**Random** LastFM RETURN 0.0156 0.0284 0.0094 0.0136\n\nBenign 0.1643 0.1804 0.1277 0.1330\nTaobao RETURN 0.1239 0.1409 0.0893 0.0948\n\n**5.3.6** **Time Complexity**",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 318,
+    "chunk_id": 312,
     "content": "To address the concern regarding the computational overhead introduced by the RETURN framework,\nwe conduct additional experiments to analyse the time complexity of RETURN. We measure the\naverage time taken by the LLM-empowered RecSys to generate recommendations after incorporating",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 319,
+    "chunk_id": 313,
     "content": "different defense methods on the LastFM dataset. As shown in Tabel 7, we can observe that\nmethods requiring minimal computational resources (e.g., RD, LLMSI, etc.) exhibit significantly\nshorter recommendation generation times, typically less than 0.5 seconds. However, their defense",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 320,
+    "chunk_id": 314,
     "content": "performance is notably limited. In contrast, more powerful methods, including RETURN, exhibit\nslightly longer recommendation generation times, with RETURN taking approximately 0.8599\nseconds. This is comparable to other advanced defense methods like PD (0.7314 seconds) and RDE",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 321,
+    "chunk_id": 315,
     "content": "(0.7222 seconds), which also take around 1 second.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 322,
+    "chunk_id": 316,
     "content": "The results indicate that while RETURN introduces additional computational steps, such as voting\noperations, it does not significantly increase the overall computational burden of the RecSys. Importantly, RETURN achieves this while substantially enhancing the robustness of RecSys against",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 323,
+    "chunk_id": 317,
     "content": "perturbations. Thus, the framework strikes a balance between computational efficiency and defense\neffectiveness, making it a practical choice for real-world applications.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 324,
+    "chunk_id": 318,
     "content": "16\n\n\n-----\n\nTable 7: Com p utational time of different methods\n\n**Methods** **PD** **RPD** **RTD** **RD** **LLMSI** **ICL** **RDE** **RETURN**\n\n**Time (s)** 0.7314 1.2271 0.2916 0.3036 0.3006 0.3130 0.7222 0.8599\n\n**5.3.7** **Impact of Poor Quality Data**",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 325,
+    "chunk_id": 319,
     "content": "We conduct additional experiments to investigate the impact of data quality. We introduce two\nvariants: **RETURN-A-k** and **RETURN-D-k**, where perturbations are injected into or items are\ndeleted from the historical interactions of users in the external database to generate collaborative item",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 326,
+    "chunk_id": 320,
     "content": "graphs. Here, *k* =0.15 and *k* =0.3 represent the proportion of perturbations or deletions, respectively.\nThe results are shown in Table 8. The results demonstrate that RETURN-A-k still achieves remarkable",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 327,
+    "chunk_id": 321,
     "content": "defense performance even when perturbations are introduced into the external database. This is\nbecause the collaborative item graphs store co-occurrence frequencies, and minor perturbations\ndo not significantly alter the overall co-occurrence distribution among items. After normalization,",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 328,
+    "chunk_id": 322,
     "content": "these perturbations have minimal impact on RETURN’s ability to cleanse user interaction data and\ngenerate accurate recommendations. Additionally, RETURN-D-k fails to achieve the desired defense\nperformance because the lack of sufficient collaborative signals prevents it from accurately capturing",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 329,
+    "chunk_id": 323,
     "content": "relationships between items, thereby hindering its ability to identify perturbations.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 330,
+    "chunk_id": 324,
     "content": "These experimental results indicate that the presence of noisy data in the external database (i.e.,\nlow-quality data) does not significantly deteriorate the performance of RETURN, as the co-occurrence",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 331,
+    "chunk_id": 325,
     "content": "distribution remains relatively stable. However, insufficient data (e.g., due to deletions) can degrade\nRETURN’s defense effectiveness, as it relies on sufficient collaborative signals to accurately model",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 332,
+    "chunk_id": 326,
     "content": "item relationships. Therefore, while RETURN is robust to minor data quality issues, ensuring an\nadequate volume of data is crucial for maintaining its performance.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 333,
+    "chunk_id": 327,
     "content": "Table 8: The defense p erformance of RETURN with res p ect to different external databases\n\n**Methods** **H@5↑** **H@10↑** **N@5↑** **N@10↑** **A-H@5↓** **A-H@10↓** **A-N@5↓** **A-N@10↓** **D-H@5↑** **D-H@10↑** **D-N@5↑** **D-N@10↑**",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 334,
+    "chunk_id": 328,
     "content": "Benign 0.0404 0.0606 0.0265 0.0331 / / / / / / / /\nCheatAgent 0.0138 0.0239 0.0084 0.0117 0.6591 0.6061 0.6820 0.6471 0.0000 0.0000 0.0000 0.0000\n\nPD 0.0183 0.0330 0.0124 0.0170 0.5455 0.4545 0.5331 0.4851 0.1724 0.2500 0.2183 0.2503",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 335,
+    "chunk_id": 329,
     "content": "RPD 0.0183 0.0312 0.0106 0.0147 0.5455 0.4848 0.6006 0.5556 0.1724 0.2000 0.1193 0.1413\n\nRTD 0.0046 0.0110 0.0024 0.0043 0.8864 0.8182 0.9108 0.8691 -0.3448 -0.3500 -0.3355 -0.3430\n\nRD 0.0220 0.0303 0.0139 0.0165 0.4545 0.5000 0.4743 0.5010 0.3103 0.1750 0.3045 0.2258",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 336,
+    "chunk_id": 330,
     "content": "LLMSI 0.0119 0.0229 0.0080 0.0116 0.7045 0.6212 0.7003 0.6491 -0.0690 -0.0250 -0.0269 -0.0031\n\nICL 0.0174 0.0321 0.0113 0.0160 0.5682 0.4697 0.5726 0.5172 0.1379 0.2250 0.1604 0.2007\n\nRDE 0.0220 0.0339 0.0128 0.0167 0.4545 0.4394 0.5170 0.4960 0.3103 0.2750 0.2420 0.2334",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 337,
+    "chunk_id": 331,
     "content": "RETURN 0.0266 0.0385 0.0169 0.0207 0.3409 0.3636 0.3613 0.3731 0.4828 0.4000 0.4703 0.4234\n\nRETURN - A - 0.15 0.0294 0.0413 0.0180 0.0219 0.2727 0.3182 0.3208 0.3391 0.5862 0.4750 0.5296 0.4760\n\nRETURN - A - 0.3 0.0294 0.0440 0.0185 0.0232 0.2727 0.2727 0.3020 0.2980 0.5862 0.5500 0.5571 0.5395",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 338,
+    "chunk_id": 332,
     "content": "RETURN - D - 0.15 0.0165 0.0321 0.0103 0.0152 0.5909 0.4697 0.6125 0.5409 0.1034 0.2250 0.1019 0.1642\n\nRETURN - D - 0.3 0.0165 0.0321 0.0103 0.0152 0.5909 0.4697 0.6125 0.5409 0.1034 0.2250 0.1019 0.1642\n\n**5.3.8** **The Adoption of Normal Distribution**",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 339,
+    "chunk_id": 333,
     "content": "During the robust ensemble recommendation process, RETURN randomly samples an integer *n*\nfrom a normal distribution, and Top- *n* items with the lowest occurrence probabilities are identified\nfrom the user’s historical interactions for purification. The normal distribution is chosen because it",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 340,
+    "chunk_id": 334,
     "content": "allows for better control over the strength of perturbation filtering in RETURN. If a majority of users’\ninteraction histories contain significant perturbations, making it difficult for RecSys to accurately",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 341,
+    "chunk_id": 335,
     "content": "capture their preferences, the mean can be adjusted to enhance the purification strength of RETURN.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 342,
+    "chunk_id": 336,
     "content": "During experiments, the mean and the variance are 3.5 and 0.5, respectively. Moreover, we conducted\nadditional experiments to demonstrate that RETURN is robust to the different values of mean\nand variance. The results are shown in Table 9. The performance of RETURN fluctuates within",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 343,
+    "chunk_id": 337,
     "content": "a reasonable range as the mean and variance change, demonstrating its robustness to different\nparameter settings. This indicates that RETURN can adapt to varying distributions while maintaining\nits effectiveness in generating accurate recommendations.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 344,
+    "chunk_id": 338,
     "content": "**5.3.9** **Impact on the Personalization of Recommendations**\n\nTo evaluate the impact of RETURN on personalized recommendations, we separately analyze the\nrecommendation results of the LLM-empowered RecSys for benign users and the results after\n\n17\n\n\n-----",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 345,
+    "chunk_id": 339,
     "content": "17\n\n\n-----\n\nTable 9: The defense p erformance of RETURN with res p ect to different values of mean and variance\n\n**Methods** **H@5↑** **H@10↑** **N@5↑** **N@10↑** **A-H@5↓** **A-H@10↓** **A-N@5↓** **A-N@10↓** **D-H@5↑** **D-H@10↑** **D-N@5↑** **D-N@10↑**",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 346,
+    "chunk_id": 340,
     "content": "Benign 0.0404 0.0606 0.0265 0.0331 / / / /\nCheatAgent 0.0138 0.0239 0.0084 0.0117 0.6591 0.6061 0.6820 0.6471 0.0000 0.0000 0.0000 0.0000\n\nPD 0.0183 0.0330 0.0124 0.0170 0.5455 0.4545 0.5331 0.4851 0.1724 0.2500 0.2183 0.2503",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 347,
+    "chunk_id": 341,
     "content": "RPD 0.0183 0.0312 0.0106 0.0147 0.5455 0.4848 0.6006 0.5556 0.1724 0.2000 0.1193 0.1413\n\nRTD 0.0046 0.0110 0.0024 0.0043 0.8864 0.8182 0.9108 0.8691 -0.3448 -0.3500 -0.3355 -0.3430\n\nRD 0.0220 0.0303 0.0139 0.0165 0.4545 0.5000 0.4743 0.5010 0.3103 0.1750 0.3045 0.2258",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 348,
+    "chunk_id": 342,
     "content": "LLMSI 0.0119 0.0229 0.0080 0.0116 0.7045 0.6212 0.7003 0.6491 -0.0690 -0.0250 -0.0269 -0.0031\n\nICL 0.0174 0.0321 0.0113 0.0160 0.5682 0.4697 0.5726 0.5172 0.1379 0.2250 0.1604 0.2007\n\nRDE 0.0220 0.0339 0.0128 0.0167 0.4545 0.4394 0.5170 0.4960 0.3103 0.2750 0.2420 0.2334",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 349,
+    "chunk_id": 343,
     "content": "N(3.5, 0.5) 0.0266 0.0385 0.0169 0.0207 0.3409 0.3636 0.3613 0.3731 0.4828 0.4000 0.4703 0.4234\nN(3, 0.5) 0.0229 0.0358 0.0132 0.0173 0.4318 0.4091 0.5035 0.4766 0.3448 0.3250 0.2618 0.2635\nN(4, 0.5) 0.0267 0.0413 0.0174 0.0224 0.3389 0.3182 0.3449 0.3236 0.4859 0.4750 0.4943 0.4999",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 350,
+    "chunk_id": 344,
     "content": "N(3.5, 1.0) 0.0229 0.0376 0.0150 0.0197 0.4318 0.3788 0.4362 0.4043 0.3448 0.3750 0.3604 0.3752\nN(3.5, 1.5) 0.0220 0.0367 0.0150 0.0198 0.4545 0.3939 0.4349 0.4025 0.3103 0.3500 0.3624 0.3780",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 351,
+    "chunk_id": 345,
     "content": "introducing RETURN for denoising. We calculate the frequency of different items in both sets of\nresults, computed the Jaccard similarity coefficient [ 2 ] between the two distributions, determined the\nproportion of items that co-occurred, and measured the Shannon entropy of each distribution. The",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 352,
+    "chunk_id": 346,
     "content": "results are presented in Table 10. Some observations can be obtained as follows:",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 353,
+    "chunk_id": 347,
     "content": "- **Jaccard Similarity (0.7605):** The high Jaccard similarity coefficient indicates that the recommendation results before and after applying RETURN are highly consistent for benign users. This\nsuggests that RETURN preserves the majority of the original recommendations, although some",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 354,
+    "chunk_id": 348,
     "content": "items are removed or replaced.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 355,
+    "chunk_id": 349,
     "content": "- **Common Items Ratio (0.8706):** The proportion of items that co-occur in both the benign and\nRETURN-processed recommendations is 87.06%. This further demonstrates that RETURN\nmaintains the core set of recommended items, ensuring minimal disruption to the personalized\nrecommendations.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 356,
+    "chunk_id": 350,
     "content": "- **Shannon Entropy:** The Shannon entropy values for both the benign (9.8616) and RETURNprocessed (9.8292) recommendations are nearly identical. This indicates that RETURN does not\nsignificantly reduce the diversity of the recommendations, preserving the richness and variety of",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 357,
+    "chunk_id": 351,
     "content": "the suggested items.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 358,
-    "content": "Table 10: Im p act of RETURN on the p ersonalization of recommendations\n\n|Col1|Shannon Entropy|Jaccard Similarity|Common Items Ratio|\n|---|---|---|---|\n|Benign RETURN|9.8616 9.8292|0.7605|0.8706|\n\n### **6 Conclusion**",
+    "chunk_id": 352,
+    "content": "Table 10: Im p act of RETURN on the p ersonalization of recommendations\n\n\n### **6 Conclusion**",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 359,
+    "chunk_id": 353,
     "content": "In this paper, we propose a novel framework RETURN by retrieving collaborative knowledge from\nexternal databases to enhance the robustness of existing LLM-empowered RecSys in a plug-and-play\nmanner. Specifically, the proposed RETURN first converts the user interactions within external",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 360,
+    "chunk_id": 354,
     "content": "databases into collaborative item graphs to implicitly encode the collaborative signals. Then, the\npotential perturbations are located by retrieving relevant knowledge from the generated graphs. To",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 361,
+    "chunk_id": 355,
     "content": "mitigate the negative impact of perturbations and maintain the integrity of user preference, a retrievalaugmented denoising strategy is introduced to purify the input user profile. Finally, a robust ensemble",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 362,
+    "chunk_id": 356,
     "content": "recommendation method is proposed to generate the final recommendations by adopting a decision\nfusion strategy. Comprehensive experiments on real-world datasets demonstrate the effectiveness of\nthe proposed RETURN and highlight the potential of introducing external collaborative knowledge",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 363,
+    "chunk_id": 357,
     "content": "to enhance the robustness of LLM-empowered RecSys.\n### **References**",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 364,
+    "chunk_id": 358,
     "content": "[1] Josh Achiam, Steven Adler, Sandhini Agarwal, Lama Ahmad, Ilge Akkaya, Florencia Leoni\nAleman, Diogo Almeida, Janko Altenschmidt, Sam Altman, Shyamal Anadkat, et al. Gpt-4\ntechnical report. *arXiv preprint arXiv:2303.08774*, 2023.\n\n18\n\n\n-----",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 365,
+    "chunk_id": 359,
     "content": "18\n\n\n-----\n\n[2] Sujoy Bag, Sri Krishna Kumar, and Manoj Kumar Tiwari. An efficient recommendation\ngeneration using relevant jaccard similarity. *Information Sciences*, 483:53–64, 2019.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 366,
+    "chunk_id": 360,
     "content": "[3] Tao Bai, Jinqi Luo, Jun Zhao, Bihan Wen, and Qian Wang. Recent advances in adversarial training for adversarial robustness. In *Proceedings of the Thirtieth International Joint Conference*\n*on Artificial Intelligence*, pages 4312–4321, 2021.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 367,
+    "chunk_id": 361,
     "content": "[4] Keqin Bao, Jizhi Zhang, Yang Zhang, Wenjie Wang, Fuli Feng, and Xiangnan He. TALLRec:\nAn effective and efficient tuning framework to align large language model with recommendation.\nIn *ACM Conference on Recommender Systems*, 2023.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 368,
+    "chunk_id": 362,
     "content": "[5] Qingpeng Cai, Zhenghai Xue, Chi Zhang, Wanqi Xue, Shuchang Liu, Ruohan Zhan, Xueliang\nWang, Tianyou Zuo, Wentao Xie, Dong Zheng, et al. Two-stage constrained actor-critic for\nshort video recommendation. In *Proceedings of the ACM Web Conference 2023*, pages 865–875,\n2023.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 369,
+    "chunk_id": 363,
     "content": "[6] Bochuan Cao, Yuanpu Cao, Lu Lin, and Jinghui Chen. Defending against alignment-breaking\nattacks via robustly aligned LLM. In *Findings of the Association for Computational Linguistics*\n*ACL 2024*, 2024.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 370,
+    "chunk_id": 364,
     "content": "[7] Jingfan Chen, Wenqi Fan, Guanghui Zhu, Xiangyu Zhao, Chunfeng Yuan, Qing Li, and Yihua\nHuang. Knowledge-enhanced black-box attacks for recommendations. In *Proceedings of the*\n*28th ACM SIGKDD Conference on Knowledge Discovery and Data Mining*, pages 108–117,\n2022.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 371,
+    "chunk_id": 365,
     "content": "[8] Luoxin Chen, Weitong Ruan, Xinyue Liu, and Jianhua Lu. SeqVAT: Virtual adversarial training\nfor semi-supervised sequence labeling. In *Proceedings of the 58th Annual Meeting of the*\n*Association for Computational Linguistics*, pages 8801–8811, 2020.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 372,
+    "chunk_id": 366,
     "content": "[9] Paul Covington, Jay Adams, and Emre Sargin. Deep neural networks for Youtube recommendations. In *Proceedings of the 10th ACM conference on recommender systems*, pages 191–198,\n2016.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 373,
+    "chunk_id": 367,
     "content": "[10] James Davidson, Benjamin Liebald, Junning Liu, Palash Nandy, Taylor Van Vleet, Ullas Gargi,\nSujoy Gupta, Yu He, Mike Lambert, Blake Livingston, et al. The youtube video recommendation\nsystem. In *Proceedings of the fourth ACM conference on Recommender systems*, pages 293–296,\n2010.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 374,
+    "chunk_id": 368,
     "content": "[11] Yingpeng Du, Di Luo, Rui Yan, Xiaopei Wang, Hongzhi Liu, Hengshu Zhu, Yang Song, and Jie\nZhang. Enhancing job recommendation through llm-based generative adversarial networks. In\n*Proceedings of the AAAI Conference on Artificial Intelligence*, pages 8363–8371, 2024.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 375,
+    "chunk_id": 369,
     "content": "[12] Wenqi Fan, Yao Ma, Dawei Yin, Jianping Wang, Jiliang Tang, and Qing Li. Deep social\ncollaborative filtering. In *Proceedings of the 13th ACM Conference on Recommender Systems*,\npages 305–313, 2019.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 376,
+    "chunk_id": 370,
     "content": "[13] Wenqi Fan, Yao Ma, Qing Li, Jianping Wang, Guoyong Cai, Jiliang Tang, and Dawei Yin. A\ngraph neural network framework for social recommendations. *IEEE Transactions on Knowledge*\n*and Data Engineering*, 2020.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 377,
+    "chunk_id": 371,
     "content": "[14] Wenqi Fan, Tyler Derr, Xiangyu Zhao, Yao Ma, Hui Liu, Jianping Wang, Jiliang Tang, and\nQing Li. Attacking black-box recommendations via copying cross-domain user profiles. In\n*2021 IEEE 37th International Conference on Data Engineering*, 2021.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 378,
+    "chunk_id": 372,
     "content": "[15] Wenqi Fan, Yujuan Ding, Liangbo Ning, Shijie Wang, Hengyun Li, Dawei Yin, Tat-Seng Chua,\nand Qing Li. A survey on RAG meeting LLMs: Towards retrieval-augmented large language\nmodels. In *Proceedings of the 30th ACM SIGKDD Conference on Knowledge Discovery and*\n*Data Mining*, 2024.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 379,
+    "chunk_id": 373,
     "content": "[16] Yunfan Gao, Yun Xiong, Xinyu Gao, Kangxiang Jia, Jinliu Pan, Yuxi Bi, Yi Dai, Jiawei Sun,\nand Haofen Wang. Retrieval-augmented generation for large language models: A survey. *arXiv*\n*preprint arXiv:2312.10997*, 2023.\n\n19\n\n\n-----",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 380,
+    "chunk_id": 374,
     "content": "19\n\n\n-----\n\n[17] Jin Ge, Steve Sun, Joseph Owens, Victor Galvez, Oksana Gologorskaya, Jennifer C Lai, Mark J\nPletcher, and Ki Lai. Development of a liver disease-specific large language model chat interface\nusing retrieval augmented generation. *Hepatology*, 2024.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 381,
+    "chunk_id": 375,
     "content": "[18] Shijie Geng, Shuchang Liu, Zuohui Fu, Yingqiang Ge, and Yongfeng Zhang. Recommendation\nas language processing (RLP): A unified pretrain, personalized prompt & predict paradigm (P5).\nIn *Proceedings of the 16th ACM Conference on Recommender Systems*, pages 299–315, 2022.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 382,
+    "chunk_id": 376,
     "content": "[19] Ihsan Gunes, Cihan Kaleli, Alper Bilge, and Huseyin Polat. Shilling attacks against recommender systems: a comprehensive survey. *Artificial Intelligence Review*, 42:767–799, 2014.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 383,
+    "chunk_id": 377,
     "content": "[20] F Maxwell Harper and Joseph A Konstan. The MovieLens datasets: History and context. *ACM*\n*Transactions on Interactive Intelligent Systems*, 2015.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 384,
+    "chunk_id": 378,
     "content": "[21] Xiangnan He, Kuan Deng, Xiang Wang, Yan Li, Yongdong Zhang, and Meng Wang. Lightgcn:\nSimplifying and powering graph convolution network for recommendation. In *Proceedings of*\n*the 43rd International ACM SIGIR conference on research and development in Information*",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 385,
+    "chunk_id": 379,
     "content": "*Retrieval*, pages 639–648, 2020.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 386,
+    "chunk_id": 380,
     "content": "[22] Alec Helbling, Mansi Phute, Matthew Hull, and Duen Horng Chau. LLM self defense: By self\nexamination, LLMs know they are being tricked. *arXiv preprint arXiv:2308.07308*, 2023.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 387,
+    "chunk_id": 381,
     "content": "[23] Neel Jain, Schwarzschild Avi, Yuxin Wen, Gowthami Somepalli, John Kirchenbauer, Ping-yeh\nChiang, Micah Goldblum, Aniruddha Saha, Jonas Geiping, and Tom Goldstein. Baseline defenses for adversarial attacks against aligned language models. *arXiv preprint arXiv:2309.00614*,\n2023.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 388,
+    "chunk_id": 382,
     "content": "[24] Wei Jin, Haitao Mao, Zheng Li, Haoming Jiang, Chen Luo, Hongzhi Wen, Haoyu Han, Hanqing\nLu, Zhengyang Wang, Ruirui Li, et al. Amazon-M2: A multilingual multi-locale shopping\nsession dataset for recommendation and text generation. *Advances in Neural Information*\n*Processing Systems*, 2024.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 389,
+    "chunk_id": 383,
     "content": "[25] Jacob Devlin Ming-Wei Chang Kenton and Lee Kristina Toutanova. BERT: Pre-training of\ndeep bidirectional transformers for language understanding. In *Proceedings of NAACL-HLT*,\npages 4171–4186, 2019.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 390,
+    "chunk_id": 384,
     "content": "[26] John Kirchenbauer, Jonas Geiping, Yuxin Wen, Manli Shu, Khalid Saifullah, Kezhi Kong,\nKasun Fernando, Aniruddha Saha, Micah Goldblum, and Tom Goldstein. On the reliability of\nwatermarks for large language models. In *The Twelfth International Conference on Learning*\n*Representations*, 2023.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 391,
+    "chunk_id": 385,
     "content": "[27] Louisa Lam and SY Suen. Application of majority voting to pattern recognition: an analysis of\nits behavior and performance. *IEEE Transactions on Systems, Man, and Cybernetics-Part A:*\n*Systems and Humans*, 27(5):553–568, 1997.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 392,
+    "chunk_id": 386,
     "content": "[28] Patrick Lewis, Ethan Perez, Aleksandra Piktus, Fabio Petroni, Vladimir Karpukhin, Naman\nGoyal, Heinrich Küttler, Mike Lewis, Wen-tau Yih, Tim Rocktäschel, et al. Retrieval-augmented\ngeneration for knowledge-intensive NLP tasks. *Advances in Neural Information Processing*\n*Systems*, 2020.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 393,
+    "chunk_id": 387,
     "content": "[29] Huayang Li, Yixuan Su, Deng Cai, Yan Wang, and Lemao Liu. A survey on retrieval-augmented\ntext generation. *arXiv preprint arXiv:2202.01110*, 2022.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 394,
+    "chunk_id": 388,
     "content": "[30] Linyang Li and Xipeng Qiu. Token-aware virtual adversarial training in natural language\nunderstanding. In *Proceedings of the AAAI Conference on Artificial Intelligence*, pages 8410–\n8418, 2021.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 395,
+    "chunk_id": 389,
     "content": "[31] Linyang Li, Demin Song, and Xipeng Qiu. Text adversarial purification as defense against adversarial attacks. In *Proceedings of the 61st Annual Meeting of the Association for Computational*\n*Linguistics*, 2023.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 396,
+    "chunk_id": 390,
     "content": "[32] Xiang Li, Zhenyu Li, Chen Shi, Yong Xu, Qing Du, Mingkui Tan, Jun Huang, and Wei Lin.\nAlphafin: Benchmarking financial analysis with retrieval-augmented stock-chain framework.\n*arXiv preprint arXiv:2403.12582*, 2024.\n\n20\n\n\n-----",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 397,
+    "chunk_id": 391,
     "content": "20\n\n\n-----\n\n[33] Dawen Liang, Jaan Altosaar, Laurent Charlin, and David M Blei. Factorization meets the item\nembedding: Regularizing matrix factorization with item co-occurrence. In *Proceedings of the*\n*10th ACM conference on recommender systems*, pages 59–66, 2016.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 398,
+    "chunk_id": 392,
     "content": "[34] Jiayi Liao, Sihang Li, Zhengyi Yang, Jiancan Wu, Yancheng Yuan, Xiang Wang, and Xiangnan\nHe. LLaRA: Large language-recommendation assistant. In *Proceedings of the 47th International*\n*ACM SIGIR Conference on Research and Development in Information Retrieval*, pages 1785–\n1795, 2024.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 399,
+    "chunk_id": 393,
     "content": "[35] Jianghao Lin, Xinyi Dai, Yunjia Xi, Weiwen Liu, Bo Chen, Hao Zhang, Yong Liu, Chuhan Wu,\nXiangyang Li, Chenxu Zhu, et al. How can recommender systems benefit from large language\nmodels: A survey. *ACM Transactions on Information Systems*, 43(2):1–47, 2025.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 400,
+    "chunk_id": 394,
     "content": "[36] Yujie Lin, Chenyang Wang, Zhumin Chen, Zhaochun Ren, Xin Xin, Qiang Yan, Maarten\nde Rijke, Xiuzhen Cheng, and Pengjie Ren. A self-correcting sequential recommender. In\n*Proceedings of the ACM Web Conference 2023*, pages 1283–1293, 2023.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 401,
+    "chunk_id": 395,
     "content": "[37] Greg Linden, Brent Smith, and Jeremy York. Amazon. com recommendations: Item-to-item\ncollaborative filtering. *IEEE Internet computing*, 7(1):76–80, 2003.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 402,
+    "chunk_id": 396,
     "content": "[38] Shang Liu, Zhenzhong Chen, Hongyi Liu, and Xinghai Hu. User-video co-attention network\nfor personalized micro-video recommendation. In *The world wide web conference*, pages\n3020–3026, 2019.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 403,
+    "chunk_id": 397,
     "content": "[39] Xiaodong Liu, Hao Cheng, Pengcheng He, Weizhu Chen, Yu Wang, Hoifung Poon, and Jianfeng\nGao. Adversarial training for large neural language models. *arXiv preprint arXiv:2004.08994*,\n2020.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 404,
+    "chunk_id": 398,
     "content": "[40] Yi Luo, Liang Rebecca Tang, Eojina Kim, and Xi Wang. Finding the reviews on yelp that\nactually matter to me: Innovative approach of improving recommender systems. *International*\n*Journal of Hospitality Management*, 91:102697, 2020.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 405,
+    "chunk_id": 399,
     "content": "[41] Yuanjie Lyu, Zhiyu Li, Simin Niu, Feiyu Xiong, Bo Tang, Wenjin Wang, Hao Wu, Huanyong\nLiu, Tong Xu, and Enhong Chen. Crud-rag: A comprehensive chinese benchmark for retrievalaugmented generation of large language models. *ACM Transactions on Information Systems*,\n43(2):1–32, 2025.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 406,
+    "chunk_id": 400,
     "content": "[42] Julian McAuley, Rahul Pandey, and Jure Leskovec. Inferring networks of substitutable and\ncomplementary products. In *Proceedings of the 21th ACM SIGKDD international conference*\n*on knowledge discovery and data mining*, pages 785–794, 2015.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 407,
+    "chunk_id": 401,
     "content": "[43] Wenjie Mo, Jiashu Xu, Qin Liu, Jiongxiao Wang, Jun Yan, Chaowei Xiao, and Muhao Chen.\nTest-time backdoor mitigation for black-box large language models with defensive demonstrations. *arXiv preprint arXiv:2311.09763*, 2023.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 408,
+    "chunk_id": 402,
     "content": "[44] Liangbo Ning, Ziran Liang, Zhuohang Jiang, Haohao Qu, Yujuan Ding, Wenqi Fan, Xiaoyong Wei, Shanru Lin, Hui Liu, Philip S. Yu, and Qing Li. A survey of webagents: Towards\nnext-generation ai agents for web automation with large foundation models. *arXiv preprint*\n*arXiv:2503.23350*, 2025.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 409,
+    "chunk_id": 403,
     "content": "[45] Liang-bo Ning, Shijie Wang, Wenqi Fan, Qing Li, Xin Xu, Hao Chen, and Feiran Huang.\nCheatAgent: Attacking llm-empowered recommender systems via llm agent. In *ACM SIGKDD*\n*Conference on Knowledge Discovery and Data Mining*, pages 2284–2295, 2024.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 410,
+    "chunk_id": 404,
     "content": "[46] Apurva Pathak, Kshitiz Gupta, and Julian McAuley. Generating and personalizing bundle\nrecommendations on steam. In *Proceedings of the 40th international ACM SIGIR conference*\n*on research and development in information retrieval*, pages 1073–1076, 2017.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 411,
+    "chunk_id": 405,
     "content": "[47] Guilherme Penedo, Quentin Malartic, Daniel Hesslow, Ruxandra Cojocaru, Hamza Alobeidli,\nAlessandro Cappelli, Baptiste Pannier, Ebtesam Almazrouei, and Julien Launay. The refinedweb\ndataset for falcon llm: Outperforming curated corpora with web data only. *Advances in Neural*",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 412,
+    "chunk_id": 406,
     "content": "*Information Processing Systems*, 2024.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 413,
+    "chunk_id": 407,
     "content": "21\n\n\n-----\n\n[48] Andreas Pfadler, Huan Zhao, Jizhe Wang, Lifeng Wang, Pipei Huang, and Dik Lun Lee. Billionscale recommendation with heterogeneous side information at taobao. In *2020 IEEE 36th*\n*International Conference on Data Engineering (ICDE)*, pages 1667–1676. IEEE, 2020.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 414,
+    "chunk_id": 408,
     "content": "[49] Ivan Provilkov, Dmitrii Emelianenko, and Elena Voita. BPE-dropout: Simple and effective\nsubword regularization. In *Proceedings of the 58th Annual Meeting of the Association for*\n*Computational Linguistics*, pages 1882–1892, Online, 2020. Association for Computational\nLinguistics.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 415,
+    "chunk_id": 409,
     "content": "[50] Haohao Qu, Wenqi Fan, Zihuai Zhao, and Qing Li. TokenRec: Learning to tokenize id for\nllm-based generative recommendation. *arXiv preprint arXiv:2406.10450*, 2024.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 416,
+    "chunk_id": 410,
     "content": "[51] Haohao Qu, Liangbo Ning, Rui An, Wenqi Fan, Tyler Derr, Xin Xu, and Qing Li. A survey of\nmamba. *arXiv preprint arXiv:2408.01129*, 2024.\n\n[52] Vipula Rawte, Amit Sheth, and Amitava Das. A survey of hallucination in large foundation\nmodels. *arXiv preprint arXiv:2309.05922*, 2023.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 417,
+    "chunk_id": 411,
     "content": "[53] Yankun Ren, Zhongde Chen, Xinxing Yang, Longfei Li, Cong Jiang, Lei Cheng, Bo Zhang,\nLinjian Mo, and Jun Zhou. Enhancing sequential recommenders with augmented knowledge\nfrom aligned large language models. In *Proceedings of the 47th International ACM SIGIR*",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 418,
+    "chunk_id": 412,
     "content": "*Conference on Research and Development in Information Retrieval*, 2024.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 419,
+    "chunk_id": 413,
     "content": "[54] Mingdan Si and Qingshan Li. Shilling attacks against collaborative recommender systems: a\nreview. *Artificial Intelligence Review*, 53:291–319, 2020.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 420,
+    "chunk_id": 414,
     "content": "[55] Changxin Tian, Yuexiang Xie, Yaliang Li, Nan Yang, and Wayne Xin Zhao. Learning to denoise\nunreliable interactions for graph collaborative filtering. In *Proceedings of the 45th international*\n*ACM SIGIR conference on research and development in information retrieval*, pages 122–132,\n2022.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 421,
+    "chunk_id": 415,
     "content": "[56] Neeraj Varshney, Pavel Dolin, Agastya Seth, and Chitta Baral. The art of defending: A\nsystematic evaluation and analysis of LLM defense strategies on safety and over-defensiveness.\nIn *Findings of the Association for Computational Linguistics ACL 2024*, 2024.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 422,
+    "chunk_id": 416,
     "content": "[57] Maxim Kuznetsov Vladimir Vorobev. A paraphrasing model based on chatgpt paraphrases.\n2023.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 423,
+    "chunk_id": 417,
     "content": "[58] Bohao Wang, Feng Liu, Changwang Zhang, Jiawei Chen, Yudi Wu, Sheng Zhou, Xingyu Lou,\nJun Wang, Yan Feng, Chun Chen, et al. Llm4dsr: Leveraing large language model for denoising\nsequential recommendation. *arXiv preprint arXiv:2408.08208*, 2024.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 424,
+    "chunk_id": 418,
     "content": "[59] Dilin Wang, Chengyue Gong, and Qiang Liu. Improving neural language modeling via adversarial training. In *International Conference on Machine Learning*, pages 6555–6565. PMLR,\n2019.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 425,
+    "chunk_id": 419,
     "content": "[60] Wenjie Wang, Fuli Feng, Xiangnan He, Liqiang Nie, and Tat-Seng Chua. Denoising implicit\nfeedback for recommendation. In *Proceedings of the 14th ACM international conference on*\n*web search and data mining*, pages 373–381, 2021.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 426,
+    "chunk_id": 420,
     "content": "[61] Wenjie Wang, Fuli Feng, Xiangnan He, Hanwang Zhang, and Tat-Seng Chua. Clicks can be\ncheating: Counterfactual recommendation for mitigating clickbait issue. In *International ACM*\n*SIGIR Conference on Research and Development in Information Retrieval*, pages 1288–1297,\n2021.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 427,
+    "chunk_id": 421,
     "content": "[62] Xin Wang, Hong Chen, Zirui Pan, Yuwei Zhou, Chaoyu Guan, Lifeng Sun, and Wenwu\nZhu. Automated disentangled sequential recommendation with large language models. *ACM*\n*Transactions on Information Systems*, 43(2):1–29, 2025.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 428,
+    "chunk_id": 422,
     "content": "[63] Zhaoyang Wang, Zhiyue Liu, Xiaopeng Zheng, Qinliang Su, and Jiahai Wang. Rmlm: A flexible\ndefense framework for proactively mitigating word-level adversarial attacks. In *Proceedings of*\n*the 61st Annual Meeting of the Association for Computational Linguistics*, pages 2757–2774,\n2023.\n\n22",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 429,
+    "chunk_id": 423,
     "content": "22\n\n\n-----\n\n[64] Yinwei Wei, Xiang Wang, Qi Li, Liqiang Nie, Yan Li, Xuanping Li, and Tat-Seng Chua. Contrastive learning for cold-start recommendation. In *Proceedings of the 29th ACM International*\n*Conference on Multimedia*, pages 5382–5390, 2021.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 430,
+    "chunk_id": 424,
     "content": "[65] Zeming Wei, Yifei Wang, and Yisen Wang. Jailbreak and guard aligned language models with\nonly few in-context demonstrations. *arXiv preprint arXiv:2310.06387*, 2023.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 431,
+    "chunk_id": 425,
     "content": "[66] Guillaume Wenzek, Marie-Anne Lachaux, Alexis Conneau, Vishrav Chaudhary, Francisco\nGuzmán, Armand Joulin, and Édouard Grave. Ccnet: Extracting high quality monolingual\ndatasets from web crawl data. In *Proceedings of the Twelfth Language Resources and Evaluation*",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 432,
+    "chunk_id": 426,
     "content": "*Conference*, pages 4003–4012, 2020.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 433,
+    "chunk_id": 427,
     "content": "[67] Sophie Xhonneux, Alessandro Sordoni, Stephan Günnemann, Gauthier Gidel, and Leo Schwinn.\nEfficient adversarial training in llms with continuous attacks. *arXiv preprint arXiv:2405.15589*,\n2024.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 434,
+    "chunk_id": 428,
     "content": "[68] Shuyuan Xu, Wenyue Hua, and Yongfeng Zhang. OpenP5: An open-source platform for\ndeveloping, training, and evaluating llm-based recommender systems. *SIGIR*, 2024.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 435,
+    "chunk_id": 429,
     "content": "[69] Xilie Xu, Keyi Kong, Ning Liu, Lizhen Cui, Di Wang, Jingfeng Zhang, and Mohan Kankanhalli.\nAn LLM can fool itself: A prompt-based adversarial attack. In *The Twelfth International*\n*Conference on Learning Representations* .",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 436,
+    "chunk_id": 430,
     "content": "[70] Yifan Yao, Jinhao Duan, Kaidi Xu, Yuanfang Cai, Zhibo Sun, and Yue Zhang. A survey on large\nlanguage model (LLM) security and privacy: The good, the bad, and the ugly. *High-Confidence*\n*Computing*, 2024.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 437,
+    "chunk_id": 431,
     "content": "[71] Antonio Jimeno Yepes, Yao You, Jan Milczek, Sebastian Laverde, and Leah Li. Financial report\nchunking for effective retrieval augmented generation. *arXiv preprint arXiv:2402.05131*, 2024.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 438,
+    "chunk_id": 432,
     "content": "[72] Yisong Yue, Rajan Patel, and Hein Roehrig. Beyond position bias: Examining result attractiveness as a source of presentation bias in clickthrough data. In *Proceedings of the 19th*\n*international conference on World wide web*, pages 1011–1018, 2010.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 439,
+    "chunk_id": 433,
     "content": "[73] Kaike Zhang, Qi Cao, Yunfan Wu, Fei Sun, Huawei Shen, and Xueqi Cheng. Lorec: Combating\npoisons with large language model for robust sequential recommendation. In *Proceedings of*\n*the 47th International ACM SIGIR Conference on Research and Development in Information*",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 440,
+    "chunk_id": 434,
     "content": "*Retrieval*, pages 1733–1742, 2024.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 441,
+    "chunk_id": 435,
     "content": "[74] Liang Zhang, Guannan Liu, Xiaohui Liu, and Junjie Wu. Denoising item graph with disentangled\nlearning for recommendation. *IEEE Transactions on Knowledge and Data Engineering*, 2024.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 442,
+    "chunk_id": 436,
     "content": "[75] Shijie Zhang, Hongzhi Yin, Tong Chen, Quoc Viet Nguyen Hung, Zi Huang, and Lizhen\nCui. Gcn-based user representation learning for unifying robust recommendation and fraudster\ndetection. In *Proceedings of the 43rd international ACM SIGIR conference on research and*",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 443,
+    "chunk_id": 437,
     "content": "*development in information retrieval*, pages 689–698, 2020.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 444,
+    "chunk_id": 438,
     "content": "[76] Zhen Zhang, Guanhua Zhang, Bairu Hou, Wenqi Fan, Qing Li, Sijia Liu, Yang Zhang, and\nShiyu Chang. Certified robustness for large language models with self-denoising. *arXiv preprint*\n*arXiv:2307.07171*, 2023.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 445,
+    "chunk_id": 439,
     "content": "[77] Zihuai Zhao, Wenqi Fan, Jiatong Li, Yunqing Liu, Xiaowei Mei, Yiqi Wang, Zhen Wen, Fei\nWang, Xiangyu Zhao, Jiliang Tang, et al. Recommender systems in the era of large language\nmodels. *IEEE Transactions on Knowledge and Data Engineering*, 2024.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 446,
+    "chunk_id": 440,
     "content": "[78] Bowen Zheng, Yupeng Hou, Hongyu Lu, Yu Chen, Wayne Xin Zhao, Ming Chen, and Ji-Rong\nWen. Adapting large language models by integrating collaborative semantics for recommendation. In *2024 IEEE 40th International Conference on Data Engineering (ICDE)*, pages\n1435–1448. IEEE, 2024.",
     "metadata": {
       "source": "2504.02458v1.md"
     }
   },
   {
-    "chunk_id": 447,
+    "chunk_id": 441,
     "content": "[79] Han Zhu, Xiang Li, Pengye Zhang, Guozheng Li, Jie He, Han Li, and Kun Gai. Learning\ntree-based deep model for recommender systems. In *Proceedings of the 24th ACM SIGKDD*\n*International Conference on Knowledge Discovery & Data Mining*, 2018.\n\n23\n\n\n-----",
     "metadata": {
       "source": "2504.02458v1.md"
