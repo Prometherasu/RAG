@@ -1,0 +1,1682 @@
+[
+  {
+    "chunk_id": 0,
+    "content": "# Scaling Prompt Instructed Zero Shot Composed Image Retrieval with Image-Only Data\n### Yiqun Duan [1,2] Sameera Ramasinghe [1] Stephen Gould [2,3] Ajanthan Thalaiyasingam [1] 1 Amazon 2 University of Techonlogy Sydney 3 The Australian National University",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 1,
+    "content": "***Abstract*** **—Composed Image Retrieval (CIR) is the task of**\n**retrieving images matching a reference image augmented with**\n**a text, where the text describes changes to the reference image**\n**in natural language. Traditionally, models designed for CIR have**",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 2,
+    "content": "**relied on triplet data containing a reference image, reformulation**\n**text, and a target image. However, curating such triplet data often**\n**necessitates human intervention, leading to prohibitive costs. This**\n**challenge has hindered the scalability of CIR model training even**",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 3,
+    "content": "**with the availability of abundant unlabeled data. With the recent**\n**advances in foundational models, we advocate a shift in the CIR**\n**training paradigm where human annotations can be efficiently**\n**replaced by large language models (LLMs). Specifically, we**",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 4,
+    "content": "**demonstrate the capability of large captioning and language**\n**models in efficiently generating data for CIR only relying on**\n**unannotated image collections. Additionally, we introduce an**\n**embedding reformulation architecture that effectively combines**",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 5,
+    "content": "**image and text modalities. Our model, named InstructCIR, out-**\n**performs state-of-the-art methods in zero-shot composed image**\n**retrieval on CIRR and FashionIQ datasets. Furthermore, we**\n**demonstrate that by increasing the amount of generated data,**",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 6,
+    "content": "**our zero-shot model gets closer to the performance of supervised**\n**baselines.**\n***Index Terms*** **—Composed Image Retrieval, Multimodality re-**\n**trieval**",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 7,
+    "content": "I. I NTRODUCTION",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 8,
+    "content": "The objective of composed image retrieval [13], [24] is to\nsearch for an image that aligns with both a reference image\nand a textual input detailing the desired alterations to that\nreference. This allows users to modify an image-based search",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 9,
+    "content": "query with natural language, facilitating a clear articulation\nof intent. Such capabilities have wide-ranging applications,\nincluding e-commerce, recommendation systems, and search\nengines.\nThe effectiveness of recent CIR methods [6], [10], [13],",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 10,
+    "content": "[35], [47] largely depends on the pre-trained vision and\nlanguage models such as CLIP [39] and BLIP [28], which utilize contrastive semantic matching. Nonetheless, these models\nneed to be finetuned specifically for CIR using triplet data\ncontaining reference images, reformulation texts, and target",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 11,
+    "content": "images. This reliance on human-annotated triplet data hinders\nthe scalability of CIR models. Additionally, the scarcity of\ntriplet data can impede fine-grained reformulations across the\ninterrelated visual and text modalities.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 12,
+    "content": "In contrast, two parallel studies, Pic2Word [41] and ZSCIR [3], introduced the zero-shot composed image retrieval\ntask by leveraging image inversion techniques [17]. Both\n\nThis work was completed by Yiqun during his internship at Amazon,\nAustralia.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 13,
+    "content": "Fig. 1. Performance curve versus current zero shot composed image\nretrieval benchmarks, where grey dashlines - - indicates supervised baselines\nas intuitive references. Our zero-shot model (shown in purple) closes the gap\nwith supervised baselines with increasing amount of generated data.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 14,
+    "content": "methods convert the reference image into a single text token\nand apply reformulation in the text domain. However, this\ntransformation of images to singular text tokens may result\nin substantial loss of intricate visual details, leading to subpar zero-shot performance.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 15,
+    "content": "A concurrent work, TransAgg [34], suggests the use of an\nLLM (ChatGPT) to produce training data from existing image\ncaption datasets. Yet, this approach remains reliant on preexisting image-caption paired data and uses generically trained\nimage and text encoders while only optimizing an aggregation",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 16,
+    "content": "layer. Moreover, TransAgg has been explored only on a limited\ndata scale.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 17,
+    "content": "Our approach further relaxes the data requirement by solely\nrelying on unannotated image collections. We hypothesize that\ngiven an arbitrary image pair, one can generate the natural\nlanguage description of the difference by utilizing large vision",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 18,
+    "content": "and language models, effectively replacing human annotations.\nTo this end, we first leverage the LLaVa model [33] to generate\ncaptions for a randomly sampled image pair. Subsequently,\nwe utilize an LLM to delineate the differences between these",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 19,
+    "content": "captions. This technique enables the formation of triplets in\na zero-shot manner, relying exclusively on unannotated image\ncollections.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 20,
+    "content": "Additionally, we introduce a simple, yet effective joint\nembedding reformulation architecture that fuses the image and\ntext modalities using cross-attention at multiple levels. Such a\nlatent fusion design enables fine-grained image manipulations",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 21,
+    "content": "using text and has been used in text-guided image generation [9], [40], [49]. Nevertheless, this embedding reformula",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 22,
+    "content": "-----\n\nTABLE I\n\nT HE U PPER PART DENOTES PROMPTS USED TO CONVERT IMAGES INTO\n\nTEXTS . T HE LOWER PART INDICATES TEXT PROMPTS USED FOR\n\nREFORMULATING FROM IMAGE CAPTION A TO CAPTION B.\n\n\n\n\n\n\nInstruction Reference Target None-Text\n\n\nPrompts",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 23,
+    "content": "Prompts\n\n<Token><Token>…You are a helpful\nlanguage and vision assistant, you are able to\nunderstand the visual content, and assist the\n\nuser with a variety of tasks using natural\nlanguage. Describe the image as detail as\npossible\n\n\n\n\n\nCaption A\n\nCaption B",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 24,
+    "content": "Caption A\n\nCaption B\n\n|Col1|LLaVa|xx exit>exit> aa xx bb|\n|---|---|---|",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 25,
+    "content": "Fig. 2. InstructCIR workflow. Given an image pair *{* **x** *a* *,* **x** *b* *}*, captions are\ngenerated by the LLaVA model. Next, the LLM generates the natural language\ndescription of the differences between these captions. Then, the reference",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 26,
+    "content": "image and the generated difference text are fused at multiple levels and the\nmodel is trained to minimize the embedding distance with respect to the target\nimage.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 27,
+    "content": "tion approach has not been used in the CIR domain to our\nknowledge and outperforms late fusion techniques as well as\ndirect pixel-space manipulations as shown in our experiments.\nOur contributions are three-fold:",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 28,
+    "content": "*•* We introduce a scalable framework for training CIR models that relies solely on unannotated image collections,\nreplacing the need for paired image-caption data and\nhuman annotations.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 29,
+    "content": "*•* We introduce a simple, yet effective latent fusion architecture to effectively combine image and text modalities\nfor CIR.\n\n*•* Our model sets the state-of-the-art on zero-shot CIR",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 30,
+    "content": "benchmarks and closes the gap between zero-shot and\nsupervised settings aided by efficient data scaling; See\nFig. 1.\n\nII. I NSTRUCT CIR",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 31,
+    "content": "II. I NSTRUCT CIR\n\nThis section presents a detailed overview of our zeroshot triplet data generation pipeline (Sec. II-A) and model\narchitecture (Sec. II-B). Section II-C elaborates on the training\nprocess as well as objective functions for composed image\nretrieval.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 32,
+    "content": "*A. Zero-Shot Triplet Generation*",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 33,
+    "content": "A comprehensive workflow of our approach is depicted in\nFig. 2. Initially, an image pair is randomly selected from the\nprovided image collection. This pair is then transformed into\ntextual descriptions via image captioning. Subsequently, the",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 34,
+    "content": "LLMs are prompted with these generated captions to produce\nthe reformulation text that describes the difference between",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 35,
+    "content": "the captions.\n*a) Image Captioning::* One key component in ensuring\nzero-shot CIR only depends on the given image collection is\nto convert images into a sufficiently detailed text description.\nWe prompt a powerful visual instructed large language model\n\n\nReformulation Prompt:",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 36,
+    "content": "You have two captions for two images, image A and image\nB, you are supposed to write a reformulation text describing\nchanging from image A to image B. caption A: *{* Caption\nA *}* caption B: *{* Caption B *}* answer should be concise\nand within 12 words, only contain normal words, do not",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 37,
+    "content": "use special characters. Difference:",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 38,
+    "content": "(LLaVA [1] [33]) to convert the sampled image pairs into a text\npair. The prompt for the captioning model is provided in the\ntop part of Table I, and example results are shown in Fig. 3.\nThe image is tokenized and encoded through a ViT model and",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 39,
+    "content": "is fed into an LLM as context tokens. The LLM generates the\ndetailed image caption given visual tokens and task prompts.\nThe examples on the Fashion200k dataset show that, although\nLLM may generate common descriptions such as “posing for",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 40,
+    "content": "a photography shot”, “a woman is wearing”, it still accurately\ndescribes key elements of the given image, such as the object\n( *e.g.* ., shirt, dress), style ( *e.g.* ., strapless, off-the-shoulder, split\nstyle), color, *etc.* .\n*b) Reformulation with LLMs::* Utilizing the high-quality",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 41,
+    "content": "image captions obtained as above, our approach leverages\nan LLM fine-tuned from vicuna 33B checkpoint [2] to generate reformulated text-prompts **in a zero-shot manner.** The\nlanguage model is fine-tuned using low-rank adaptation finetuning (LORA) [25] with 10 epochs. The fine-tuning seed",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 42,
+    "content": "data is obtained by prompting ChatGPT-4 in zero-shot. Here,\ndirectly prompting ChatGPT-4 is also feasible to generate\nreformulation data. Here we fine-tuning our own model for\nthe feasibility of the ablation study. We employ the prompt",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 43,
+    "content": "structure illustrated in Table I, which is crafted without prior\ntraining specific to this task. Illustrative examples of generated\nreformulation texts are presented in Fig. 3. These highlight the\nefficacy of our data generation pipeline. Rather than merely",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 44,
+    "content": "presenting experiment outcomes, we delve deeper to discern\nthe influence of various language models on the performance\nmetrics.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 45,
+    "content": "*B. Model Structure*\n\nOur proposed architecture capitalizes on a streamlined yet\npotent framework; a layer-by-layer **text-guided embedding**",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 46,
+    "content": "1 [https://huggingface.co/liuhaotian/llava-v1.5-13b](https://huggingface.co/liuhaotian/llava-v1.5-13b)\n2 [https://huggingface.co/lmsys/vicuna-33b-v1.3](https://huggingface.co/lmsys/vicuna-33b-v1.3)\n\n\n-----\n\nImage Converted Caption Image Converted Caption\n\nExam p les on FashionI Q Dataset",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 47,
+    "content": "The image features a woman wearing a white shirt and a black The image features a woman wearing a gray skirt and a green shirt.\nleather pencil skirt. She is posing for the camera, standing with her The woman is positioned in the center of the frame, with her skirt",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 48,
+    "content": "hands on her hips. The woman is wearing a gold belt, which adds covering most of her lower body. The overall scene appears to be\na touch of elegance to her overall appearance. a casual and comfortable setting.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 49,
+    "content": "The image features a woman wearing a white dress, which appears",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 50,
+    "content": "The image features a woman wearing a black dress with a necklace to be a strapless, off-the-shoulder, split style. The dress has a unique\naround her neck. She is standing in front of a mirror, possibly posing design, with a row of buttons running down the front. She is holding",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 51,
+    "content": "for a picture. The dress appears to be a short, black dress with a a handbag, and the scene exudes elegance and sophistication. The\nneckline that accentuates her necklace.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 52,
+    "content": "overall style of the dress is elegant.\n\nReform Changed white shirt and skirt to short black dress, added necklace. Reform From gray skirt and green shirt to elegant white strapless split dress.\n\nExam p les on CIRR Dataset",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 53,
+    "content": "The image features a brown, shaggy dog standing on a dining table The image features a white house with a thatched roof, giving\nnext to a bowl of food. The dog appears to be looking at the camera, it a charming and rustic appearance. The house is situated on a",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 54,
+    "content": "possibly waiting for its owner to take a picture. The scene captures lush green field, surrounded by a beautiful garden. The garden is\nthe dog’s curiosity as it stands near the bowl. adorned with a flag, adding a touch of patriotism to the scene.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 55,
+    "content": "The image features a large, fluffy, and furry dog lying on a white The image features a group of seals sitting on a sandy beach. There\ncountertop. The dog appears to be a Chow Chow, with its distinctive are at least four seals visible in the scene, with one seal sitting",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 56,
+    "content": "appearance and long, shaggy fur. The dog is positioned in the center prominently in the foreground and the others scattered around the\nof the scene, occupying a significant portion of the countertop. beach. The seals appear to be enjoying their time on the sand,",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 57,
+    "content": "possibly resting or socializing with each other.\n\nReform Dog moved from dining table to white countertop, now lying down. Reform House with garden and flag changes to seals on a sandy beach.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 58,
+    "content": "Fig. 3. Caption results by prompting visual LLMs on Fashion200k and NLVR, where accurate information and unrelated information is highlighted in different",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 59,
+    "content": "color. Though unrelated information exists, it still suggests zero-shot image-text conversion is feasible with LLMs. Reform corresponds to the reformulation\ntext generated for the images in the same column.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 60,
+    "content": "|Col1|Col2|Col3|Col4|Col5|Col6|̂̂ EMA updated|Col8|\n|---|---|---|---|---|---|---|---|\n|||||||̂̂ ff θθ|gg θθ Predictor|\n|||||||||\n|||||||||\n|||||||||\n|||||||||\n\n\nReference Image\n\n\n*e* *t*\n\n\n\n\n\n\n### “is darker green” t\n\nText Instruction",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 61,
+    "content": "### “is darker green” t\n\nText Instruction\n\nFig. 4. Model structure of proposed embedding reformulation network. The\ntext embedding is injected into the visual transformer through cross-attention\nlayer by layer.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 62,
+    "content": "**reformulation network**, as illustrated in Fig. 4. This design is inspired by in the latest advancements in generative\nimage manipulation [8], [40] where models adeptly utilize\ntext instructions to guide image generation. Although the",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 63,
+    "content": "generated images are visually plausible, they fail on recall\nmetrics (as shown in Table II) due to overly strict pixel-topixel correlations. Instead of the pixel space, we harness the\njoint latent space [1] to perform the instructed embedding\nreformulation.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 64,
+    "content": "We modify each transformer block of the ViT model [14]\nby introducing cross attention from the text encoder. Our\ntext encoder is the same as CLIP [39], which takes text\ninstruction as input and outputs an embedding sequence. In\neach ViT block, one self-attention layer is first applied on",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 65,
+    "content": "visual embeddings and cross-attention is utilized to inject the\ntext instruction on embeddings, where the text embeddings are\ntreated as *K* and *V* and image embeddings as queries *Q* . Then,\nan MLP layer combined with layer norm [2] and residual",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 66,
+    "content": "connection is utilized to aggregate the features. Several such\nreformulation blocks are stacked to get the final output. On\nthe top of the encoder, a predictor is used to obtain the final\nembedding for retrieval. For the target images, which do not",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 67,
+    "content": "have an instruct prompt, we use a null-text token as the text\ninput. This enables us to embed both the source and target\nimages within a shared model architecture. Additionally, the\ntarget encoder is updated using an exponential moving average\nsimilar to I-JEPA [1].",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 68,
+    "content": "*C. Composed Retrieval Training*",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 69,
+    "content": "We train the joint-embedding reformulation network\nby minimizing the distance between the reformulated query\nembeddings and the target embeddings. For a fair comparison,\nwe maintain the model size consistent with preceding models\nwhich are similar to the CLIP model. For a given query with",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 70,
+    "content": "an image pair **x** *a* *,* **x** *b*, we obtain the associated captions *C* *a* *, C* *b*",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 71,
+    "content": "-----",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 72,
+    "content": "using the LLaVa model. Subsequently, the reformulation LLM\nproduces the reformulation text *t* *ab* in a zero-shot fashion,\ndefined as *t* *ab* = LMM diff ( *C* *a* *, C* *b* ).\nSubsequently, the reformulated embedding **e** *r* is extracted\nby our proposed encoder and a predictor. Formally,",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 73,
+    "content": "**e** *r* = *g* *θ* ( **z** *r* *, ϕ* *t* ( *t* *ab* )) *,* where **z** *r* = *f* *θ* ( **x** *a* *, t* *ab* ) *,* (1)",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 74,
+    "content": "and *ϕ* *t* ( *·* ) is the pre-trained text encoder. The predictor *g* *θ* ( *·* ) is\na MLP projection layer based on concatenated image and text\nembeddings *{* **z** *r* *, ϕ* *t* ( *t* *ab* ) *}* . Detailed description of the encoder",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 75,
+    "content": "*f* *θ* ( *·, ·* ) is provided in the model structure section (Sec. II-B\nand Fig. 4). The target embedding is extracted using the same\nfunction with the null-text token embedding instead of input",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 76,
+    "content": "text, **e** *t* = *g* *θ* ( **z** *t* *, ϕ* *t* ( *∅* )), where **z** *t* = *f* *θ* ( **x** *b* *, ∅* ), Here, **e** *r* *,* **e** *t* *∈*\nR *[d]* where *d* is embedding dimensionality.\nOur training objective is to minimize the distance between",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 77,
+    "content": "the query embedding **e** *r* and the target embedding **e** *t* for a\ngiven triplet *{* **x** *a* *,* **x** *b* *, t* *ab* *}* from the zero-shot pipeline. Simultaneously, we maximize the distance between **e** *r* and embeddings of other target images within the batch. To accomplish",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 78,
+    "content": "this, we utilize a batch-centric contrastive loss:",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 79,
+    "content": "*B*\n\n*L* contr = *B* [1] � *i* =1 *−* log � *Bj* ex =1 p [exp] *{* *τ ·* *[{]* *κ* *[τ][ ·]* ( **e** *[ κ]* *[i]* *r* [(] *[,]* **[ e][e]** *r* *[i][i]* *t* *[,]* [)] **[ e]** *[}]* *t* *[j]* [)] *[}]* *,* (2)",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 80,
+    "content": "Here, **e** *[i]* *r* [,] **[ e]** *[i]* *t* [denote the embeddings of the reformulation]\nencoder and the target encoder for the *i* -th triplet, *κ* ( *·, ·* )\ndenotes the cosine similarity, *τ >* 0 is a temperature parameter\nthat controls the range of the logits, and *B* is the number of",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 81,
+    "content": "triplets in a batch. Both text encoder and the reformulated\nimage encoder are updated during the alignment training.\nGiven reformulated embeddings, we further boost the performance by fusing the pure text embedding with the reformulated embedding using the following settings from most",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 82,
+    "content": "of the previous papers [6], [36], [37]. Given the reformulated\nembedding **e** *r*, we calculate the final embedding as follows:",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 83,
+    "content": "**e** *f* = *λ* **e** *r* + (1 *−* *λ* ) *ϕ* *t* ( *t* *ab* ) *,* (3)",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 84,
+    "content": "where *λ* is the trained hyper-parameter weight to combine\noriginal features from two sides. After the whole network is\ntrained, this combiner weight is fine-tuned using the same\n*L* contr by fixing backbone weights and replacing **e** *r* with **e** *f* in\nEquation 2.\n\nIII. R ELATED W ORK",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 85,
+    "content": "*a) Composed Image Retrieval (CIR)::* Composed image\nretrieval (CIR) retrieves images using a reference image-text\npair [15], [16], [47], with applications in fashion [48] and\nscene composition [35]. Traditional methods merge latent\nembeddings [29]–[31] from both modalities to form retrieval",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 86,
+    "content": "queries. Techniques range from TIRG’s gating and residual\nconnections [47] to VAL’s transformer-based hierarchical design [10]. Wu et al. [48] employ a custom transformer for\nearly image-language fusion. In contrast, Goenka et al. [18]\nuse BERT [12] for image-text-tag unified coding, while Han et",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 87,
+    "content": "al. [22] pre-train a model using a vast fashion dataset. Modern",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 88,
+    "content": "CIR approaches, like CLIP4CIR [7] and BLIP4CIR [36],\nleverage pre-trained visual-language models and apply late\nfusion. CASE [27] enhances this by adding external data.\nCandidate-R [37], aiming for peak performance, re-ranks\nretrieval candidates, albeit at a much higher computational",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 89,
+    "content": "cost. Notably, all these strategies require source-prompt-target\ntriplets for training, and the high cost of obtaining such data\nconstrains CIR’s broader application.\n*b) Zero-Shot Compsed Image Retrieval::* The concept",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 90,
+    "content": "of zero-shot composed image retrieval has recently garnered significant attention. Two contemporaneous studies,\nPic2Word [41] and ZS-CIR [3], utilize image-caption datasets\nto train networks that represent images as singular tokens,",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 91,
+    "content": "thus facilitating cross-modal retrieval in the text domain. CompoDiff [19] leverages a modified diffusion-denoising model to\niteratively refine search queries and introduces a new dataset,\nSynthTriplet18M. This dataset comprises images synthesized",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 92,
+    "content": "through the prompt-to-prompt model [23], guided by corresponding captions.\nOur concurrent work, TransAgg [34], harnesses ChatGPT\ncombined with human-translated templates on selected image\ncaption data from LAION [42], yielding impressive results.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 93,
+    "content": "Distinctly, our approach aims to achieve zero-shot image\nretrieval relying solely on image distribution. By integrating\nimage captioning models with large language models (LLMs)\nand capitalizing on scaling potential, InstructCIR sets new\nbenchmarks in the realm of composed image retrieval.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 94,
+    "content": "IV. E XPERIMENTS\n\nIn this section, we provide comprehensive experiments to\nillustrate the state-of-the-art performance of InstructCIR on\nboth zero-shot and supervised composed image retrieval.\n\n*A. Setup*",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 95,
+    "content": "The reformulation network is modified from CLIP pretrained ViT-L/14 and injects cross attention to each layer. The\ncross-attention layer is initialized with Xavier [26] initialization. The cross-attention layer has the same heads as the main",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 96,
+    "content": "backbone. The training data is sampled from Fashion200k [21]\nand NLVR [45] which respectively have 280k and 21.4k\nimages. For the Fashion200k dataset, we randomly sample\nimage pairs under the same meta class [3], while for NLVR\nwe sample the whole dataset. For the image caption model,",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 97,
+    "content": "we directly used LLaVA Vicuna 13B pre-train weights. We use\nour own language model with 33B as the text reformulator,\nalso, we provide a comparison with different language models\nin supplementary.\nSince the unique combination is scalable, we creating image",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 98,
+    "content": "pairs from 16k up to 500k to report the performance curve. The\nmodel is trained with AdamW [38] optimizer, with learning\nrate 2 *×* 10 *[−]* [6], weight decay 0.1, batch size 32. The model is\nimplemented using PyTorch and trained with eight A100 GPU\ninstances.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 99,
+    "content": "3 Fashion200k has five meta classes: dresses, jackets, pants, skirts, tops.\n\n\n-----",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 100,
+    "content": "TABLE II\nQ UANTITATIVE COMPARISON WITH STATE  - OF  - THE  - ART ZERO  - SHOT METHODS ( AND WITH SUPERVISED BASELINES ). H ERE, *[⋆]* INDICATES DATA ARE",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 101,
+    "content": "SAMPLED FROM SUBSETS OF THEMODEL ACROSS TWO DATASETS . F F ASHIONOR SUPERVISED METHODS 200 K AND NLVR DATASETS, EVALUATIONS ARE FROM THE BEST MODELS RESPECTIVELY ON EACH DATASET . F OR ZERO   - SHOT METHODS, EVALUATION METRICS ARE FROM THE SAME . *[†]*",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 102,
+    "content": "DENOTES THE TRAINING SCALE IS ADDITIONAL TO THE ORIGINAL CLIP PRE - TRAINED MODEL . C ANDIDATE R 50 */* 100 IS MARKED GREY AS IT REQUIRES",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 103,
+    "content": "A MUCH HIGHER COMPUTATIONAL COST . **R** **ESULTS INDICATE THAT OUR** **I** **NSTRUCT** **CIR** **REACHES STATE** **-** **OF** **-** **THE** **-** **ART PERFORMANCE ON BOTH**",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 104,
+    "content": "**ZERO** **-** **SHOT AND SUPERVISED BENCHMARKS** **. W** **E SELECT THE BEST PERFORMANCES IN EXISTING METHODS FOR FAIR COMPARISON** **. T** **HE FIRST**\n**SECTION RESULTS** **(** **IMAGE OR TEXT ONLY** **)** **ARE WITH THE SAME** **CLIP-L14** **ARCHITECTURE AS OUR METHOD** **.**",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 105,
+    "content": "**CIRR** **FashionIQ**\n\n#Sample\n\nMethods Zero-Shot Data Source Scale R@1 R@5 R@50 R Subset @1 R@10 R@50 Average",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 106,
+    "content": "Image Only + CLIP-L14 ✓ CLIP [39]  - 8.42 23.81 61.03 22.98 6.33 15.21 10.78\nText Only + CLIP-L14 ✓ CLIP [39]  - 22.98 46.83 82.36 63.88 19.05 37.82 28.63\nImage-Text Sum. +CLIP-L14 ✓ CLIP [39]  - 11.71 35.06 77.49 32.77 24.60 43.21 33.91",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 107,
+    "content": "InstructPix2Pix +CLIP-L14 ✓ CLIP [39]/ LAION [43]  - 22.03 47.81 83.52 61.67 9.86 19.63 15.03",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 108,
+    "content": "Zero Shot Benchmarks",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 109,
+    "content": "PALAVRA [11] ✓ PerVL [11] *∼* 1m. 16.62 43.49 83.95 41.61 19.76 37.25 28.51\nPic2Word [41] ✓ CC3M [44] 3m. 23.90 51.70 87.80  - 24.70 43.70 34.20\nSEARLE-XL-OTI [3] ✓ COCO (CIRCO) [32] 118k. *[†]* 24.87 52.31 88.58 53.80 27.61 47.90 37.76",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 110,
+    "content": "CompoDiff w/T5-XL [19] ✓ SynthTriplets18m [44] 18m. 19.37 53.81 90.85 28.96 **37.36** 50.85 44.11\nCASE Pre-LaSCo.Ca. [27] ✓ LaSCo [27] 360k. *[†]* 35.40 65.78 94.63 64.29  -  -  TransAgg ✓ LAION [43] 32k *[†]* 37.87 68.88 93.86 69.79 34.64 55.72 45.18",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 111,
+    "content": "COVR [46] ✓ WebVid- [46] 1.6m *[†]* **39.28** 68.22 94.65 - 27.70 44.63 36.15\n**InstructCIR (Ours)** ✓ LAION [43] 300k *[†]* 38.56 **69.21** **95.21** 68.22 36.56 **56.33** **46.89**",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 112,
+    "content": "**InstructCIR (Ours)** ✓ Fashion200k [20]/ NLVR [45] *[⋆]* 300k *[†]* **39.28** **69.62** **95.88** **69.87** 37.32 **56.84** **47.08**",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 113,
+    "content": "Compared to Supervised Learning.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 114,
+    "content": "CLIP4CIR [4] *×* CIRR/FashionIQ  - 38.53 69.98 95.93 68.19 38.32 61.74 50.03\nBLIP4CIR+Bi [36] *×* CIRR/FashionIQ  - 40.15 73.08 96.27 72.10 43.49 67.31 55.40\nCASE Pre-LaSCo.Ca. *[†]* [27] *×* CIRR/FashionIQ - 49.35 80.02 97.47 **76.48** 48.79 70.68 59.74",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 115,
+    "content": "Candidate **F** [37] *×* CIRR/FashionIQ  - 44.70 76.59 97.18 75.02 46.15 69.15 57.65\nCandidate **R** 50 */* 100 [37] *×* CIRR/FashionIQ  - 50.55 **81.75** 97.18 **80.04** **51.17** **73.13** **62.15**\nCOVR [46] *×* CIRR/FashionIQ - 50.41 80.96 97.64 - **49.40** **70.98** **60.19**",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 116,
+    "content": "**InstructCIR (Ours)** *×* CIRR/FashionIQ  - **50.70** **81.61** **98.27** 76.10 49.03 70.96 60.00",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 117,
+    "content": "TABLE III\n\nC OMPARISON ON CIRCO DATASET\n\nBackbone Method K = 5 K = 10 K = 25 K = 50\n\nSEARLE-OTI 7.14 7.83 8.99 9.60\n\nB/32 SEARLE 9.35 9.94 11.13 11.84\n\nInstrucCIR **10.23** **10.98** **12.07** **13.88**\n\nPic2Word 8.72 9.51 10.64 11.29\n\nSEARLE-XL-OTI 10.18 11.03 12.72 13.67\n\nL/14",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 118,
+    "content": "SEARLE-XL-OTI 10.18 11.03 12.72 13.67\n\nL/14\n\nSEARLE-XL 11.68 12.73 14.33 15.12\n\nInstructCIR **12.94** **13.84** **15.62** **16.34**\n\n*B. Zero-Shot Quantitative Evaluation*",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 119,
+    "content": "*a) Baselines::* To illustrate the efficiency of our proposal,\nwe provide a comparison with a wide range of zero-shot CIR\nbaselines. CLIP [39] and PALAVRA [11] provide baselines\nthat utilize frozen vision-language pretraining models. We",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 120,
+    "content": "respectively evaluate *text only*, *image only*, and direct embedding summation ( *Image-Text Sum.* ) to report the performance\nof each modality. Pic2Word [41] and SEARLE [3] represent\nrealizing zero-shot CIR by converting an image into a single",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 121,
+    "content": "text token. Moreover, we provide an image editing baseline\nby using InstructPix2Pix [8] to edit reference images towards\nthe target image with text prompt then applying pure image\nretrieval. CompoDiff [19] represents a diffusion-based generative model on latent space. CASE [27] and TransAGG [34]",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 122,
+    "content": "suggest using LLMs to generate reformulation data but rely\non image-text pairs.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 123,
+    "content": "*b) Performance::* The zero-shot evaluation is conducted\nacross two datasets with the same model weights, FashionIQ [48] (fashion) and CIRR [35] (real-life scenarios) in\nTable II.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 124,
+    "content": "The first sector provides an intuitive understanding of\nzero-shot performance by using raw model analysis. Textonly and image-text summation using CLIP [39] exceed the\nperformance of early baseline PALAVRA [11] and image only.\nFor recent works, Pic2word [41] and SEARLE [3] introduce",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 125,
+    "content": "2 *.* 09% to 7 *.* 09% performance improvement on recall metrics.\nCompoDiff [19] reaches highest 37 *.* 36% top 10 recall ( *R* @10)\non FashionIQ while failing to reach competitive performance\non CIRR. TransAgg [34] and CASE further boost performance\nby introducing pretraining data.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 126,
+    "content": "by introducing pretraining data.\nWhile just given image distribution, InstructCIR reaches\nrecall 38 *.* 18%, 69 *.* 62%, and 95 *.* 88% respectively on\n*R* @ *{* 1 *,* 5 *,* 50 *}* on CIRR dataset. Using the same model, InstructCIR reaches recall 36 *.* 91% and 55 *.* 84% respectively on",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 127,
+    "content": "*R* @10 and *R* @50 on the FashionIQ dataset. *Results demon-*\n*strate that our InstructCIR reaches new state-of-the-art per-*\n*formance across two major datasets* .\n*c) Extensive* *Zero-Shot* *Performance* *on* *Benchmark*\n*CIRCO:* We have now compared our method (InstructCIR)",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 128,
+    "content": "with two other zero-shot methods on an extensive dataset proposed recently called CIRCO [3]. The observation is similar to\nother datasets, that our approach clearly outperforms previous\nmethods even on the CIRCO dataset. We will include these",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 129,
+    "content": "results in the revised manuscript.\n\n\n-----",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 130,
+    "content": "TABLE IV\nA BLATION STUDY ON DIFFERENT MODELS, REFORMULATION LLM S, AND DATA DISTRIBUTION WITH ZERO - SHOT SETTING . 33B *[∓]* DENOTES OUR OWN\nLANGUAGE MODEL WITH 33 BILLION PARAMETERS . CIRR *[⋆]* AND F ASHION IQ *[⋆]* DENOTES JUST UTILIZING IMAGES FROM GT DATASET WITHOUT",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 131,
+    "content": "ANNOTATION BUT CREATING ZERO - SHOT REFORMULATION USING OUR PIPELINE . 33B *[∓]* -GT DENOTES WE USE SUPERVISE DATA TO FINE - TUNE THE",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 132,
+    "content": "LANGUAGE MODEL . **I** **NSTRUCT** **CIR** **OUTPERFORMS** **T** **RANS** **A** **GG WITH RESPECTIVE TO THE QUALITY OF GENERATED DATA AS WELL AS THE**\n\n**MODEL ARCHITECTURE** **.**\n\n**CIRR** **FashionIQ**\n\n#Reform\n\nModel Backbone Images Caption LLM #Scale R@1 R@5 R Subset @1 R@10 R@50",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 133,
+    "content": "CLIP L/14 TransAgg LAION Temp. 32k 33.04 64.39 63.37 32.63 53.65\nTransAgg CLIP L/14 TransAgg LAION ChatGPT 32k 32.67 64.05 62.98 32.45 53.15\nCLIP L/14 Fashion/NVLR LLaVa 33B *[∓]* 32k 33.26 65.67 64.05 32.91 53.41",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 134,
+    "content": "InstructCIR CLIP L/14 TransAgg LAION 33B *[∓]* 32k 35.58 67.85 66.87 33.52 54.07\nCLIP L/14 Fashion/NVLR LLaVa 33B *[∓]* 32k **35.83** **68.04** **66.93** **33.78** **54.82**\n\nScaling-Up Experiments with Zero-Shot Pipeline",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 135,
+    "content": "Scaling-Up Experiments with Zero-Shot Pipeline\n\nCLIP L/14 CIRR *[⋆]* LLaVa 33B *[∓]* 3.6k 34.74 65.83 66.43 32.21 53.19\nCLIP L/14 FashionIQ *[⋆]* LLaVa 33B *[∓]* 5.9k 33.08 65.98 66.38 33.64 54.62\nCLIP L/14 Fashion/NVLR LLaVa 33B *[∓]* 32k 35.83 68.04 66.93 33.78 54.82",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 136,
+    "content": "InstructCIR CLIP L/14 Fashion/NVLR LLaVa 33B *[∓]* 65k 36.72 68.49 67.03 34.85 55.16",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 137,
+    "content": "CLIP L/14 Fashion/NVLR LLaVa 33B *[∓]* 95k 36.92 68.64 68.34 35.94 55.78\nCLIP L/14 Fashion/NVLR LLaVa 33B *[∓]* 200k 38.04 69.56 69.45 36.64 56.18\nCLIP L/14 Fashion/NVLR LLaVa 33B *[∓]* 300k 38.86 69.62 69.87 37.32 56.84",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 138,
+    "content": "CLIP L/14 Fashion/NVLR LLaVa 33B *[∓]* -GT 300k **41.32** **72.55** **71.01** **38.92** **58.43**",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 139,
+    "content": "*C. Supervised Quantitative Evaluation*",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 140,
+    "content": "To underscore the efficiency of our proposed embedding\nreformulation network, we benchmarked it using standard\nsupervised learning on two prominent CIR datasets: FashionIQ [48] (fashion-centric) and CIRR [35] (reflecting reallife scenarios). Unlike the zero-shot setting, which evaluates a",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 141,
+    "content": "single model across both datasets, the supervised benchmark\ntrains optimized models for each dataset before evaluation.\nIt’s worth noting that the Candidate Re-ranking process,\nwhich refines results from the top 100 retrieved candidates,",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 142,
+    "content": "incurs additional computational costs. Hence, we’ve highlighted Candidate **R** 100 in grey. In the CIRR evaluation, our\nInstructCIR outperforms most preceding benchmarks, even\nsurpassing the Candidate **R** 100 in the Recall@K metrics. For",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 143,
+    "content": "the Recall Subset @K metric, while Candidate **R** 100 achieves\nthe peak performance, both CASE and our proposal are\nclosely competitive for the second-best score. In the FashionIQ",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 144,
+    "content": "evaluation, InstructCIR ranks slightly below CASE, with Candidate **R** 100 securing the third spot. These results suggest that\nour network architecture is on par with the state-of-the-art\nwhen compared against supervised baselines, underscoring the\nefficacy of our model design.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 145,
+    "content": "*D. Ablation Study*\n\nTransAgg [34] and our model significantly outperform previous models as these two models both utilize LLMs to create",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 146,
+    "content": "reformulated text prompts. The difference is that TransAgg\nutilizes existing image caption dataset, but InstructCIR creates\ncaptions given the image distribution. We further conducted\ndetailed ablation studies in Table IV to help people understand\nthe performance improvement.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 147,
+    "content": "the performance improvement.\n*a) Architectural Efficiency::* In this section, we provide\nan ablation study on architecture efficiency compared to concurrent work TransAgg [34]. The first sector of Table IV\ncompares TransAgg [34] with our model by exchanging",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 148,
+    "content": "TABLE V\n\nA BLATION STUDY ON ARCHITECTURAL DESIGN ACROSS CIRR AND\n\nF ASHION IQ WITH ZERO  - SHOT SETTING . C ROSS  - ATTENTION  - BASED\n\nLATENT FUSION YIELDS THE MOST BENEFIT .\n\n**CIRR** **FashionIQ**\nModel #Scale R@1 R@5 R@10 R@50\n\nInstructCIR 32k 35.83 68.04 33.78 54.82",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 149,
+    "content": "InstructCIR 32k 35.83 68.04 33.78 54.82\n\n+w/o EMA 32k 35.04 67.85 33.16 54.23\n\n+w/o CrossAtt. 32k 28.45 59.33 24.53 45.67",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 150,
+    "content": "training data. By controlling data scale the same (32k),\nTransAgg R@ *{* 1, 5 *}* of CIRR dataset respectively increases\nfrom 32 *.* 67% *,* 64 *.* 05% to 33 *.* 26% *,* 65 *.* 67%. This suggest the\nefficiency of zero-shot data creating pipeline of InstructCIR.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 151,
+    "content": "Also, while using the TransAgg data training, our embedding\nreformulation network also could reach 35 *.* 58% *,* 67 *.* 85% on\nCIRR R@ *{* 1, 5 *}*, which is still higher than previous model.\nThis observation suggests that, while using the same data",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 152,
+    "content": "with the same scale of model, our methods outperforms\nTransAgg clearly. The improvement is compared smaller on\nthe FashionIQ dataset, but the conclusion still stands.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 153,
+    "content": "Table V provides an ablation study on **architectual design** .\nThe model is trained with InstructCIR data with a data scale of",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 154,
+    "content": "32k samples. When removing EMA [1] update, the CIRR R@1\nand FashionIQ R@10 drop slightly from 35 *.* 83% to 35 *.* 04%\nand from 33 *.* 78% to 33 *.* 16%. When further removing both\nEMA and cross attention to perform embedding reformulation,",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 155,
+    "content": "which is the original CLIP model, the average recall drops\nsignificantly by 6 *.* 59% *∼* 8 *.* 52% on both CIRR and Fashion\nIQ. This suggests the design efficiency of the proposed embedding reformulation network. We conducted a supervised",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 156,
+    "content": "CIR comparison in Section IV-C, which further illustrates the\narchitectural efficiency by comparing with previous methods\nwith the same training data.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 157,
+    "content": "-----\n\nFig. 5. Qualitative results on FashionIQ dataset. For each given reference image and text instructions, we visualize the top 10 retrieved candidates. Here,\ngreen boxes □ denote reference images, and red boxes □ denotes target images indicated by ground truth label.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 158,
+    "content": "*b) Language Model Reformulation::* To illustrate how\nperformance improvements related to pure image distribution\nwe sampled from Fashion200k and NLVR. We directly take\nthe images from the supervised dataset, FashionIQ, and CIRR\nand abandon the annotations. The images are fed through the",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 159,
+    "content": "zero-shot pipeline to train the model. Results in Table IV\nsuggest that, although these two datasets show a slightly better\nperformance on data (3.6k and 5.9k) closer to their own\ndistribution, the differences are not significant and they still",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 160,
+    "content": "fall short of models with larger data scales. This suggests the\ngood salable property of InstructCIR.\n*c) Scaling-Up::* The lower part of Table IV reports the\nscaling-up experiment of InstructCIR. The performance rises\nfrom 35 *.* 83% R@1 to 38 *.* 86% R@1 on the CIRR dataset",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 161,
+    "content": "when scaling from 32k to 300k. The findings indicate good\nscalability, demonstrating that as the data scale increases, so\ntoo does performance.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 162,
+    "content": "too does performance.\nFurthermore, to obtain an approximate empirical performance upper bound, we augment our approach with semisupervised data. By utilizing triplet data from the CIRR [35]\nand the FashionIQ [48] datasets, we further boost the language",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 163,
+    "content": "model by leaking information from the ground truth. This exploration is critical, as it provides a trajectory of performance\nenhancement: starting from a zero-shot scenario and progressively approaching supervised benchmarks. With the help of",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 164,
+    "content": "the boosted language model, the performance could further rise\nto 41 *.* 32% R@1 on the CIRR dataset and 38 *.* 92% R@10 on\nthe FashionIQ dataset, indicated as 33B *[∓]* -GT in Table IV. This\nperformance **is even comparable with advanced supervised**\n**baselines** CLIP4CIR [5] and BLIP4CIR [36].",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 165,
+    "content": "*d) Test Domain Variance::* InstructCIR employs LLMs\nto generate text instructions in a zero-shot manner for training\npurposes. To showcase the generalization ability of Instruct\n\nTABLE VI\n\nA BLATION STUDY BY REPLACING GT TEXT INSTRUCTIONS BY",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 166,
+    "content": "GENERATED TEXT INSTRUCTIONS . S MALL DIFFERENCE INDICATE THE\n\nDOMAIN GAP BETWEEN GENERATED AND GT REFORMULATION TEXTS IS\n\nSMALL .\n\n**CIRR** **FashionIQ**\nImage Test Text R@1 R@5 R@10 R@50\n\nGT GT 35.83 68.04 33.78 54.82\n\nGT Generated 37.45 68.31 33.92 54.87\n\n∆ +1.62 +0.27 +0.14 +0.04",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 167,
+    "content": "CIR in real-world test distributions, we have conducted an\nablation study, presented in Table VI. In this study, while\nretaining the images from the ground truth (GT), we replaced\nthe text GT with generated texts. Our hypothesis was that",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 168,
+    "content": "by using generated texts closer to the training distribution,\nthe model would exhibit improved performance. Indeed, this\nchange led to an increase in top-1 recall (R@1) as seen in\nTable VI. However, only marginal differences were observed\nfor R@5, R@10, and R@50 metrics. Such results underscore",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 169,
+    "content": "the robust generalization capabilities of our proposed data\ncreation pipeline.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 170,
+    "content": "*E. Qualitative Analysis*",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 171,
+    "content": "To provide a clear understanding of the retrieval performance, we present visualizations of the retrieval results on the\nFashionIQ dataset (Figure 5) and CIRR dataset (Figure 6. For\neach reference image (highlighted with green boxes) paired",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 172,
+    "content": "with text prompts (displayed as the title of each line), we\nshowcase the top 10 retrieved candidates. The target image’s\nground truth is marked with red boxes on each line.\nIt’s widely recognized that metric-based evaluations can\nsometimes diverge from human judgments. This is because",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 173,
+    "content": "-----\n\nFig. 6. Qualitative results on CIRR dataset. green boxes □ denote reference\nimages and red boxes □ denotes GT label.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 174,
+    "content": "there may be multiple reasonable results beyond just the\nground truths. For instance, in the middle-right line of our\nvisualization, all retrieved results adhere to the prompt “Has\nfloral design and has flowers and is blue”. However, the ground",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 175,
+    "content": "truth only indicates one of these valid candidates. Common\nfailures occur when the original reference images still appear\namong the top 10 retrieved candidates. This is especially\nprevalent when the reference image captures comprehensive\nhuman attributes, like a face.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 176,
+    "content": "V. L IMITATIONS",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 177,
+    "content": "Achieving optimal results requires sampling image pairs\nthat have complementary features but maintain certain shared\ncharacteristics. When images with excessive dissimilarity are\nchosen, LLMs tend to falter, often generating descriptions that",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 178,
+    "content": "encompass both images rather than high-quality reformulation\ntext prompts. However, such extreme scenarios are uncommon\nin CIR, where reference and target images usually differ\nonly at a fine-grained level. Experiments show that these\ndissimilarities are tolerable as the training scale increases,",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 179,
+    "content": "without causing significant negative impacts on the model.",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 180,
+    "content": "VI. C ONCLUSION",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 181,
+    "content": "This work explores achieving zero-shot composed image\nretrieval based solely on an unannotated image collection. Our\napproach involves transforming images into detailed captions\nand then generating reformulated text prompts within the\ntext domain. With the support of advanced large language",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 182,
+    "content": "models, this data-creating approach is not only efficient but\nalso scalable, without requiring pre-existing caption data.\nLeveraging this scalable pipeline, InstructCIR reaches new",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 183,
+    "content": "state-of-the-art in the zero-shot domain. Furthermore, our\nproposed embedding reformulation network also attains stateof-the-art results in supervised benchmarks, underscoring the\nefficacy of our design.\n\nR EFERENCES",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 184,
+    "content": "[1] Mahmoud Assran, Quentin Duval, Ishan Misra, Piotr Bojanowski, Pascal\nVincent, Michael Rabbat, Yann LeCun, and Nicolas Ballas. Selfsupervised learning from images with a joint-embedding predictive\narchitecture. In *Proceedings of the IEEE/CVF Conference on Computer*",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 185,
+    "content": "*Vision and Pattern Recognition*, pages 15619–15629, 2023. 3, 6",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 186,
+    "content": "[2] Jimmy Lei Ba, Jamie Ryan Kiros, and Geoffrey E Hinton. Layer\nnormalization. *arXiv preprint arXiv:1607.06450*, 2016. 3",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 187,
+    "content": "[3] Alberto Baldrati, Lorenzo Agnolucci, Marco Bertini, and Alberto\nDel Bimbo. Zero-shot composed image retrieval with textual inversion.\n*arXiv preprint arXiv:2303.15247*, 2023. 1, 4, 5",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 188,
+    "content": "[4] Alberto Baldrati, Marco Bertini, Tiberio Uricchio, and Alberto\nDel Bimbo. Conditioned and composed image retrieval combining and\npartially fine-tuning clip-based features. In *CVPR Workshops*, 2022. 5",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 189,
+    "content": "[5] A. Baldrati, M. Bertini, T. Uricchio, and A. Del Bimbo. Conditioned and\ncomposed image retrieval combining and partially fine-tuning clip-based\nfeatures. In *Proceedings of the IEEE/CVF Conference on Computer*\n*Vision and Pattern Recognition (CVPR) Workshops*, 2022. 7",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 190,
+    "content": "[6] A. Baldrati, M. Bertini, T. Uricchio, and A. Del Bimbo. Effective conditioned and composed image retrieval combining clip-based features.\nIn *Proceedings of the IEEE/CVF Conference on Computer Vision and*\n*Pattern Recognition (CVPR)*, 2022. 1, 4",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 191,
+    "content": "[7] Alberto Baldrati, Marco Bertini, Tiberio Uricchio, and Alberto\nDel Bimbo. Effective conditioned and composed image retrieval\ncombining clip-based features. In *CVPR*, pages 21466–21474, 2022.\n4",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 192,
+    "content": "[8] Tim Brooks, Aleksander Holynski, and Alexei A Efros. Instructpix2pix: Learning to follow image editing instructions. *arXiv preprint*\n*arXiv:2211.09800*, 2022. 3, 5",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 193,
+    "content": "[9] S´ebastien Bubeck, Varun Chandrasekaran, Ronen Eldan, Johannes\nGehrke, Eric Horvitz, Ece Kamar, Peter Lee, Yin Tat Lee, Yuanzhi Li,\nScott Lundberg, et al. Sparks of artificial general intelligence: Early\nexperiments with gpt-4. *arXiv preprint arXiv:2303.12712*, 2023. 1",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 194,
+    "content": "[10] Y. Chen, S. Gong, and L. Bazzani. Image search with text feedback\nby visiolinguistic attention learning. In *IEEE Conference on Computer*\n*Vision and Pattern Recognition*, 2020. 1, 4",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 195,
+    "content": "[11] Niv Cohen, Rinon Gal, Eli A. Meirom, Gal Chechik, and Yuval\nAtzmon. ”this is my unicorn, fluffy”: Personalizing frozen visionlanguage representations. In *ECCV*, 2022. 5",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 196,
+    "content": "[12] Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova.\nBert: Pre-training of deep bidirectional transformers for language understanding. *arXiv preprint arXiv:1810.04805*, 2018. 4",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 197,
+    "content": "[13] E. Dodds, J. Culpepper, S. Herdade, Y. Zhang, and K. Boakye. Modalityagnostic attention fusion for visual search with text feedback. *arXiv*\n*preprint arXiv:2007.00145*, 2020. 1",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 198,
+    "content": "[14] A. Dosovitskiy, L. Beyer, A. Kolesnikov, D. Weissenborn, X. Zhai, T.\nUnterthiner, M. Dehghani, M. Minderer, G. Heigold, S. Gelly, J. Uszkoreit, and N. Houlsby. An image is worth 16x16 words: Transformers\nfor image recognition at scale. In *International Conference on Learning*",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 199,
+    "content": "*Representations*, 2021. 3",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 200,
+    "content": "[15] Yiqun Duan, Zhen Wang, Yi Li, and Jingya Wang. Cross-domain\nmulti-style merge for image captioning. *Computer Vision and Image*\n*Understanding*, 228:103617, 2023. 4",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 201,
+    "content": "[16] Yiqun Duan, Zhen Wang, Jingya Wang, Yu-Kai Wang, and Chin-Teng\nLin. Position-aware image captioning with spatial relation. *Neurocom-*\n*puting*, 497:28–38, 2022. 4",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 202,
+    "content": "[17] Rinon Gal, Yuval Alaluf, Yuval Atzmon, Or Patashnik, Amit H Bermano,\nGal Chechik, and Daniel Cohen-Or. An image is worth one word:\nPersonalizing text-to-image generation using textual inversion. *arXiv*\n*preprint arXiv:2208.01618*, 2022. 1",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 203,
+    "content": "[18] Sonam Goenka, Zhaoheng Zheng, Ayush Jaiswal, Rakesh Chada, Yue\nWu, Varsha Hedau, and Pradeep Natarajan. Fashionvlp: Vision language\ntransformer for fashion retrieval with feedback. In *CVPR*, pages 14105–\n14115, 2022. 4",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 204,
+    "content": "[19] Geonmo Gu, Sanghyuk Chun, Wonjae Kim, HeeJae Jun, Yoohoon Kang,\nand Sangdoo Yun. Compodiff: Versatile composed image retrieval with\nlatent diffusion. *arXiv preprint arXiv:2303.11916*, 2023. 4, 5",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 205,
+    "content": "[20] Xintong Han, Zuxuan Wu, Phoenix X Huang, Xiao Zhang, Menglong\nZhu, Yuan Li, Yang Zhao, and Larry S Davis. Automatic spatially-aware\n\n\n-----\n\nfashion concept discovery. In *Proceedings of the IEEE international*\n*conference on computer vision*, pages 1463–1471, 2017. 5",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 206,
+    "content": "[21] X. Han, Z. Wu, P. X. Huang, X. Zhang, M. Zhu, Y. Li, Y. Zhao, and\nL. S. Davis. Automatic spatially-aware fashion concept discovery. In\n*IEEE International Conference on Computer Vision*, 2017. 4",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 207,
+    "content": "[22] Xiao Han, Licheng Yu, Xiatian Zhu, Li Zhang, Yi-Zhe Song, and Tao\nXiang. Fashionvil: Fashion-focused vision-and-language representation\nlearning. In *ECCV*, 2022. 4",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 208,
+    "content": "[23] Amir Hertz, Ron Mokady, Jay Tenenbaum, Kfir Aberman, Yael Pritch,\nand Daniel Cohen-Or. Prompt-to-prompt image editing with cross\nattention control. *arXiv preprint arXiv:2208.01626*, 2022. 4",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 209,
+    "content": "[24] Mehrdad Hosseinzadeh and Yang Wang. Composed query image retrieval using locally bounded features. In *Proceedings of the IEEE/CVF*\n*Conference on Computer Vision and Pattern Recognition*, pages 3596–\n3605, 2020. 1",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 210,
+    "content": "[25] Edward J Hu, Yelong Shen, Phillip Wallis, Zeyuan Allen-Zhu, Yuanzhi\nLi, Shean Wang, Lu Wang, and Weizhu Chen. Lora: Low-rank\nadaptation of large language models. *arXiv preprint arXiv:2106.09685*,\n2021. 2",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 211,
+    "content": "[26] Siddharth Krishna Kumar. On weight initialization in deep neural\nnetworks. *arXiv preprint arXiv:1704.08863*, 2017. 4\n\n[27] Matan Levy, Rami Ben-Ari, Nir Darshan, and Dani Lischinski. Data\nroaming and early fusion for composed image retrieval. *arXiv preprint*\n*arXiv:2303.09429*, 2023. 4, 5",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 212,
+    "content": "[28] Junnan Li, Dongxu Li, Caiming Xiong, and Steven Hoi. Blip:\nBootstrapping language-image pre-training for unified vision-language\nunderstanding and generation. In *International Conference on Machine*\n*Learning*, pages 12888–12900. PMLR, 2022. 1",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 213,
+    "content": "[29] Yi Li, Hualiang Wang, Yiqun Duan, and Xiaomeng Li. Clip surgery for\nbetter explainability with enhancement in open-vocabulary tasks. *arXiv*\n*e-prints*, pages arXiv–2304, 2023. 4",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 214,
+    "content": "[30] Yi Li, Hualiang Wang, Yiqun Duan, Hang Xu, and Xiaomeng Li.\nExploring visual interpretability for contrastive language-image pretraining. *arXiv preprint arXiv:2209.07046*, 2022. 4",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 215,
+    "content": "[31] Yi Li, Hualiang Wang, Yiqun Duan, Jiheng Zhang, and Xiaomeng Li.\nA closer look at the explainability of contrastive language-image pretraining. *Pattern Recognition*, page 111409, 2025. 4",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 216,
+    "content": "[32] Tsung-Yi Lin, Michael Maire, Serge Belongie, James Hays, Pietro\nPerona, Deva Ramanan, Piotr Doll´ar, and C Lawrence Zitnick. Microsoft\ncoco: Common objects in context. In *Computer Vision–ECCV 2014:*\n*13th European Conference, Zurich, Switzerland, September 6-12, 2014,*",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 217,
+    "content": "*Proceedings, Part V 13*, pages 740–755. Springer, 2014. 5",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 218,
+    "content": "[33] Haotian Liu, Chunyuan Li, Qingyang Wu, and Yong Jae Lee. Visual\ninstruction tuning. *arXiv preprint arXiv:2304.08485*, 2023. 1, 2",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 219,
+    "content": "[34] Yikun Liu, Jiangchao Yao, Ya Zhang, Yanfeng Wang, and Weidi\nXie. Zero-shot composed text-image retrieval. *arXiv preprint*\n*arXiv:2306.07272*, 2023. 1, 4, 5, 6",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 220,
+    "content": "[35] Zheyuan Liu, Cristian Rodriguez-Opazo, Damien Teney, and Stephen\nGould. Image retrieval on real-life images with pre-trained visionand-language models. In *Proceedings of the IEEE/CVF International*\n*Conference on Computer Vision*, pages 2125–2134, 2021. 1, 4, 5, 6, 7",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 221,
+    "content": "[36] Zheyuan Liu, Weixuan Sun, Yicong Hong, Damien Teney, and Stephen\nGould. Bi-directional training for composed image retrieval via text\nprompt learning. *arXiv preprint arXiv:2303.16604*, 2023. 4, 5, 7",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 222,
+    "content": "[37] Zheyuan Liu, Weixuan Sun, Damien Teney, and Stephen Gould. Candidate set re-ranking for composed image retrieval with dual multi-modal\nencoder. *arXiv preprint arXiv:2305.16304*, 2023. 4, 5",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 223,
+    "content": "[38] Ilya Loshchilov and Frank Hutter. Decoupled weight decay regularization. *arXiv preprint arXiv:1711.05101*, 2017. 4",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 224,
+    "content": "[39] Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel\nGoh, Sandhini Agarwal, Girish Sastry, Amanda Askell, Pamela Mishkin,\nJack Clark, et al. Learning transferable visual models from natural\nlanguage supervision. In *International conference on machine learning*,",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 225,
+    "content": "pages 8748–8763. PMLR, 2021. 1, 3, 5",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 226,
+    "content": "[40] Robin Rombach, Andreas Blattmann, Dominik Lorenz, Patrick Esser,\nand Bj¨orn Ommer. High-resolution image synthesis with latent diffusion\nmodels. In *Proceedings of the IEEE/CVF conference on computer vision*\n*and pattern recognition*, pages 10684–10695, 2022. 1, 3",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 227,
+    "content": "[41] Kuniaki Saito, Kihyuk Sohn, Xiang Zhang, Chun-Liang Li, Chen-Yu\nLee, Kate Saenko, and Tomas Pfister. Pic2word: Mapping pictures to\nwords for zero-shot composed image retrieval. In *Proceedings of the*\n*IEEE/CVF Conference on Computer Vision and Pattern Recognition*,",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 228,
+    "content": "pages 19305–19314, 2023. 1, 4, 5",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 229,
+    "content": "[42] Christoph Schuhmann, Romain Beaumont, Richard Vencu, Cade Gordon, Ross Wightman, Mehdi Cherti, Theo Coombes, Aarush Katta,\nClayton Mullis, Mitchell Wortsman, et al. Laion-5b: An open large-scale",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 230,
+    "content": "dataset for training next generation image-text models. *arXiv preprint*\n*arXiv:2210.08402*, 2022. 4",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 231,
+    "content": "[43] Christoph Schuhmann, Richard Vencu, Romain Beaumont, Robert Kaczmarczyk, Clayton Mullis, Aarush Katta, Theo Coombes, Jenia Jitsev,\nand Aran Komatsuzaki. Laion-400m: Open dataset of clip-filtered 400\nmillion image-text pairs. *arXiv preprint arXiv:2111.02114*, 2021. 5",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 232,
+    "content": "[44] Piyush Sharma, Nan Ding, Sebastian Goodman, and Radu Soricut.\nConceptual captions: A cleaned, hypernymed, image alt-text dataset\nfor automatic image captioning. In *Proceedings of the 56th Annual*\n*Meeting of the Association for Computational Linguistics (Volume 1:*",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 233,
+    "content": "*Long Papers)*, pages 2556–2565, 2018. 5",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 234,
+    "content": "[45] Alane Suhr, Mike Lewis, James Yeh, and Yoav Artzi. A corpus of\nnatural language for visual reasoning. In *Proceedings of the 55th Annual*\n*Meeting of the Association for Computational Linguistics (Volume 2:*\n*Short Papers)*, pages 217–223, 2017. 4, 5",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 235,
+    "content": "[46] Lucas Ventura, Antoine Yang, Cordelia Schmid, and G¨ul Varol. Covr:\nLearning composed video retrieval from web video captions. In *Pro-*\n*ceedings of the AAAI Conference on Artificial Intelligence*, volume 38,\npages 5270–5279, 2024. 5",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 236,
+    "content": "[47] Nam Vo, Lu Jiang, Chen Sun, Kevin Murphy, Li-Jia Li, Li Fei-Fei, and\nJames Hays. Composing text and image for image retrieval-an empirical\nodyssey. In *Proceedings of the IEEE/CVF conference on computer vision*\n*and pattern recognition*, pages 6439–6448, 2019. 1, 4",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 237,
+    "content": "[48] Hui Wu, Yupeng Gao, Xiaoxiao Guo, Ziad Al-Halah, Steven Rennie,\nKristen Grauman, and Rogerio Feris. Fashion iq: A new dataset towards\nretrieving images by natural language feedback. In *Proceedings of*\n*the IEEE/CVF Conference on computer vision and pattern recognition*,",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 238,
+    "content": "pages 11307–11317, 2021. 4, 5, 6, 7",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  },
+  {
+    "chunk_id": 239,
+    "content": "[49] Lvmin Zhang and Maneesh Agrawala. Adding conditional control to\ntext-to-image diffusion models. *arXiv preprint arXiv:2302.05543*, 2023.\n1\n\n\n-----",
+    "metadata": {
+      "source": "2504.00812v1.md"
+    }
+  }
+]

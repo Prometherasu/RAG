@@ -1,0 +1,2172 @@
+[
+  {
+    "chunk_id": 0,
+    "content": "## **Multilingual Retrieval-Augmented Generation** **for Knowledge-Intensive Task**\n### **Leonardo Ranaldi Barry Haddow Alexandra Birch** Institute for Language, Cognition and Computation School of Informatics, University of Edinburgh 10 Crichton Street, Edinburgh {first_name.last_name}@ed.ac.uk",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 1,
+    "content": "### **Abstract**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 2,
+    "content": "Retrieval-augmented generation (RAG) has become a cornerstone of contemporary NLP, enhancing large language models (LLMs) by allowing them to access richer factual contexts\nthrough in-context retrieval. While effective in\nmonolingual settings, especially in English, its",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 3,
+    "content": "monolingual settings, especially in English, its\nuse in multilingual tasks remains unexplored.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 4,
+    "content": "This paper investigates the effectiveness of\nRAG across multiple languages by proposing novel approaches for multilingual opendomain question-answering. We evaluate the performance of various multilingual\nRAG strategies, including question-translation",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 5,
+    "content": "RAG strategies, including question-translation\n( **tRAG** ), which translates questions into English before retrieval, and Multilingual RAG\n( **MultiRAG** ), where retrieval occurs directly\nacross multiple languages. Our findings reveal\nthat **tRAG**, while useful, suffers from limited",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 6,
+    "content": "that **tRAG**, while useful, suffers from limited\ncoverage. In contrast, **MultiRAG** improves\nefficiency by enabling multilingual retrieval\nbut introduces inconsistencies due to cross\nlingual variations in the retrieved content. To\naddress these issues, we propose Crosslingual",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 7,
+    "content": "address these issues, we propose Crosslingual\nRAG ( **CrossRAG** ), a method that translates\nretrieved documents into a common language\n(e.g., English) before generating the response.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 8,
+    "content": "(e.g., English) before generating the response.\nOur experiments show that **CrossRAG** significantly enhances performance on knowledgeintensive tasks, benefiting both high-resource\nand low-resource languages.\n### **1 Introduction**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 9,
+    "content": "Retrieval-augmented generation (RAG) aims to improve the factuality and memory access of large\nlanguage models (LLMs) by combining external\nknowledge during inference (Lewis et al., 2020b;\nPetroni et al., 2021). RAG is designed to mitigate",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 10,
+    "content": "some of the well-known limitations of LLMs, including the tendency for hallucinations and the lack\nof specific domain knowledge in the training data\n(Siriwardhana et al., 2023; Kandpal et al., 2023;\nKasai et al., 2023; Asai et al., 2023).",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 11,
+    "content": "Augmenting the questions by operating through\nrelevant information retrieved from external cor\npora, such as Wikipedia effectively reduced inaccurate generation, thereby notably improving accuracies (Gao et al., 2024; Fan et al., 2024).",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 12,
+    "content": "Nevertheless, previous efforts focused on English as the data language in their experiments, i.e.,\nthe language of the user queries and the retrieval\ncorpora. Hence, limited attention is afforded to\nstudying the type and role of non-English queries\nand retrieving multilingual documents to augment",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 13,
+    "content": "and retrieving multilingual documents to augment\nLLMs’ capabilities. To address this gap, Zhang\net al. (2022); Thakur et al. (2024a); Li et al. (2024)\nproposed methodologies to evaluate multilingual",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 14,
+    "content": "proposed methodologies to evaluate multilingual\nretrieval. Chirkova et al. (2024) introduce a preliminary analysis of the impact of multilingual documents in the RAG pipeline.\nIn this paper, we systematically investigate the\nimpact of RAG-based pipelines beyond English,",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 15,
+    "content": "impact of RAG-based pipelines beyond English,\naiming to identify potential challenges and propose\nstrategies for improving the performance across a\nselection of languages. Taking previous work a\nstep further, we evaluate the benefits of extending RAG methodologies in multilingual settings by",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 16,
+    "content": "analysing the effects of different types of retrieved\ndocuments on multilingual generative abilities in\ndifferent languages. Complementing the foundation work of (Chirkova et al., 2024), we introduce\nand analyse the trade-off of different approaches\nthat lead LLMs to harness multilingual knowledge.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 17,
+    "content": "that lead LLMs to harness multilingual knowledge.\nThis leads to the main research questions:\n*RQ1: How does multilingual retrieval affect RAG*\n*accuracy and consistency?*\n*RQ2: What are the benefits and limitations of*\n*incorporating multilingual knowledge in RAG*",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 18,
+    "content": "*models?*\n\n*RQ3: Which methods could improve multilingual*\n*RAG performance?*\n\nTo answer these questions, we produce a\ncomprehensive evaluation by introducing strate\n\n-----",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 19,
+    "content": "-----\n\nFigure 1: Retrieval-Augmented Generation (RAG) pipelines studied in our works. We explore the performances of\ndifferent prompting pipelines to handle multilingual queries (§2).",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 20,
+    "content": "gies for handling multilingual queries as well\nas retrieval stages, as shown in Figure 1. We\nuse three knowledge-intensive question-answering\ntasks properly constructed for multilingual evaluation as they best represent multilingual openended question-answering tasks (Longpre et al.,",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 21,
+    "content": "2021; Chirkova et al., 2024). Then, we employed\ndifferent LLMs, chosen for proficiency in RAG\ntasks and multilingual performances, to investigate their capabilities in leveraging multilingual\nretrieved knowledge.\nThe main contributions of our paper are:",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 22,
+    "content": "- We explore RAG beyond English by showing\nthe benefits derived from extending the range\nof retrieval to multilingual contexts. Firstly,\nwe show that naïve approaches such as query",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 23,
+    "content": "we show that naïve approaches such as query\ntranslation ( **tRAG** ) generate incorrect translations, leading to wrong retrieval and misleading generations, for instance, Appendix\nO. Instead, Multilingual RAG ( **MultiRAG** ),",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 24,
+    "content": "O. Instead, Multilingual RAG ( **MultiRAG** ),\nbased on multilingual retrieval and languagespecific queries, outperforms monolingual\nRAG ( **monoRAG** ) based on monolingual retrieval sources in the query language.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 25,
+    "content": "the LLMs used in our work are proficient at\nunderstanding multilingual questions but fail\nin extracting information, especially in lowresource languages.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 26,
+    "content": "- In order to address these problems with\n**MultiRAG**, we introduce a document-level\ntranslation pipeline ( **CrossRAG** ) that allows\nthe LLMs to handle knowledge-intensive\ntasks by operating with retrieved documents\nin a single language (i.e. English) but still",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 27,
+    "content": "in a single language (i.e. English) but still\nproviding multilingual responses.\n### **2 Methods**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 28,
+    "content": "- We then study the dynamics between the languages that emerge in **MultiRAG** . We outline the advantages of document retrieval over\nheterogeneous knowledge bases, and at the\nsame time, we display the problems that some\nmodels have when they have to operate with",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 29,
+    "content": "models have when they have to operate with\nretrieved knowledge from documents in different languages. Specifically, we show that",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 30,
+    "content": "Retrieval-augmented Generations (RAG) methods improve performance of LLMs in knowledgeintensive tasks by combining questions with retrieved knowledge in context (§2.1).\nAlthough the usefulness of RAG has been\ndemonstrated, evaluations and further studies are",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 31,
+    "content": "demonstrated, evaluations and further studies are\nprimarily conducted in English, leaving other languages unexplored. Hence, we propose a systematic study of the portability of RAG pipelines to\nlanguages other than English (§2.2), analysing different approaches to improve the effective value of",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 32,
+    "content": "expanding retrieval beyond English (§2.3).",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 33,
+    "content": "**2.1** **RAG Pipelines**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 34,
+    "content": "In traditional RAG, knowledge is acquired from\ndomains *D* (e.g., Wikipedia or internal databases)\nand used during inference to promote accurate generation. The pipeline is structured into phases:",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 35,
+    "content": "**Retrieval** In this phase, the relevant top- *k* documents *docs* = *{d* 1 *, . . ., d* *k* *}* are retrieved, based",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 36,
+    "content": "-----",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 37,
+    "content": "on the query *Q* from *D*, using a retrieval system *R* .\nDuring retrieval with *R*, the question *Q* and documents in *D* are encoded, forming *h* *Q* = *R* ( *Q* ) *∈*\nR *[n]* for query and *h* *D* = *R* ( *D* ) *∈* R *[n]* for documents. Then, the similarity *⟨h* *Q* *, h* *D* *⟩* is used to",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 38,
+    "content": "select a collection *C* from *D*, consisting of documents that best match the query. Usually, to improve retrieval quality, the top most relevant documents are filtered and ordered using a re-ranked",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 39,
+    "content": "model obtaining *docs* . Then, they are encoded together with the query in *h* *Q,C* = *R* ( *Q, C* ) *∈* R .",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 40,
+    "content": "This allows for *h* *Q,C* representations, which capture similarities between the query and the documents by improving quality and considering similarity, specific contexts, and semantic relevance to\n*docs* = top-k *{h* *Q,C* *}* .",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 41,
+    "content": "*docs* = top-k *{h* *Q,C* *}* .\nThe retriever generally uses a ranker based on architectures trained on specific information retrieval\ndatasets and a customised reranker. Since our work",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 42,
+    "content": "focuses on using such systems in a multilingual setting, we operate via retriever and re-ranker systems\nprovided by Cohere [1] detailed in §3.2.\n**Inference** The second phase consists of augmenting the LLMs’ capabilities in answering a\ngiven query *Q* using knowledge delivered from",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 43,
+    "content": "given query *Q* using knowledge delivered from\nreference evidence, i.e. the retrieved relevant\ndocuments. The LLM generates the answer *A*\nfrom LLM( *Q, docs* ) . Here, using a well-defined",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 44,
+    "content": "prompt *template* to get the LLM to consider retrieved documents a source of knowledge is recommended. Following the earlier RAG heuristics\n(Gao et al., 2024), we propose a standard template that instructs the model (\" **#Instructions** \")\nto consider \" **#Reference Evidence** \" in retrieved",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 45,
+    "content": "documents for delivering the final answer *A* . An\nexample prompt is reported in Table 1.\n\n**2.2** **RAG beyond English**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 46,
+    "content": "**Monolingual RAG (** **monoRAG** **)** In general RAG\npipelines (§2.1), it is assumed that the query *Q* and\n*A* are in the same language, which we refer to as\n*L* *SL* . Consequently, the *docs* retrieved from *D* *SL*\nare in *L* *SL* . Hence, in this setting, we instruct",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 47,
+    "content": "the LLM using the template in Table 1, *docs* =\ntop-k *{h* *Q* *SL* *,C* *}* *where* *C ∈D* *SL* and *Q* *SL* is in\n*L* *SL* . For the rest of the paper, we refer to this\nsetting as monolingual RAG ( **monoRAG** ).",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 48,
+    "content": "**Translation RAG (** **tRAG** **)** Since the knowledge\nsources from which retrieval is made are generally\n\n1 https://huggingface.co/Cohere/Cohere-embedmultilingual-v3.0\n\n\nRAG Prompt Template\n\n*Please answer the question by following the*\n*provided instructions.*\n**#Instructions:**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 49,
+    "content": "*Answer the question as clearly as possible*\n*using the provided* ***reference evidence*** *and*\n*follow the format ’Answer:’*\n**#Reference Evidence:**\n*docs* = top-k *{h* *Q,C* *}, C ∈D*\n**#Question:** *Q*",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 50,
+    "content": "Table 1: RAG instructions (prompt) for the model to\nelicit they to consider the reference evidence ( *docs* ) for\ngenerating an answer to a given question ( *Q* ).",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 51,
+    "content": "richer in English (Sharma et al., 2024), a practical\nway to solve RAG beyond English is to translate\nthe *Q* *SL* to English *Q* [˜] *En* using a translation system and perform the retrieval from *D* *En* . Then,\nwe instruct the LLM using the same setting of",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 52,
+    "content": "we instruct the LLM using the same setting of\n**monoRAG**, but in contrast, the retrieved documents\nare *docs* = top-k *{h* ˜ *Q* *En* *,C* *[}]* [ where] *[ C ∈D]* *[En]* [.]\nAlthough these strategies can solve the language\nbarrier by allowing non-English queries to operate,",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 53,
+    "content": "the scope of retrieval is limited to only one domain,\nnamely *D* *En* for **tRAG** and *D* *SL* for **monoRAG** . In\naddition to the limited scope, the translation also\naffects retrieval (for instance, see the example in\nAppendix O).",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 54,
+    "content": "**Multilingual RAG (** **MultiRAG** **)** Hence, we extend the scope of the retrieval to many languages.\nWe use a retriever whose database consists of\n� *D* *i* *∈L* [, i.e. the union across all resources in all]",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 55,
+    "content": "available languages. As in the **monoRAG**, we instruct the LLM to consider the retrieved docu\nments using the template in Table 1. In contrast\nto the previous approaches we use the *docs* =\ntop-k *{h* *Q* *SL* *,C* *}*, where *C ∈* [�] *D* *i* *∈L* [and] *[ Q]* *[SL]* [.]",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 56,
+    "content": "**2.3** **Cross-lingual RAG**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 57,
+    "content": "Multilingual retrieval and prompting strategies\nbroaden the scope of retrieval. As a result, retrieved documents can be in any language in *D* .\nAlthough this is a plus for retrieval, it can degrade the LLM’s responses, for example, generating answers in the wrong language (see example in",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 58,
+    "content": "Appendix Q) because it must combine in-context\ndocuments in different languages.\nTo solve this issue, we propose Cross-lingual",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 59,
+    "content": "-----\n\nRAG ( **CrossRAG** ), in which the documents are\n\nretrieved as in **MultiRAG** but are then translated",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 60,
+    "content": "by an external tool T and delivered at inference\ntime in English. This approach improves the accuracy of the response without requiring a substantial\nadditional computational effort.\n### **3 Experiments**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 61,
+    "content": "We select three multilingual open-domain questionanswering tasks (§3.1) to compare our approaches.\nWe perform the retrieval and inference phases described in §3.2 and perform the evaluations as presented in §3.3.\n\n**3.1** **Tasks & Datasets**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 62,
+    "content": "We use the following question-answering (QA)\ntasks: *(i)* MLQA (Lewis et al., 2020a), *(ii)* MKQA\n(Longpre et al., 2021) and *(iii)* XOR-TyDi QA\n(Asai et al., 2021) as they best represent multilingual open-ended question-answering tasks. These\ndatasets are extensions of resources that originated",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 63,
+    "content": "in English. MLQA and MKQA are manually and\nmachine-translated, whereas XOR-TyDi QA is\ntranslated by professional annotators. We provide\ndetails about the languages covered and the number\nof questions in Appendices F and I.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 64,
+    "content": "**3.2** **Experimental Setup**\n\nTo explore RAG pipelines beyond English, we apply the methods introduced in §2 based on retrieval\nand inference phases.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 65,
+    "content": "**Retrieval** We use Cohere as the retrieval system *R* and Wikimedia_dump as the database *D*\nfor all experiments [2] . Specifically, in the version [3]",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 66,
+    "content": "provided by Cohere, individual articles are embedded with multilingual embedding model *Co-*\n*here_Embed_V3* (we report the dump composition\nin Table 7). Following the approaches proposed\nby Asai et al. (2023); Chirkova et al. (2024), we\nretrieve the most relevant passages and use top *−* 5",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 67,
+    "content": "as in-context knowledge during inference (details\nin Appendix D). As described in §2.2 we either use\n*(i) monolingual retrieval* ( **monoRAG** and **tRAG** )\nwhich consists of retrieval on *D* *SL* with documents\nonly in a single specific language, or *(ii) mul-*",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 68,
+    "content": "*tilingual retrieval* ( **MultiRAG** and **CrossRAG** )\nwhich consists of retrieval on [�]\n*D* *i* *∈L* [that is the]",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 69,
+    "content": "2 This pipeline makes it easy to search Wikipedia for information and to restrict it to specific languages.\n3 Cohere/wikipedia-2023-11-embed-multilingual-v3\n\n\nunion of multiple *D* *i* in *L* used in the evaluated\ntask.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 70,
+    "content": "**Prompting** We instruct the LLMs using the\nprompts introduced in §2. We then include explicit instructions that elicit the model to consider\nthe input query ( **#Question:** ), retrieved documents",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 71,
+    "content": "( **#Reference Evidence:** ) and deliver the final answer in an **“evaluated language”** that, by the construction of our experiments, corresponds to the\nquery language.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 72,
+    "content": "**Translation** As a translation system, in the main\ndiscussion, we use Google Translate [4] to\n\ntranslate for both **tRAG** and **CrossRAG** . Further\nmore, we investigate the effect of using LLMs as\ntranslation systems operating via GPT-4o and other\napproaches detailed discussed in §4.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 73,
+    "content": "**Models & Inference Settings** To get a comprehensive evaluation of existing RAG pipelines, we\nuse three different LLMs: GPT-4o (OpenAI, 2023),\nLlama-3-8b-instruct (Touvron et al., 2023) and\nCommand-R-35b [5] (Cohere Inc., 2024). Detailed\nsettings and model versions are in Appendix A.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 74,
+    "content": "settings and model versions are in Appendix A.\nWe use greedy decoding in all experiments to ensure a more deterministic generation process. We\nset most deterministic temperatures to 0 and the\nmaximum generation length to 2048.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 75,
+    "content": "**3.3** **Evaluation**\n\nWe use flexible exact-match accuracy following",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 76,
+    "content": "Schick et al. (2023); Mallen et al. (2023), which\nis based on whether or not ground-truth answers\nare included in the generated answers provided by\nthe models instead of a strict exact match. Fur\nthermore, for a complete comparison, we follow",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 77,
+    "content": "thermore, for a complete comparison, we follow\nChirkova et al. (2024) to conduct multilingual evaluations using the SQUAD evaluation script and\n3-gram character level.\n### **4 Results & Discusssions**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 78,
+    "content": "The empirical results across different languages on\nMKQA, MLQA and XOR TyDi QA are reported\nin Figure 2. Overall, the experiments confirm\nthat extending the retrieval scope to multilingual\ncontexts ( **MultiRAG** ) improves the RAG-based",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 79,
+    "content": "contexts ( **MultiRAG** ) improves the RAG-based\npipelines, outperforming language-specific monolingual RAG ( **monoRAG** ) and naïve approaches",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 80,
+    "content": "4 used via Google Translate API python package\n5 To simplify discussion for the rest of the paper, we will\nrefer to these models using Llama-3-8b and Command-R.\n\n\n-----",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 81,
+    "content": "Figure 2: Performance comparison of models using RAG approaches described in §2 across benchmarks and\nsettings detailed in §3, separated by average (Avg), high-resource (HR) and low-resource (LR) languages averages.\nThe values above the bars are the differences with the baselines (no RAG scores).",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 82,
+    "content": "that address the language barrier using query translation ( **tRAG** ). Indeed, although monolingual retrieval (i.e., **monoRAG** ) achieves benefits compared to the baseline, the retrieved documents\nmay be limited and consequently could not contain",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 83,
+    "content": "may be limited and consequently could not contain\nthe necessary information to answer a languagespecific query. Conversely, retrieval from multilingual heterogeneous sources has a broader range of\nresults. However, multilingual knowledge could",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 84,
+    "content": "results. However, multilingual knowledge could\nlead models to wrong generations (see the example in Appendix Q). Therefore, we proposed\n**CrossRAG** to harness **MultiRAG** retrieval by operating with documents in the same language, i.e.\nEnglish.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 85,
+    "content": "English.\nIn the following sections, we analyse the benefits a multilingual retrieval brings when adopted\nin a RAG strategy (§4.1), then we examine the effects across different languages §4.2 and propose\ntwo strategies to improve the practical usage of the",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 86,
+    "content": "retrieved knowledge in multilingual settings §4.3.\nFinally, we conduct additional studies by investigating the role of the retriever and its impact on\nthe final performances (§5.2), the generated languages (§5.1) and the robustness on challenging\nperturbations (§5.3).",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 87,
+    "content": "**4.1** **The impact of RAG beyond English**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 88,
+    "content": "Figure 2 shows the results obtained from different\nLLMs when prompted with RAG-based strategies\nin monolingual and multilingual settings as introduced in §2. An overall improvement over baseline",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 89,
+    "content": "models without RAG can be observed using monolingual RAG, i.e., **monoRAG** (+8.9% improvement for GPT-4o, +7.9% improvement for Llama3-8b and +8.2% improvement for Command-R).",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 90,
+    "content": "Moreover, the results show that the impact of extending retrieval to multilingual settings and using retrieved passages in RAG-based approaches\n( **MultiRAG** strategy) brings clear benefits. Indeed, performance consistently increases compared to the **monoRAG** (+5.4% for GPT-4o, +7.1%",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 91,
+    "content": "for Llama-3-8b and +5.7% for Command-R). This",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 92,
+    "content": "indicates that multilingual retrieval provides access\nto broader information that could be unavailable in",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 93,
+    "content": "monolingual resources; for instance, in the example reported in Appendix P, the information about\n\"England Queens\" are not available in Chinese\nWikipedia. However, since the scope of retrieval is\nwider and the retrieval languages are multiple, the\nlanguages of the retrieved documents may impact",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 94,
+    "content": "languages of the retrieved documents may impact\nthe performance differently, as discussed in §4.2.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 95,
+    "content": "**4.2** **Knowledge Diversity**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 96,
+    "content": "Multilingual RAG ( **MultiRAG** ) shows average improvements compared to the baselines,\n**monoRAG** and **tRAG**, where the retrieved documents are in a single language as discussed in §4).\nIn **MultiRAG**, the knowledge retrieved are in different languages (as reported in Figure 3, these are",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 97,
+    "content": "average documents retrieved per language). The\ndifferences in percentages are due to the composition of the Wikimedia_dumps (reported in Table 7)\nundersized for some languages.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 98,
+    "content": "Figure 3: Average percentage languages of retrieved\ndocuments (details in Appendix 13).",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 99,
+    "content": "Consequently, the effect of **MultiRAG** is different even between languages. Figure 4 shows\nthat the effect of **MultiRAG** on low- (LR) languages is more marked than high-resource (HR)\nlanguages [6] . Indeed, comparing **MultiRAG** with",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 100,
+    "content": "**monoRAG** in the case of HR, we observe average increases of +3.6% for GPT-4o, +4.1% for",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 101,
+    "content": "6 high- and low-resources defined following (Chirkova\net al., 2024) explained in Appendix B\n\n\n-----\n\nLlama-3-8b and +4.4% for Command-R. In con\ntrast, for LR, there is an average increase of 6.6%\nfor GPT-4o, 8.4% for Llama-3-8b and 7.7% for\nCommand-R).",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 102,
+    "content": "Figure 4: Accuracies **monoRAG** and **MultiRAG** in\nlow- (LR) and high-resource (HR) languages. *(differences are above the bars).",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 103,
+    "content": "To gain a comprehensive view of the role of\nmultilingual retrieval conducted in the **MultiRAG**\nsetting, we performed further experiments by restricting the retrieval to a set formed by specific\nlanguage (SL) and English, which we define as",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 104,
+    "content": "language (SL) and English, which we define as\n*(En+SL)* . Figure 8 (Appendix M) shows the differences in terms of performance when the scope\nof the retrieval of **MultiRAG** is broader, i.e. all\nlanguages available in the dump used in the experiment (Wikipedia versions as detailed in §3)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 105,
+    "content": "and *(En+SL)* . On average, extending the scope of\nretrieval beyond the subset represented of *En+SL*\nhas benefits except GPT-4o in the MKQA task and\nLlama-3-8b in the case of MLQA.\nHence, although **MultiRAG** consistently\nachieves higher performance than **monoRAG**, there",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 106,
+    "content": "are some cases where the heterogeneity of languages is not beneficial. For instance, the case in\nAppendix Q where passages in English is not taken\ninto account by the model. Therefore, to analyse\nwhether the component affecting performances is\nthe ability to leverage the different languages in",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 107,
+    "content": "different retrieved documents, we propose an intervention strategy by introducing a translation phase\nof the retrieved multilingual knowledge and discuss the results in §4.3.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 108,
+    "content": "**4.3** **When translating matters**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 109,
+    "content": "The red bars in Figure 2 show that the average\nresults obtained by **CrossRAG** are consistently\nbetter than those of other approaches. In general, translating the retrieved information into English benefits the final performance. In Table\n2, we report the performance improvements over",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 110,
+    "content": "2, we report the performance improvements over\n**MultiRAG** differentiated for LR and HR. Here,\nwe observe that in HR, there are improvements of",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 111,
+    "content": "**Model**\n\n**Avg** +3.8 +1.3 +5.5 +3.5\n**GPT-4o** **HR** **+4.2** +0.7 +2.7 +2.5\n\n**LR** +1.8 **+2.1** **+7.1** **+3.7**\n\n**Avg** +2.2 +2.8 +1.6 +2.2\n**Command-R** **HR** +2.7 +3.7 +3.9 +3.4\n\n**LR** **+5.2** **+4.3** **+5.5** **+5.0**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 112,
+    "content": "**LR** **+5.2** **+4.3** **+5.5** **+5.0**\n\n**Avg** **+4.0** +3.2 +1.6 +2.9\n**Llama-3-8b** **HR** +1.8 +2.4 +3.9 +2.7\n\n**LR** +3.7 **+4.2** **+4.6** **+4.1**\n\nTable 2: Differences ( ∆ ) between **CrossRAG** and\n**MultiRAG** .*In **bold**, the highest differences for\nmodel.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 113,
+    "content": "around +2.5 for GPT-4o and Llama-3-8b and +3.4",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 114,
+    "content": "for Command-R when compared to **MultiRAG** .\nIn contrast, we note larger benefits for LR (respectively +3.7 for GPT-4o, +5 for Command-R and\n+4.1 for Llama-3-8b on average). These results\nhighlight the limitations that the LLMs examined\nhave when operating via **MultiRAG** concerning",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 115,
+    "content": "have when operating via **MultiRAG** concerning\ndocuments in multiple languages (see the case discussed in §4.2 in Appendix Q.\nHowever, since the translation component matters, we proposed the same experimental setting using *(i)* GPT-4o as the translation tool, *(ii)*",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 116,
+    "content": "instruction-tuning at the translation level.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 117,
+    "content": "**Model**\n\n**MKQA** 46.5 **48.3** 60.4 **62.0**\n**GPT-4o** **MLQA** 46.4 47.9 55.4 **58.8**\n**XoR TD** **Q** **A** 37.7 38.2 45.8 **49.3**\n\n**MKQA** 39.9 40.3 56.4 57.8\n**Command-R** **MLQA** 45.5 46.0 54.8 56.2\n**XoR TD** **Q** **A** 36.6 37.3 42.0 **44.5**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 118,
+    "content": "**MKQA** 41.4 42.0 57.2 58.5\n**Llama-3-8bMLQA** 44.5 44.6 53.6 55.4\n**XoR TDQA** 37.0 37.7 44.5 **47.3**\n\nTable 3: Average performances using two different\ntranslation systems. *In **bold**, the differences that exceed at least 2 points. **XoR TiDy-QA (XoR TDQA)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 119,
+    "content": "**GPT-4o as translator** Here, we propose different settings to observe the effect of various systems\non the performance of our **CrossRAG** . Hence, we\nused GPT-4o ( GPT-4o as in §3.2) as the translation tool. Then, using the prompt in Appendix K,\n\n\n-----",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 120,
+    "content": "we translated both retrieved documents and questions (in two distinct experimental phases) and reproduced the experimental setting proposed earlier.\nTable 3 compares the results using two different\nsystems. In the case of **tRAG**, there are no conspicuous improvements (highest difference +1.9",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 121,
+    "content": "in GPT-4 MKQA). Concerning **CrossRAG**, it can\nbe observed that significant differences emerge between the final results achieved by using Google\nTranslate and GPT-4o. This further demonstrates",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 122,
+    "content": "*(i)* the importance of multilingual retrieval (greater\nrange of retrieval) and *(ii)* the usability of retrieved\nknowledge by LLM is better when it is in English.\nIn fact, multilingual knowledge retrieved and then\nprocessed in English impacts the final generations,",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 123,
+    "content": "whereas the same knowledge (the same documents\nin a foreign language) does not impact in the same",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 124,
+    "content": "way.\n\n**Method** **MKQA** **MLQA**\n\n**Avg** 53.1 50.6\n**MultiRAG**\n**LR** 44.0 38.7\n\n**Avg** 57.2 53.8\n**CrossRAG**\n**LR** 46.7 41.9\n\n**Avg** **58.9** 54.7\n**TF**\n**LR** 45.2 **43.6**\n\n**CrossRAG** **Avg** 58.5 **55.4**\n**(GPT-4o)** **LR** 47.3 42.8",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 125,
+    "content": "Table 4: Evaluation using Translation-following (TF),\n**MultiRAG** and **CrossRAG** (with Google Translate\nand GPT-4o as translation tools) on Llama-3-8b.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 126,
+    "content": "**Translation-following** Since the language of\nthe retrieved documents plays a crucial role in\nthe model’s performance, we propose a multilingual augmentation strategy conceived to enhance\ntheir capability to operate multilingual documents.\nHence, we employ the Translation-following (TF)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 127,
+    "content": "Hence, we employ the Translation-following (TF)\napproach as proposed in (Ranaldi et al., 2024)\nand detailed in Appendix G. Table 4 shows that\nLlama-3-8b enhanced through the TF achieves consistent benefits. In particular, 11.6% on MKQA",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 128,
+    "content": "and 7.5% on MLQA on average values when compared with **MultiRAG** . While 4.9% on MKQA\nand 1.8% on MLQA on average values when compared with **CrossRAG** . Finally, when compared\nwith the **CrossRAG** version with GPT-4o as a",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 129,
+    "content": "translation tool, it achieves comparable performance (differences around <1). However, although\nperformance increases are evident in some cases,\nthere is the cost of additional tuning that should be\n\n\nconsidered.\n### **5 Ablation Analysis**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 130,
+    "content": "The results discussed in §4 show the benefits of *(i)*\nextending retrieval beyond English contexts and\n*(ii)* the operability of in-context approaches and\ntranslation tools to align the language of different\nretrieved information. This section analyses the",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 131,
+    "content": "retrieved information. This section analyses the\nqualitative impact of the proposed techniques on\ngenerations (§5.1) and the effect of using other\nretrievals (§5.2). Finally, in §5.3, we study the\nrobustness of LLM to the combination of infor\nmation in different languages and the number of",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 132,
+    "content": "mation in different languages and the number of\ndocuments retrieved.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 133,
+    "content": "**5.1** **Language Generated**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 134,
+    "content": "One of the requirements for the correct answer is\nthat the language must be the same as the query\n(the labels are also in a specific language). As\nan evaluation metric, in addition to the accuracy\ndiscussed in §5, we evaluate the percentage of answers generated in the correct language. To do this,",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 135,
+    "content": "we use the OpenLID framework (Burchell et al.,\n2023). Figure 5 shows that **CrossRAG** achieves\nconsistently higher rates than **MultiRAG** . Moreover, **monoRAG** gets comparable performances to\nthe baseline (no RAG approach), but the accuracy\nis significantly lower. These results demonstrate",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 136,
+    "content": "is significantly lower. These results demonstrate\nthat the models analysed generally follow instructions (given prompt); however, when operating\nwith multilingual knowledge (i.e., **MultiRAG** ),\nthey fail to both follow instructions and deliver\nthe correct response, especially in low-resource",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 137,
+    "content": "the correct response, especially in low-resource\nlanguages.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 138,
+    "content": "Figure 5: Average generated languages for MKQA.\n\n\n-----\n\n**5.2** **Retrieval Settings**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 139,
+    "content": "In our experimental setting (§3), we use Cohere\nas a retrieval tool. To observe the impact of the\nretrieval methodologies on the performances, we\nconducted a parallel experiment using BGE-m3\n(Chen et al., 2024) as in (Chirkova et al., 2024)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 140,
+    "content": "(Chen et al., 2024) as in (Chirkova et al., 2024)\n(detailed in Appendix E). Figure 6 shows the average performances obtained by Llama-3-8b on\nthe MKQA subset using the two different retrieval\nstrategies. There are no conspicuous differences on\naverage. This indicates that although the retrieval",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 141,
+    "content": "techniques differ, they provide equivalent retrieval\nmethodologies. In our work, we use Cohere because it allows for an already indexed version of\nWikipedia dump, as discussed in Appendix D.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 142,
+    "content": "Figure 6: Difference between our retrieval strategy (§3)\nand approach proposed in (Chirkova et al., 2024)\n\n**5.3** **Robustness Analysis**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 143,
+    "content": "Figure 7 shows a robustness analysis of the proposed approaches. We analysed the impact of the\norder of the retrieved documents by selecting the\nknowledge provided at the inference phase and\nconducting an extensive retrieval and a re-ranking",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 144,
+    "content": "(details in §3.2). To observe the impact of the order of the provided knowledge (documents), we *(i)*\nrandomly shuffled documents (Random Shuffle),\n*(ii)* English documents in first positions (En doc/s\nfirst), *(iii)* English documents at the last positions",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 145,
+    "content": "(En doc/s last). From the results in Figure 7, it\nemerges that **CrossRAG** is robust to the varying\ndocument order. Instead, **MultiRAG** is more sensitive to retrieval order; this phenomenon emerges\nin Llama-3-8b and less markedly in Command-R\nand GPT-4o. This further indicates that the lan",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 146,
+    "content": "and GPT-4o. This further indicates that the lan\nguage sensitivity of documents is a drawback to\nthe final performance, and operating a translation\nprocess or system such as **CrossRAG** improves\nperformance by making it more robust to scenarios\nwhere retrieved documents may not be delivered",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 147,
+    "content": "where retrieved documents may not be delivered\nin the most optimal order.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 148,
+    "content": "### **6 Related Work**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 149,
+    "content": "Previous research investigated the advantages\nof augmenting large language models (LLMs)\nthrough retrieved knowledge, a technique known\nas Retrieval-augmented Generative (RAG) (Lewis\net al., 2020b). Many efforts have concentrated on\nexploring techniques to improve RAG by operating",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 150,
+    "content": "exploring techniques to improve RAG by operating\nin-context (Menick et al., 2022), tuning (Gao et al.,\n2023), or intervening on retrievers (Sawarkar et al.,\n2024). Although these results represent a considerable step forward, slight attention has been yielded",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 151,
+    "content": "beyond English. We work on multilingual tasks involving multilingual queries and documents in the\nevaluation. While the tremendous effort of Zhang\net al. (2022); Thakur et al. (2024b) is focused on\nthe study of retrieval from multilingual sources and",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 152,
+    "content": "proposed benchmark-related, we study the role that\nretrieved documents have on the inference phase\nof LLMs. Enriching the foundation work proposed\nby Chirkova et al. (2024); Sharma et al. (2024), we\nstudy the impact that different architecture components have on final performance. We analyse the",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 153,
+    "content": "effect of translation at different levels (before and\nafter retrieval) conducted through various tools differing between high and low-resource languages.\nAnalysing criticisms and strengths of Multilingual\nRAG, we study the roles of different solutions,\nshowing when they lead the LLMs to leverage",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 154,
+    "content": "showing when they lead the LLMs to leverage\nmultilingual knowledge by obtaining consistent\nbenefits.\n### **7 Conclusion**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 155,
+    "content": "RAG has shown great potential in boosting the performance of LLMs on knowledge-intensive tasks.\nHowever, scenarios beyond English represent a\nsignificant limitation. Hence, we proposed strategies to mitigate these restrictions by introducing\nretrieval expansion techniques and interventions on",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 156,
+    "content": "retrieved documents. We then analysed the performance of different LLMs in multilingual tasks. The\nresults show that multilingual retrieval brings significant benefits compared to monolingual retrieval\nor greedy approaches related to query translation.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 157,
+    "content": "This research shows that a better understanding of\nRAG-based pipelines beyond English would enable reliable access to information in different lan\nguages and cultures. Our contribution supports the\nneed for a strategic combination of the components\nin RAG pipelines that can aid the performance of",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 158,
+    "content": "in RAG pipelines that can aid the performance of\nvarious models to complete the LLM perspective\nin further language landscapes.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 159,
+    "content": "-----\n\n### **References**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 160,
+    "content": "Akari Asai, Jungo Kasai, Jonathan Clark, Kenton Lee,\n[Eunsol Choi, and Hannaneh Hajishirzi. 2021. XOR](https://doi.org/10.18653/v1/2021.naacl-main.46)\n[QA: Cross-lingual open-retrieval question answering.](https://doi.org/10.18653/v1/2021.naacl-main.46)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 161,
+    "content": "In *Proceedings of the 2021 Conference of the North*\n*American Chapter of the Association for Computa-*\n*tional Linguistics: Human Language Technologies*,\npages 547–564, Online. Association for Computational Linguistics.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 162,
+    "content": "Akari Asai, Sewon Min, Zexuan Zhong, and Danqi\n[Chen. 2023. Retrieval-based language models and](https://doi.org/10.18653/v1/2023.acl-tutorials.6)\n[applications.](https://doi.org/10.18653/v1/2023.acl-tutorials.6) In *Proceedings of the 61st Annual*",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 163,
+    "content": "*Meeting of the Association for Computational Lin-*\n*guistics (Volume 6: Tutorial Abstracts)*, pages 41–46,\nToronto, Canada. Association for Computational Linguistics.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 164,
+    "content": "Laurie Burchell, Alexandra Birch, Nikolay Bogoychev,\n[and Kenneth Heafield. 2023. An open dataset and](https://doi.org/10.18653/v1/2023.acl-short.75)\n[model for language identification. In](https://doi.org/10.18653/v1/2023.acl-short.75) *Proceedings*",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 165,
+    "content": "*of the 61st Annual Meeting of the Association for*\n*Computational Linguistics (Volume 2: Short Papers)*,\npages 865–879, Toronto, Canada. Association for\nComputational Linguistics.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 166,
+    "content": "Jianlv Chen, Shitao Xiao, Peitian Zhang, Kun Luo,\nDefu Lian, and Zheng Liu. 2024. [Bge m3-](http://arxiv.org/abs/2402.03216)\n[embedding: Multi-lingual, multi-functionality, multi-](http://arxiv.org/abs/2402.03216)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 167,
+    "content": "[granularity text embeddings through self-knowledge](http://arxiv.org/abs/2402.03216)\n[distillation.](http://arxiv.org/abs/2402.03216)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 168,
+    "content": "Nadezhda Chirkova, David Rau, Hervé Déjean,\nThibault Formal, Stéphane Clinchant, and Vassilina\n[Nikoulina. 2024. Retrieval-augmented generation in](http://arxiv.org/abs/2407.01463)\n[multilingual settings.](http://arxiv.org/abs/2407.01463)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 169,
+    "content": "Jonathan H. Clark, Eunsol Choi, Michael Collins, Dan\nGarrette, Tom Kwiatkowski, Vitaly Nikolaev, and\n[Jennimaria Palomaki. 2020. TyDi QA: A benchmark](https://doi.org/10.1162/tacl_a_00317)\n[for information-seeking question answering in ty-](https://doi.org/10.1162/tacl_a_00317)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 170,
+    "content": "[pologically diverse languages.](https://doi.org/10.1162/tacl_a_00317) *Transactions of the*\n*Association for Computational Linguistics*, 8:454–\n470.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 171,
+    "content": "Cohere Inc. 2024. Command-r documentation.\n[https://docs.cohere.com/v2/docs/](https://docs.cohere.com/v2/docs/command-r)\n[command-r. Accessed: 2024-12-08.](https://docs.cohere.com/v2/docs/command-r)\n\n[Common Crawl. 2021. Common crawl 2021. Web.](https://commoncrawl.org/2021/)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 172,
+    "content": "Accessed: 2023-12-12.\n\nWenqi Fan, Yujuan Ding, Liangbo Ning, Shijie Wang,\nHengyun Li, Dawei Yin, Tat-Seng Chua, and Qing\n[Li. 2024. A survey on rag meeting llms: Towards](http://arxiv.org/abs/2405.06211)\n[retrieval-augmented large language models.](http://arxiv.org/abs/2405.06211)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 173,
+    "content": "Luyu Gao, Zhuyun Dai, Panupong Pasupat, Anthony\nChen, Arun Tejasvi Chaganty, Yicheng Fan, Vincent\nZhao, Ni Lao, Hongrae Lee, Da-Cheng Juan, and\n[Kelvin Guu. 2023. RARR: Researching and revising](https://doi.org/10.18653/v1/2023.acl-long.910)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 174,
+    "content": "[what language models say, using language models.](https://doi.org/10.18653/v1/2023.acl-long.910)\nIn *Proceedings of the 61st Annual Meeting of the*\n*Association for Computational Linguistics (Volume 1:*\n*Long Papers)*, pages 16477–16508, Toronto, Canada.\nAssociation for Computational Linguistics.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 175,
+    "content": "Yunfan Gao, Yun Xiong, Xinyu Gao, Kangxiang Jia,\nJinliu Pan, Yuxi Bi, Yi Dai, Jiawei Sun, Meng Wang,\n[and Haofen Wang. 2024. Retrieval-augmented gen-](http://arxiv.org/abs/2312.10997)\n[eration for large language models: A survey.](http://arxiv.org/abs/2312.10997)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 176,
+    "content": "Nikhil Kandpal, Haikang Deng, Adam Roberts, Eric\n[Wallace, and Colin Raffel. 2023. Large language](http://arxiv.org/abs/2211.08411)\n[models struggle to learn long-tail knowledge.](http://arxiv.org/abs/2211.08411)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 177,
+    "content": "Jungo Kasai, Keisuke Sakaguchi, yoichi takahashi,\nRonan Le Bras, Akari Asai, Xinyan Velocity Yu,\nDragomir Radev, Noah A. Smith, Yejin Choi, and\n[Kentaro Inui. 2023. Realtime QA: What’s the an-](https://openreview.net/forum?id=HfKOIPCvsv)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 178,
+    "content": "[swer right now? In](https://openreview.net/forum?id=HfKOIPCvsv) *Thirty-seventh Conference on*\n*Neural Information Processing Systems Datasets and*\n*Benchmarks Track* .",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 179,
+    "content": "Tom Kwiatkowski, Jennimaria Palomaki, Olivia Redfield, Michael Collins, Ankur Parikh, Chris Alberti, Danielle Epstein, Illia Polosukhin, Jacob Devlin, Kenton Lee, Kristina Toutanova, Llion Jones,\nMatthew Kelcey, Ming-Wei Chang, Andrew M. Dai,\nJakob Uszkoreit, Quoc Le, and Slav Petrov. 2019.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 180,
+    "content": "Jakob Uszkoreit, Quoc Le, and Slav Petrov. 2019.\n[Natural questions: A benchmark for question an-](https://doi.org/10.1162/tacl_a_00276)\n[swering research.](https://doi.org/10.1162/tacl_a_00276) *Transactions of the Association*\n*for Computational Linguistics*, 7:452–466.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 181,
+    "content": "Patrick Lewis, Barlas Oguz, Ruty Rinott, Sebastian\n[Riedel, and Holger Schwenk. 2020a. MLQA: Eval-](https://doi.org/10.18653/v1/2020.acl-main.653)\n[uating cross-lingual extractive question answering.](https://doi.org/10.18653/v1/2020.acl-main.653)\nIn *Proceedings of the 58th Annual Meeting of the*",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 182,
+    "content": "*Association for Computational Linguistics*, pages\n7315–7330, Online. Association for Computational\nLinguistics.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 183,
+    "content": "Patrick Lewis, Ethan Perez, Aleksandra Piktus, Fabio\nPetroni, Vladimir Karpukhin, Naman Goyal, Heinrich Küttler, Mike Lewis, Wen-tau Yih, Tim Rocktäschel, et al. 2020b. Retrieval-augmented generation for knowledge-intensive nlp tasks. *Advances*\n*in Neural Information Processing Systems*, 33:9459–",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 184,
+    "content": "9474.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 185,
+    "content": "Bryan Li, Samar Haider, Fiona Luo, Adwait Agashe,\nand Chris Callison-Burch. 2024. [Bordirlines:](http://arxiv.org/abs/2410.01171)\n[A dataset for evaluating cross-lingual retrieval-](http://arxiv.org/abs/2410.01171)\n[augmented generation.](http://arxiv.org/abs/2410.01171)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 186,
+    "content": "Shayne Longpre, Yi Lu, and Joachim Daiber. 2021.\n\n[Mkqa: A linguistically diverse benchmark for multi-](http://arxiv.org/abs/2007.15207)\n[lingual open domain question answering.](http://arxiv.org/abs/2007.15207)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 187,
+    "content": "Alex Mallen, Akari Asai, Victor Zhong, Rajarshi Das,\nDaniel Khashabi, and Hannaneh Hajishirzi. 2023.\n[When not to trust language models: Investigating](https://doi.org/10.18653/v1/2023.acl-long.546)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 188,
+    "content": "[effectiveness of parametric and non-parametric mem-](https://doi.org/10.18653/v1/2023.acl-long.546)\n[ories. In](https://doi.org/10.18653/v1/2023.acl-long.546) *Proceedings of the 61st Annual Meeting of*\n*the Association for Computational Linguistics (Vol-*",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 189,
+    "content": "*ume 1: Long Papers)*, pages 9802–9822, Toronto,\nCanada. Association for Computational Linguistics.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 190,
+    "content": "Jacob Menick, Maja Trebacz, Vladimir Mikulik,\nJohn Aslanides, Francis Song, Martin Chadwick,\nMia Glaese, Susannah Young, Lucy CampbellGillingham, Geoffrey Irving, and Nat McAleese.\n[2022. Teaching language models to support answers](http://arxiv.org/abs/2203.11147)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 191,
+    "content": "[with verified quotes.](http://arxiv.org/abs/2203.11147)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 192,
+    "content": "-----\n\n[OpenAI. 2023. Gpt-4 technical report.](http://arxiv.org/abs/2303.08774)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 193,
+    "content": "Fabio Petroni, Aleksandra Piktus, Angela Fan, Patrick\nLewis, Majid Yazdani, Nicola De Cao, James Thorne,\nYacine Jernite, Vladimir Karpukhin, Jean Maillard,\nVassilis Plachouras, Tim Rocktäschel, and Sebastian",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 194,
+    "content": "[Riedel. 2021. KILT: a benchmark for knowledge](https://doi.org/10.18653/v1/2021.naacl-main.200)\n[intensive language tasks. In](https://doi.org/10.18653/v1/2021.naacl-main.200) *Proceedings of the 2021*\n*Conference of the North American Chapter of the*",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 195,
+    "content": "*Conference of the North American Chapter of the*\n*Association for Computational Linguistics: Human*\n*Language Technologies*, pages 2523–2544, Online.\nAssociation for Computational Linguistics.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 196,
+    "content": "Pranav Rajpurkar, Jian Zhang, Konstantin Lopyrev, and\n[Percy Liang. 2016. SQuAD: 100,000+ questions for](https://doi.org/10.18653/v1/D16-1264)\n[machine comprehension of text. In](https://doi.org/10.18653/v1/D16-1264) *Proceedings of*\n*the 2016 Conference on Empirical Methods in Natu-*",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 197,
+    "content": "*ral Language Processing*, pages 2383–2392, Austin,\nTexas. Association for Computational Linguistics.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 198,
+    "content": "[Leonardo Ranaldi and Giulia Pucci. 2023. Does the En-](https://doi.org/10.18653/v1/2023.mrl-1.14)\n[glish matter? elicit cross-lingual abilities of large lan-](https://doi.org/10.18653/v1/2023.mrl-1.14)\n[guage models. In](https://doi.org/10.18653/v1/2023.mrl-1.14) *Proceedings of the 3rd Workshop*",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 199,
+    "content": "*on Multi-lingual Representation Learning (MRL)*,\npages 173–183, Singapore. Association for Computational Linguistics.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 200,
+    "content": "Leonardo Ranaldi, Giulia Pucci, Barry Haddow, and\n[Alexandra Birch. 2024. Empowering multi-step rea-](https://doi.org/10.18653/v1/2024.emnlp-main.678)\n[soning across languages via program-aided language](https://doi.org/10.18653/v1/2024.emnlp-main.678)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 201,
+    "content": "[models. In](https://doi.org/10.18653/v1/2024.emnlp-main.678) *Proceedings of the 2024 Conference on*\n*Empirical Methods in Natural Language Processing*,\npages 12171–12187, Miami, Florida, USA. Association for Computational Linguistics.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 202,
+    "content": "Kunal Sawarkar, Abhilasha Mangal, and Shivam Raj\nSolanki. 2024. Blended rag: Improving rag\n[(retriever-augmented generation) accuracy with se-](http://arxiv.org/abs/2404.07220)\n[mantic search and hybrid query-based retrievers.](http://arxiv.org/abs/2404.07220)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 203,
+    "content": "Timo Schick, Jane Dwivedi-Yu, Roberto Dessì, Roberta\nRaileanu, Maria Lomeli, Luke Zettlemoyer, Nicola\nCancedda, and Thomas Scialom. 2023. Toolformer:\nLanguage models can teach themselves to use tools.\n*arXiv preprint arXiv:2302.04761* .\n\nNikhil Sharma, Kenton Murray, and Ziang Xiao. 2024.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 204,
+    "content": "[Faux polyglot: A study on information disparity in](http://arxiv.org/abs/2407.05502)\n[multilingual large language models.](http://arxiv.org/abs/2407.05502)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 205,
+    "content": "Shamane Siriwardhana, Rivindu Weerasekera, Elliott\nWen, Tharindu Kaluarachchi, Rajib Rana, and\n[Suranga Nanayakkara. 2023. Improving the domain](https://doi.org/10.1162/tacl_a_00530)\n[adaptation of retrieval augmented generation (RAG)](https://doi.org/10.1162/tacl_a_00530)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 206,
+    "content": "[models for open domain question answering.](https://doi.org/10.1162/tacl_a_00530) *Trans-*\n*actions of the Association for Computational Lin-*\n*guistics*, 11:1–17.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 207,
+    "content": "Nandan Thakur, Luiz Bonifacio, Xinyu Zhang,\nOdunayo Ogundepo, Ehsan Kamalloo, David\nAlfonso-Hermelo, Xiaoguang Li, Qun Liu, Boxing\nChen, Mehdi Rezagholizadeh, and Jimmy Lin. 2024a.\n[Nomiracl: Knowing when you don’t know for robust](http://arxiv.org/abs/2312.11361)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 208,
+    "content": "[multilingual retrieval-augmented generation.](http://arxiv.org/abs/2312.11361)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 209,
+    "content": "Nandan Thakur, Suleman Kazi, Ge Luo, Jimmy Lin,\nand Amin Ahmad. 2024b. [Mirage-bench: Auto-](http://arxiv.org/abs/2410.13716)\n[matic multilingual benchmark arena for retrieval-](http://arxiv.org/abs/2410.13716)\n[augmented generation systems.](http://arxiv.org/abs/2410.13716)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 210,
+    "content": "[Jörg Tiedemann. 2012. Parallel data, tools and inter-](http://www.lrec-conf.org/proceedings/lrec2012/pdf/463_Paper.pdf)\n[faces in OPUS. In](http://www.lrec-conf.org/proceedings/lrec2012/pdf/463_Paper.pdf) *Proceedings of the Eighth In-*\n*ternational Conference on Language Resources and*",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 211,
+    "content": "*Evaluation (LREC’12)*, pages 2214–2218, Istanbul,\nTurkey. European Language Resources Association\n(ELRA).",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 212,
+    "content": "Hugo Touvron, Louis Martin, Kevin Stone, Peter Albert, Amjad Almahairi, Yasmine Babaei, Nikolay\nBashlykov, Soumya Batra, Prajjwal Bhargava, Shruti\nBhosale, Dan Bikel, Lukas Blecher, Cristian Canton Ferrer, Moya Chen, Guillem Cucurull, David\nEsiobu, Jude Fernandes, Jeremy Fu, Wenyin Fu,",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 213,
+    "content": "Esiobu, Jude Fernandes, Jeremy Fu, Wenyin Fu,\nBrian Fuller, Cynthia Gao, Vedanuj Goswami, Naman Goyal, Anthony Hartshorn, Saghar Hosseini,\nRui Hou, Hakan Inan, Marcin Kardas, Viktor Kerkez,\nMadian Khabsa, Isabel Kloumann, Artem Korenev,\nPunit Singh Koura, Marie-Anne Lachaux, Thibaut",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 214,
+    "content": "Punit Singh Koura, Marie-Anne Lachaux, Thibaut\nLavril, Jenya Lee, Diana Liskovich, Yinghai Lu, Yuning Mao, Xavier Martinet, Todor Mihaylov, Pushkar\nMishra, Igor Molybog, Yixin Nie, Andrew Poulton,\nJeremy Reizenstein, Rashi Rungta, Kalyan Saladi,",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 215,
+    "content": "Jeremy Reizenstein, Rashi Rungta, Kalyan Saladi,\nAlan Schelten, Ruan Silva, Eric Michael Smith, Ranjan Subramanian, Xiaoqing Ellen Tan, Binh Tang,\nRoss Taylor, Adina Williams, Jian Xiang Kuan,\nPuxin Xu, Zheng Yan, Iliyan Zarov, Yuchen Zhang,",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 216,
+    "content": "Puxin Xu, Zheng Yan, Iliyan Zarov, Yuchen Zhang,\nAngela Fan, Melanie Kambadur, Sharan Narang, Aurelien Rodriguez, Robert Stojnic, Sergey Edunov,\n[and Thomas Scialom. 2023. Llama 2: Open founda-](http://arxiv.org/abs/2307.09288)\n[tion and fine-tuned chat models.](http://arxiv.org/abs/2307.09288)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 217,
+    "content": "Xinyu Zhang, Nandan Thakur, Odunayo Ogundepo,\nEhsan Kamalloo, David Alfonso-Hermelo, Xiaoguang Li, Qun Liu, Mehdi Rezagholizadeh, and\n[Jimmy Lin. 2022. Making a miracl: Multilingual in-](http://arxiv.org/abs/2210.09984)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 218,
+    "content": "[formation retrieval across a continuum of languages.](http://arxiv.org/abs/2210.09984)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 219,
+    "content": "-----\n\n### **A Models Vesions**\n\n**Model** **Version**\n\nGPT-4o O p enAI API (gp t-4-o )\nCommand-R CohereForAI/c4ai-command-r-v01\n\nLlama3-8b meta-llama/Meta-Llama-3-8B-Instruct",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 220,
+    "content": "Table 5: List the versions of the models proposed in this\nwork, which can be found on huggingface.co. We used\nthe configurations described in §3 in the repositories\nfor each model *(access to the following models was\nverified on 11 December 2024).",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 221,
+    "content": "verified on 11 December 2024).\n### **B Difference between High- and** **Low-resource Languages**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 222,
+    "content": "We define the differences between high-resource\n(HR) and low-resource (LR) using the consideration already taken in previous works (Chirkova\net al., 2024; Ranaldi et al., 2024). Table 6 reports\nthe language distribution of CommonCrawl, and\nTable 7 the number of documents in the Wikipedia",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 223,
+    "content": "Table 7 the number of documents in the Wikipedia\ndump used in our work (§3).",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 224,
+    "content": "|Language|Percentage|\n|---|---|\n|English (en) Russian (ru) German (de) Chinese (zh) French (fr) Japanese (ja) Spanish (es) Other|46.3% 6.0% 5.4% 5.3% 4.4% 4.3% 4.2% 23.1%|\n\n\n\nTable 6: Language distribution of CommonCrawl (Common Crawl, 2021).\n### **C Documents in Wikimedia Dump**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 225,
+    "content": "**Lan** **g** **ua** **g** **e** **Percenta** **g** **e**\nEnglish (en) 41,488k\nRussian (ru) 13,784k\nGerman (de) 20,772k\nChinese (zh) 7,875k\nItalian (it) 10,462k\nFrench (fr) 17,813k\nJapanese (ja) 6,626k\nSpanish (es) 12,865k\nPortuguese (pt) 5,637k\nBengali (bn) 767k\nFinnish (fn) 272k",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 226,
+    "content": "Bengali (bn) 767k\nFinnish (fn) 272k\nArabic (ar) 1,050k\nThai (th) 876k\nVietnamese (vi) 2,067k\nTelo g u ( te ) 124k",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 227,
+    "content": "Table 7: Language distribution of Wikimedia Dump\nintroduced in §3.\n\n### **D Retrieval Details**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 228,
+    "content": "We use Cohere as the retrieval system and Wikimedia_dump as the database. Cohere in *wikipedia-*\n*2023-11-embed-multilingual-v3* [(available on hug-](https://huggingface.co/datasets/Cohere/wikipedia-2023-11-embed-multilingual-v3)",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 229,
+    "content": "[gingface) provides individual documents embed-](https://huggingface.co/datasets/Cohere/wikipedia-2023-11-embed-multilingual-v3)\nded with multilingual embedding model *Co-*\n*here_Embed_V3* . For each question in the evaluation data, we retrieve 50 relevant documents and",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 230,
+    "content": "then rerank the top-5 most relevant ones using dot\nscore between query embedding and document embeddings. We use this procedure as recommended\n[in the use cases (case1, case2).](https://huggingface.co/datasets/Cohere/wikipedia-2023-11-embed-multilingual-v3)\n### **E Retrieval Bergen**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 231,
+    "content": "To reproduce the retrieval setting proposed in\n(Chirkova et al., 2024), we used the open-source\n[library available at the following link. Hence, we](https://github.com/naver/bergen/blob/main/documentation/multilingual.md)\nreproduce the same settings operating via BGE-m3\n(Chen et al., 2024).",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 232,
+    "content": "(Chen et al., 2024).\n### **F Data Composition**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 233,
+    "content": "As introduced in §3.1 we use *(i)* MLQA (Lewis\net al., 2020a), *(ii)* MKQA (Longpre et al., 2021)\nand *(iii)* XOR-TyDi QA (Asai et al., 2021) as they\nbest represent multilingual open-ended questionanswering tasks. MLQA is manually translated from SQuAD v1.1 (Rajpurkar et al., 2016),",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 234,
+    "content": "MKQA and XOR-TyDi QA are machine translated and manually controlled by Natural Questions (Kwiatkowski et al., 2019) and TyDi QA\n(Clark et al., 2020), respectively. We use parts of\nthe datasets in the languages listed in Table 11. For\neach language, we used the same questions and,",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 235,
+    "content": "each language, we used the same questions and,\nconsequently, the same number of questions to\navoid any imbalance in double-checking by retrieving the corresponding ids. Details on the number\nof instances are given in Table 8.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 236,
+    "content": "**Dataset** **#language** **#language** **#Total**\n**available** **used** **used**\n\nMLQA 1.5 *k* 0.8 *k* 9.6 *k*\nMKQA 2 *k* 1.2 *k* 8.4 *k*\nXOR-TyDi QA 0.6 *k* 0.4 *k* 2.4 *k*\n\nTable 8: Number of instances used in our evaluations",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 237,
+    "content": "equally distributed among the languages in Table 11.\nWe denote by *k* 1000 instances.\n\n\n-----\n\n### **J Robustness Analysis**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 238,
+    "content": "### **J Robustness Analysis**\n\nFigure 7: Robustness analysis. We deliver the retrieved documents using the order presented in §3.2 (Original),\nrandomly (Random Shuffle), with English first (En doc/s first) and English last (En doc/s last).\n### **M Performance differences between Retrieval Scope**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 239,
+    "content": "(a) MRAG Differences (ALL vs En+SL) (b) CRAG Differences (ALL vs En+SL)\n\nFigure 8: Difference in MRAG (a) and CRAG (b) between retrieval from documents available in Wikidump (ALL)\nand retrieval done in English+Query specific language (En+SL).\n\n\n-----\n\n### **G Translation-Following**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 240,
+    "content": "We instruct Llama-3-8b using instruction set\ncomposed from **Instruction** : ‘Translate\nthe following text from *L* *X* to\nEnglish’, **Input:** ‘Sentence in *L* *X* ’.\nand **Output:** ‘Sentence in English’., as\nin (Ranaldi and Pucci, 2023) and later (Ranaldi",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 241,
+    "content": "in (Ranaldi and Pucci, 2023) and later (Ranaldi\net al., 2024). We used *news_commentary* (Tiedemann, 2012) by selecting En-X translations as\ndetailed in Table 9. We randomly extracted 2k\ndemonstrations for the available languages in",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 242,
+    "content": "demonstrations for the available languages in\n[the open repo (link1, link2). We tune the model](https://huggingface.co/datasets/wecover/OPUS_News-Commentary)\nfor three epochs with a batch size of 32 and a\nlearning rate equal to 1e-5 with a 0.001 weight",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 243,
+    "content": "learning rate equal to 1e-5 with a 0.001 weight\ndecay. We use the cosine learning rate scheduler\nwith a warmup ratio of 0.03. We conducted our\nexperiments on a workstation with four Nvidia\nRTX A6000 48VRAM for approximately 14\nGPU/h.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 244,
+    "content": "**Languages**\n\nGerman, Spanish, Italian, Russian, Chinese, Japanese,\nArabic, Russian, Hindi\nTotal: 18k\n\nTable 9: Instances and languages used for conducting\nTranslation-following experiment.\n\n### **H Translation-Following Results**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 245,
+    "content": "To make the experimental setting fair and consistent, we randomly extracted the same number of\ndemonstrations for the languages available in the\nonen-source repositories. Although these offer a",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 246,
+    "content": "onen-source repositories. Although these offer a\nlarge amount of languages, some languages (Korean, Finnish, Thai and Vietnamese) are not available. However, we chose not to exclude these languages from the final evaluation.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 247,
+    "content": "**Lan** **g** **ua** **g** **e** **ML** **Q** **A** **MK** **Q** **A**\nGerman 69.8 67.5\n\nItalian 69.2        \nChinese 64.4 62.3\nJapanese 56.8       Spanish 69.2 69.6\nPortuguese 69.0       Russian 64.2       \nArabic 59.1 43.9\n\nHindi       - 40.6",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 248,
+    "content": "Hindi       - 40.6\n\nFinnish 57.0       \nKorean 39.4      \nThai 23.9       \nVietnamese      - 44.5\n\n**Avg** 58.9 54.7\n**Avg LR** 45.2 43.3\n\nTable 10: Performances Llama-3-8b with Translation\nfollowing tuning.\n\n\n-----\n\n### **I Proposed Task**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 249,
+    "content": "**Dataset** **Task** **Lan** **g** **ua** **g** **es** **#Lan** **g** **ua** **g** **es**\n**MKQA** QA English, Spanish, German, Italian,\nPortuguese, Russian, Chinese, 12\nKorean, Thai, Japanese,\nFinnish, Arabic\n**MLQA** QA English, Chinese, Arabic, German, 7\nS p anish, Vietnamese, Hindi,",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 250,
+    "content": "S p anish, Vietnamese, Hindi,\n**XORTyDi** QA English, Chinese, Arabic, Chinese, 8\nKorean, Finnish, Telogu,\nBen g ali",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 251,
+    "content": "Table 11: Languages present in datasets used in this work. *We denote question-answering task as (QA)\n### **K Instruction Template**\n\nThis section contains the *Instruction Templates* used for the additional analysis.\n\n**Translation**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 252,
+    "content": "**Translation**\n\nPlease answer the question by following the provided instructions.\n**#Instructions:**\n\nProvide the English translation for this document. Your language and style should align with the language\nconventions of a native speaker.\n**# Document:** *[document]*",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 253,
+    "content": "Table 12: *Instruction Templates* . The structure is defined by a set of in-context examples (zero examples, in the\n0-shot case), the question in { **evaluated language** }, the final instruction part and a special template to guide\ngeneration and support the final evaluation.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 254,
+    "content": "generation and support the final evaluation.\n### **L Languages of Retrieved Documents**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 255,
+    "content": "|Col1|Retrieval from WEn+SL (R from En and SL Docs)|Retrieval from WALL (R from All Available Docs (ALL))|\n|---|---|---|\n|Question Language|% En % SL|% En % SL % Others|",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 256,
+    "content": "|English German Italian Spanish Finnish Portuguese MKQA Russian Chinese Arabic Japanese Korean Thai|- - 10.8% 89.2% 12.6% 87.4% 12.4% 87.6% 26.3% 73.7% 12.0% 88.0% 25.3% 74.7% 16.3% 83.7% 28.2% 71.8% 18.2% 81.8% 30.0% 70.0% 33.3% 66.7%|98.9% - 1.1% 10.2% 86.3% 3.1% 11.8% 85.8% 2.4% 11.4% 86.0% 2.8%",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 257,
+    "content": "86.3% 3.1% 11.8% 85.8% 2.4% 11.4% 86.0% 2.8% 22.6% 67.1% 10.3% 11.7% 85.8% 2.9% 22.2% 65.2% 12.6% 14.4% 81.2% 4.4% 24.3% 66.2% 9.5% 16.3% 80.3% 5.4% 24.0% 65.5% 10.5% 26.2% 64.6% 9.2%|",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 258,
+    "content": "|English Chinese Arabic MLQA German Spanish Vietnamese Hindi|- - 18.4% 82.6% 28.1% 71.9% 14.4% 85.6% 10.7% 89.3% 39.0% 61.0% 38.5% 61.5%|99.2% - 0.8% 15.3% 83.5% 2.2% 20.8% 70.0% 9.2% 13.0% 85.5% 1.5% 11.4% 86.0% 2.8% 32.2% 55.4% 12.4% 32.6% 58.8% 9.2%|",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 259,
+    "content": "|English Arabic Bengali XORTyDi QA Chinese Korean Russian Finnish Telogu|- - 18.4% 81.6% 43.8% 56.2% 16.8% 83.2% 34.3% 65.7% 23.6% 76.4% 20.6% 79.4% 45.6% 54.4%|98.4% - 1.6% 16.3% 76.6% 7.1% 40.6% 46.6% 12.8% 15.6% 79.0% 7.4% 31.2% 59.2% 9.8% 19.8% 68.4% 11.8% 19.8% 70.8% 9.4% 42.0% 45.6% 12.4%|",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 260,
+    "content": "Table 13: Percentage of the languages of retrieved documents. We retrieve the documents using *R* system from\nthe Wikipedia dump (detailed in §3) considering both English+Specific Language ( **W** *En* + *SL* ) and all languages",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 261,
+    "content": "analysed in the task ( **W** *ALL* ). The languages are checked using OpenLID framework (Burchell et al., 2023).",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 262,
+    "content": "-----\n\n### **N Perfomances using character 3-gram**\n\n**MKQA** **MLQA** **XoRTy-QA**\n**Model**\n\n**Avg** **HR** **LR** **Avg** **HR** **LR** **Avg** **HR** **LR**\n\nGPT-4-o 38.3 55.5 30.3 41.2 50.2 30.1 29.8 35.2 27.4\n\n**tRAG** 50.2 61.1 38.3 50.4 58.5 39.5 38.6 41.3 40.5",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 263,
+    "content": "**monoRAG** 49.5 60.5 38.0 50.4 60.5 37.7 39.7 42.1 37.6\n\n**MultiRAG** 55.7 63.7 45.4 55.9 66.4 46.5 42.1 44.4 40.5\n\n**CrossRAG** 58.0 66.6 47.9 58.6 68.6 48.6 44.7 46.5 43.2\n\nCommand-R 40.2 48.7 31.8 40.1 50.5 30.0 31.0 34.5 24.9\n\n**tRAG** 42.1 53.8 31.0 47.8 59.8 36.1 38.9 40.9 37.5",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 264,
+    "content": "**monoRAG** 46.7 54.9 35.1 48.6 60.5 37.1 35.0 43.6 27.1\n\n**MultiRAG** 57.0 63.9 45.8 54.5 64.3 45.3 42.0 44.3 41.9\n\n**CrossRAG** 59.3 67.0 51.1 57.2 68.1 46.1 44.4 48.4 44.5\n\nLlama-3-8 38.7 47.4 30.9 39.9 49.2 29.1 28.9 32.2 26.3\n\n**tRAG** 43.9 52.2 29.5 47.3 58.8 34.8 37.9 39.2 36.3",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 265,
+    "content": "**monoRAG** 43.5 54.0 33.5 47.8 59.4 41.6 39.9 41.1 36.5\n\n**MultiRAG** 53.5 62.1 43.6 52.7 63.8 40.5 44.1 42.9 38.2\n\n**CrossRAG** 57.4 65.3 51.0 56.2 66.9 45.8 45.7 46.8 44.2",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 266,
+    "content": "Table 14: Performance ( *character 3-gram recall* as in (Chirkova et al., 2024)) using RAG approaches described\nin §2 across benchmarks and settings detailed in §3, separated by total average (Avg), high-resource (HR) and\nlow-resource (LR) languages averages.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 267,
+    "content": "low-resource (LR) languages averages.\n### **O Example of bad retrieval in tRAG**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 268,
+    "content": "**Original Question:** *¿quién escribió variaciones de Campanita del lugar?*\n**Translated Question:** *Who wrote variations of Tinkerbell of the Place?* *translatio n b y Googl e API\n**Target:** *[Wolfgang Amadeus Mozart, Mozart]*",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 269,
+    "content": "**[1]:** Tinker Bell is a fictional character from J. M. Barrie’s 1904 play Peter Pan and his 1911 novelisation *Peter and Wendy* . She\nhas appeared in a variety of film and television adaptations of the Peter Pan stories, notably Walt Disney’s 1953 animated film",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 270,
+    "content": "*Peter Pan* and its 2023 live-action adaptation *Peter Pan & Wendy* .",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 271,
+    "content": "**[2]:** ‘Jingle Bells’ is one of the best known and most sung traditional winter songs in the world. It was written between 1850 and\n1857 by the American composer James Pierpont (1822– 893) under the title ‘The One Horse Open Sleigh’ and was published in",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 272,
+    "content": "Boston by Oliver Ditson & Co. on 16 September 1857.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 273,
+    "content": "**[3]:** Tinker Bell is a 2008 American animated film and the first installment in the Disney Fairies franchise produced by\nDisneyToon Studios. It is about Tinker Bell, a fairy character created by J. M. Barrie in his 1904 play *Peter Pan, or The Boy Who*",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 274,
+    "content": "*Wouldn’t Grow Up*, and featured in the 1953 Disney animated film, *Peter Pan* and its 2002 sequel *Return to Neverland* . Unlike\nDisney’s two Peter Pan films featuring the character, which were produced primarily using traditional animation, Tinker Bell was",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 275,
+    "content": "produced using digital 3D modeling. The film was released on DVD and Blu-ray by Walt Disney Studios Home Entertainment\non October 28, 2008. A sequel, *Tinker Bell and the Lost Treasure*, was released in 2009.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 276,
+    "content": "**[4]:** Tinker Bell is an animated fantasy film series based on the character Tinker Bell, produced by DisneyToon Studios as part of\nthe Disney Fairies franchise after producing a number of direct-to-video Winnie the Pooh films. Voices of Mae Whitman, Lucy",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 277,
+    "content": "Liu, Raven-Symoné, America Ferrera, Kristin Chenoweth and Pamela Adlon are featured in the main films. Six feature films and\none TV special were produced: *Tinker Bell*, *Tinker Bell and the Lost Treasure*, *Tinker Bell and the Great Fairy Rescue*, *Secret of*",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 278,
+    "content": "*the Wings*, *Pixie Hollow Games* (the special), *The Pirate Fairy*, and *Tinker Bell and the Legend of the NeverBeast* . The series is a\nspin-off of and prequel to *Peter Pan* . Originally developed as a direct-to-video franchise, the series was theatrically released from\nits third film onwards.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 279,
+    "content": "**[5]:** Sir James Matthew Barrie, 1st Baronet, was a novelist and playwright, best remembered as the creator of *Peter Pan* . He was\nborn and educated in Scotland and then moved to London, where he wrote several successful novels and p la y s.",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 280,
+    "content": "Table 15: An example of bad document retrieval using **tRAG** (query translated before retrieval). The retrieved\ndocuments are relevant to the target query.\n\n\n-----\n\n### **P Example of MultiRAG**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 281,
+    "content": "**Question:** `英格兰有多少位女王` *(how many queens have been in England?)*\n**Tar** **g** **et:** 8\n**Answer Llama3-8 (no-RAG):**\n`实际统治英格兰的女王有四位：玛格丽特一世，玛丽一世，伊丽莎白一世和伊丽莎白二世。女王人数为` 4 `。`",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 282,
+    "content": "*(* *Four* *q* *ueens actuall* *y* *ruled En* *g* *land: Mar* *g* *aret I* *,* *Mar* *y* *I* *,* *Elizabeth I and Elizabeth II. The number o* *f* *q* *ueens is 4.* *)*\n**Retrieval from from W** *ALL* (Wikipedia in **ALL** languages):",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 283,
+    "content": "**[1]:** Since 1 May 1707, when the Kingdom of England and the Kingdom of Scotland were united to form the Kingdom of\nGreat Britain, there have been 13 monarchs of the United Kingdom. The Kingdoms of England and Scotland had been under a",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 284,
+    "content": "commonwealth confederation under the Stuarts since 24 March 1603, and were formally united on 1 May 1707 to form the\nKingdom of Great Britain, which was united with the Kingdom of Ireland on 1 January 1801 to form the United Kingdom of",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 285,
+    "content": "Great Britain and Ireland, and the Irish Free State was formed and became independent [...] ( *from* ***W*** *Zh* )",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 286,
+    "content": "**[2]:** This entry lists all female monarchs in the world, including emperors, queens, princes, grand dukes, duchesses, goddesses\nand other monarchs, and excludes female royals who have ruled on the throne or as regents. In addition, Elizabeth II, who was",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 287,
+    "content": "monarch of the United Kingdom from 1952 to 2022, ruled over 32 Commonwealth realms [...]. ( *from* ***W*** *En* )",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 288,
+    "content": "**[3]:** In less than 200 years, eight queens ruled the Kingdom of England. Among these queens were Matilda, Lady Jane Grey,\nMary I, Elizabeth I, Mary II, Anne, Victoria, and Elizabeth II. Despite the tradition that heirs of the throne should be the eldest",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 289,
+    "content": "son of the monarch, the mentioned queens ruled competence and capability [...] ( *from* ***W*** *En* )",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 290,
+    "content": "**[4]:** Empress Matilda, also known as Empress Maud, was one of the claimants to the English throne during the civil war known\nas the Anarchy. The daughter and heir of Henry I, king of England and ruler of Normandy, she went to Germany as a child when",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 291,
+    "content": "she was married to the future Holy Roman Emperor Henry V. She travelled with the emperor to Italy in 1116, was controversially\ncrowned empress in St Peter’s Basilica [...] ( *from* ***W*** *Zh* )",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 292,
+    "content": "**[5]:** Elizabeth II, known as Elizabeth Alexandra Mary, was Queen of the United Kingdom and other Commonwealth realms\nfrom 1952 to 2022 and held the record for the lon g est rei g n [ ... ] ( *f* *rom* ***W*** *Zh* )\n**Answer Llama3-8b (MultiRAG):**\n`英格兰曾有` 8 `位女王作为君主执政` .... `答案是：` 8",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 293,
+    "content": "`英格兰曾有` 8 `位女王作为君主执政` .... `答案是：` 8\nThus, En g land has had 8 q ueens who ruled as soverei g ns.... **The answer is: 8.**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 294,
+    "content": "Table 16: An example of **MultiRAG** inference for Llama3-8b. To facilitate the reading, we translated retrieved\nfrom Chinese Wikipedia ( ***W*** *Zh* ) into English (at inference time, we delivered them in Chinese).\n### **Q Example of MultiRAG Misleading Answer**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 295,
+    "content": "**Question:** `누가` ’ `나는` `바비ᅥᄀᆯ` ’ `노래를` `만들었나요` ? *(Who made the song i’m a barbie girl?)*\n**Tar** **g** **et:** [ ’ `ᄋ` `ᅡ` `ᄏ` `ᅮ` `ᄋ` `ᅡ` ’, ’A q ua’ ]\n**Answer Llama3-8 (no-RAG):**\n`정답은` Ingemar Örhagen, Matthias Lindblom, `그리고` Candice Posey `입니다` .",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 296,
+    "content": "( The answer is In g emar Örha g en, Matthias Lindblom and Candice Pose y . )\n**Retrieval from from W** *ALL* (Wikipedia in **ALL** languages):",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 297,
+    "content": "**[1]:** The music video for \"Barbie Girl\" was recorded on August 2005, between 17 and 18. It was directed by Ricardo Vereza,\nBidu Madio, Rentz and Mauricio Eça. The video was released on August 30. Kelly plays a determinate and feminist woman,\nwho doesn’t need a man [...] ( *from* ***W*** *Ko* )",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 298,
+    "content": "**[2]:** Barbie Girl is a song by the Danish-Norwegian dance-pop group Aqua. It was released in May 1997 as the third single from\nthe group’s debut studio album, \"Aquarium\" (1997). The song was written by Søren Rasted, Claus Norreen, René Dif, and Lene",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 299,
+    "content": "Nystrøm, and was produced by Johnny Jam, Delgado, Rasted, and Norreen. It was written after Rasted [...] ( *from* ***W*** *En* )",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 300,
+    "content": "**[3]:** Barbie and The Three Musketeers is a video premiere animated feature from Universal Pictures, released on DVD on\n15 September 2009 in the United States. It is the 16th film in the Barbie animated series and is based on the novel Les Trois",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 301,
+    "content": "Mousquetaires by French writer Alexandre Dumas. The heroine of the film is played by Barbie and her three friends, Teresa,\nSummer and Nikki, who together realise their dream of becoming [...] ( *from* ***W*** *Ko* )",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 302,
+    "content": "**[4]:** Barbie as the Princess and the Pauper is a video premiere animated production released by Lionsgate Entertainment on 28\nSeptember 2004 on DVD and VHS. It is the fourth film in the Barbie animated series, based on Mark Twain’s classic novel The",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 303,
+    "content": "Beggar Prince. The film is also the first animated musical of the Barbie film series, with a total of seven original songs performed\nby Barbie in two roles a noble princess and a poor village girl. [...] ( *from* ***W*** *Ko* )",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 304,
+    "content": "**[5]:** The song, at first glance, appears to be about the popular children’s doll Barbie. However, at second glance, the song\ncontains several sexual overtones, such as \"You can brush my hair, undress me everywhere\". This caused some controversy upon",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 305,
+    "content": "its release in Denmark, but des p ite the controvers y and p erha p s p artl y due [ ... ] ( *f* *rom* ***W*** *En* )\n**Answer Llama3-8b (MultiRAG):**\nThe seven original songs in Barbie as the Princess and the Pauper are less certain, as they were likely adapted from classical",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 306,
+    "content": "compositions and reworked into the animated film’s soundtrack by an unspecified creative team. **The answer is:** The songs were\nall composed by Wolfgang Amadeus Mozart in collaboration with contemporary pop producers. ( *translated from Korean* )\n**Answer Llama3-8b (CrossRAG):**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 307,
+    "content": "**Answer Llama3-8b (CrossRAG):**\nThe song \"Barbie Girl\" was performed by the Danish-Norwegian [...] **The answer is: Aqua.** ( *translated from Korean* )\n**Answer GPT-4o (MultiRAG):**",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 308,
+    "content": "**Answer GPT-4o (MultiRAG):**\nThe song \"Barbie Girl\" was written by Søren Rasted, Claus Norreen, René Dif, and Lene Nystrøm, members of the DanishNorwe g ian dance- p o p g rou p A q ua. **The answer is: A** **q** **ua.** ( *translated* *f* *rom Korean* )",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  },
+  {
+    "chunk_id": 309,
+    "content": "Table 17: An example of **MultiRAG** inference. We have translated documents and answers into English to\nfacilitate the understanding as in Table 16.\n\n\n-----",
+    "metadata": {
+      "source": "2504.03616v1.md"
+    }
+  }
+]
