@@ -1,13 +1,22 @@
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM #, AutoModelForCausalLM
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, AutoModelForCausalLM
 import torch
 
-model_name = "google/flan-t5-base"
+#model_name = "google/flan-t5-base" # tres tres nul
+model_name = "tiiuae/falcon-7b-instruct"
+
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 #model = AutoModelForCausalLM.from_pretrained(model_name)
-model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
+#model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
-model.to(device)
+model = AutoModelForCausalLM.from_pretrained(
+    model_name,
+    torch_dtype=torch.float16,
+    device_map="auto"
+)
+
+
+#device = "cuda" if torch.cuda.is_available() else "cpu"
+#model.to(device)
 
 
 def generate_answer(query, retrieved_chunks, max_tokens=512):
@@ -22,5 +31,5 @@ def generate_answer(query, retrieved_chunks, max_tokens=512):
     Question: {query}
     """
     inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=1024).to(model.device)
-    outputs = model.generate(**inputs, max_new_tokens=max_tokens)
+    outputs = model.generate(**inputs, max_new_tokens=max_tokens, do_sample=False)
     return tokenizer.decode(outputs[0], skip_special_tokens=True)

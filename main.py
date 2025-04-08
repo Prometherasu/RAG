@@ -7,7 +7,7 @@ def main():
     first = True
     while not exit:
         if first:
-            #init()
+            init()
             first = False
 
         query = input("Pose ta question :\n> ")
