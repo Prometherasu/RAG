@@ -8,11 +8,12 @@ import os
 import json
 
 def init(model=None, index_name="rag_chunks"):
+    print(model)
     print("Etape 1 — Extraction des nouveaux Markdown")
-    orphans = extract_missing_markdown()
+    #orphans = extract_missing_markdown()
 
     print("Etape 2 — Nettoyage des documents orphelins")
-    cleanup_orphan_documents(orphans)
+    #cleanup_orphan_documents(orphans)
 
     print("Etape 3 — Chunking des Markdown en JSON")
     process_all_markdown(model)

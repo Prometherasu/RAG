@@ -1,0 +1,2158 @@
+[
+  {
+    "chunk_id": 0,
+    "content": "## **Improving the Context Length and Efficiency of Code Retrieval for Tracing** **Security Vulnerability Fixes**",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 1,
+    "content": "### XUEQING LIU, Stevens Institute of Technology, USA JIANGRUI ZHENG, Stevens Institute of Technology, USA GUANQUN YANG, Stevens Institute of Technology, USA SIYAN WEN, Stevens Institute of Technology, USA QIUSHI LIU, ZJU-UIUC Institute, China",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 2,
+    "content": "In recent years, the rapid increase of security vulnerabilities has caused major challenges in managing them. One critical task\n\nin vulnerability management is tracing the patches that fix a vulnerability. By accurately tracing the patching commits, security",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 3,
+    "content": "stakeholders can precisely identify affected software components, determine vulnerable and fixed versions, assess the severity etc.,\n\nwhich facilitates rapid deployment of mitigations. However, previous work has shown that the patch information is often missing",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 4,
+    "content": "in vulnerability databases, including both the National Vulnerability Databases (NVD) and the GitHub Advisory Database, which\n\nincreases the risk of delayed mitigation, incorrect vulnerability assessment, and potential exploits.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 5,
+    "content": "Although existing work has proposed several approaches for patch tracing, they suffer from two major challenges: (1) the lack of\n\nscalability to the full-repository level, and (2) the lack of study on how to model the semantic similarity between the CVE and the",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 6,
+    "content": "full diff code. Upon identifying this gap, we propose SITPatchTracer, a scalable full-repo full-context retrieval system for security\n\nvulnerability patch tracing. SITPatchTracerleverages ElasticSearch, learning-to-rank, and a hierarchical embedding approach based",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 7,
+    "content": "on GritLM [ 38 ], a top-ranked LLM for text embedding with unlimited context length and fast inference speed. The evaluation of\n\nSITPatchTracershows that it achieves a high recall on both evaluated datasets. SITPatchTracer’s recall not only outperforms",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 8,
+    "content": "several existing works (PatchFinder [ 30 ], PatchScout [ 49 ], VFCFinder [ 14 ]), but also Voyage, the SOTA commercial code embedding\n\nAPI by 13% and 28%.\n\nAdditional Key Words and Phrases: Security Vulnerability; Traceability; Open-Source Software; Information Retrieval; Large Language\n\nModels",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 9,
+    "content": "Models\n\n**ACM Reference Format:**\n\nXueqing Liu, Jiangrui Zheng, Guanqun Yang, Siyan Wen, and Qiushi Liu. 2018. Improving the Context Length and Efficiency of",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 10,
+    "content": "Code Retrieval for Tracing Security Vulnerability Fixes . *ACM/IMS J. Data Sci.* [37, 4, Article 111 (August 2018), 21 pages. https:](https://doi.org/XXXXXXX.XXXXXXX)\n\n[//doi.org/XXXXXXX.XXXXXXX](https://doi.org/XXXXXXX.XXXXXXX)\n\n**1** **Introduction**",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 11,
+    "content": "**1** **Introduction**\n\nWith the tremendous increase in OSS security vulnerabilities, it is imperative to improve the data management for\n\nsecurity vulnerability information. Poor vulnerability management can pose a higher risk for OSS to be exploited by",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 12,
+    "content": "Authors’ Contact Information: Xueqing Liu, Stevens Institute of Technology, Hoboken, NJ, USA, xliu127@stevens.edu; Jiangrui Zheng, Stevens Institute\n\nof Technology, Hoboken, NJ, USA, jzheng36@stevens.edu; Guanqun Yang, Stevens Institute of Technology, Hoboken, NJ, USA, gyang16@stevens.edu;",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 13,
+    "content": "Siyan Wen, Stevens Institute of Technology, Hoboken, NJ, USA, swen4@stevens.edu; Qiushi Liu, ZJU-UIUC Institute, Haining, Zhejiang, China,\n\nqiushi3@illinois.edu.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 14,
+    "content": "qiushi3@illinois.edu.\n\nPermission to make digital or hard copies of all or part of this work for personal or classroom use is granted without fee provided that copies are not",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 15,
+    "content": "made or distributed for profit or commercial advantage and that copies bear this notice and the full citation on the first page. Copyrights for components",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 16,
+    "content": "of this work owned by others than the author(s) must be honored. Abstracting with credit is permitted. To copy otherwise, or republish, to post on\n\nservers or to redistribute to lists, requires prior specific permission and/or a fee. Request permissions from permissions@acm.org.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 17,
+    "content": "© 2018 Copyright held by the owner/author(s). Publication rights licensed to ACM.\n\nManuscript submitted to ACM\n\nManuscript submitted to ACM 1\n\n\n-----\n\n2 Xueqing Liu, Jiangrui Zheng, Guanqun Yang, Siyan Wen, and Qiushi Liu",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 18,
+    "content": "(a) An example CVE-2013-1814 whose patch is missing (Nov\n2024) in the NVD database\n\n(b) An Example of GitHub Maintainer’s Efforts to Find the\nPatch for CVE-2013-1814\n\nFig. 1. An example of NVD’s missing patch link",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 19,
+    "content": "Fig. 1. An example of NVD’s missing patch link\n\nmalicious attackers, causing significant damage such as data breaches and financial losses. For example, in 2017, an\n\nApache Struts vulnerability enabling remote code execution (RCE) was exploited in the Equifax breach [ 56 ], leading",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 20,
+    "content": "to an identity theft attack that affected millions of users and caused $425 million in losses. Three months before the\n\nattack, the patch was disclosed in the National Vulnerability Database [ 2 ], indicating the attack was the result of poor\n\nmanagement.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 21,
+    "content": "management.\n\nOne critical task in vulnerability management is tracing the commits for fixing a vulnerability [ 14, 30, 45, 48, 49, 54, 62,\n\n64 ]. By locating the patch, security stakeholders can more accurately determine the affected version [ 6 ], identify affected",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 22,
+    "content": "software components[ 9, 10, 21, 34 ], and improve the severity assessment [ 29 ]. A lack of accurate patch information can",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 23,
+    "content": "increase the difficulty for security maintainers to identify the above information. For example, Figure 1 shows CVE-2013\n1814, whose patch is missing in NVD. Thus when a GitHub user requests to change its affected package information to",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 24,
+    "content": "the GitHub Advisory database [ 17 ], the GitHub maintainer has to manually search the patch by him/herself to validate\n\nthe affected package information.\n\nDespite the importance of patch tracing, studies find that the patch information is often missing in 63% CVEs in the",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 25,
+    "content": "GitHub Advisory Database [ 14 ]; the National Vulnerability Databases (NVD) experiences a more severe delay [ 2, 12, 22,\n\n23 ]. To this end, previous works [ 14, 30, 45, 48, 49, 54, 62, 64 ] study how to automatically retrieve the patching commit.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 26,
+    "content": "Existing works leverage learning to rank[ 49, 54 ], text embedding [ 14 ], and fine-tuning language models [ 14, 30, 54 ] to",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 27,
+    "content": "improve the model performance. Nevertheless, we identify two major challenges. First, a lack of evaluation on the full\nrepository scale. Multiple existing works evaluate their models by randomly sampling 5,000 negative commits [ 30, 49, 54 ].",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 28,
+    "content": "However, our dataset shows that 38% repositories contain more than 5,000 commits. Second, there exist fewer studies\n\non modeling the similarity between the CVE description and the code at the full-context level. Existing work [ 14, 30, 54 ]\n\nManuscript submitted to ACM\n\n\n-----",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 29,
+    "content": "Manuscript submitted to ACM\n\n\n-----\n\nImproving the Context Length and Efficiency of Code Retrieval for Tracing Security Vulnerability Fixes 3\n\ntruncate the code to 512 tokens, causing significant information loss [1], especially when the commit message is only\n\nbriefly written [41].",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 30,
+    "content": "briefly written [41].\n\nUpon observing existing works’ limitations in scalability and code modeling, we propose SITPatchTracer, a scalable\n\nand effective retrieval system for security vulnerability patch tracing. SITPatchTracerleverages the following steps to",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 31,
+    "content": "improve the scalability and retrieval scores: (1) First, we leverage BM25 using ElasticSearch and the time difference\n\nbetween a CVE and the commit to efficiently pre-rank the candidate commits; (2) Second, to reduce the truncation",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 32,
+    "content": "of the diff code, we propose a hierarchical embedding approach based on GritLM [ 38 ], a top-ranked LLM for text\n\nembedding with unlimited context length and fast inference speed. During indexing time, the hierarchical embedding",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 33,
+    "content": "splits each diff into files, then index the commit message and each file’s diff. During query time, it aggregates the\n\nfile-level embeddings to obtain different similarity commit-level features. (3) To bridge the gap when the CVE description",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 34,
+    "content": "mentions out-of-commit entities (e.g., package names, function names), we build a path similarity feature by searching\n\nfor the file paths matching these entities, and then computing their similarity with the commit paths. (4) Finally, we build",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 35,
+    "content": "a learning-to-rank [7, 26] framework based on LightGBM’s LambdaRank algorithm [26] and the FLAML library [53].\n\nTo compare SITPatchTracer’s performance with existing work, we use the PatchFinder [ 30 ] and a dataset we",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 36,
+    "content": "build based on GitHub Advisory database. The result shows that SITPatchTracerachieves a recall@10 of 0.736 and\n\n0.573 respectively, which outperforms existing work on patch tracing, including PatchFinder [ 30 ], PatchScout [ 49 ], and",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 37,
+    "content": "VFCFinder [ 14 ]. Furthermore, this recall outperforms VoyageAI [ 4 ], the top-1 ranked commercial code embedding API\n\nfor code retrieval, by 13% and 28% respectively. SITPatchTracertakes approximate 40 mins to process every 10000\n\ncommits, which is manageable for practical deployment.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 38,
+    "content": "In this paper, we make the following contributions:\n\n- We propose SITPatchTracer, a scalable full-repo full-context retrieval system for security vulnerability patching\n\ncommit.\n\n- We introduce the hierarchical embedding approach to handle the long context of the commit diff code. The",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 39,
+    "content": "hierarchical embedding approach can be easily extended to other tasks such as code search;\n\n- SITPatchTracerachieves high recalls, which not only outperforms existing work on patch retrieval (PatchFinder [ 30 ],",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 40,
+    "content": "PatchScout [ 49 ], VFCFinder [ 14 ]), but also outperforms the SOTA commercial code embedding API (VoyageAI)\n\nby 13% and 28% on our two datasets;\n\n**2** **Challenges in Patch Retrieval**",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 41,
+    "content": "**2** **Challenges in Patch Retrieval**\n\n**Challenge in Handling Large Scale Repositories** . Existing work propose several strategies to reduce the scalability\n\nchallenge. First, using a low-cost retrieval model to pre-rank candidate commits. For example, PatchFinder uses a",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 42,
+    "content": "two-phrase framework: (1) Phase 1: pre-ranks the candidate commits using TF-IDF and the BertScore method [ 65 ], (2)\n\nPhase 2: re-ranks the top commits using a fine-tuned model. The Phase 1 TF-IDF in PatchFinder and other existing",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 43,
+    "content": "work [ 49, 54 ] all uses *forward indexing*, significantly limiting the scalability. Furthermore, BertScore is not an embedding\n\nmodel, prohibiting PatchFinder to leverage the efficient indexing/querying pipeline of text embedding. Second, using",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 44,
+    "content": "version tag to filter the candidate commits. VFCFinder [ 14 ] restricts the candidate to commits between the fixed version\n\nand the prior version. While this approach can largely reduce the candidate commit size, it relies on the availability",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 45,
+    "content": "and accuracy of the fixed version. To examine the accuracy of the fixed version, we conduct an empirical study in\n\nSection A of the Appendix which reveals the fixed version tag only contains 60.24% of the patching commits. Without",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 46,
+    "content": "1 Our study in Table 3 shows the average commit contains 12,000 to 19,000 tokens.\n\nManuscript submitted to ACM\n\n\n-----\n\n4 Xueqing Liu, Jiangrui Zheng, Guanqun Yang, Siyan Wen, and Qiushi Liu",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 47,
+    "content": "solving the scalability challenge, multiple existing works resort to evaluation on the subset of patch + 5,000 sampled\n\nnegative commits [ 30, 49, 54 ]. This unrealistic setting will significantly overestimate the evaluated methods’ accuracy\n\nand underestimate its time cost.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 48,
+    "content": "and underestimate its time cost.\n\n**Challenge in Modeling Code** . We find that how to model the semantic similarity between CVE and the full diff code\n\nis relatively under-explored. The existing efforts for improving the code modeling[ 14, 30, 49, 54 ] can be categorized as",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 49,
+    "content": "feature engineering and deep learning. First, several works [ 45, 49, 54 ] focus on creating count-based features to be\n\napplied in their learning-to-rank framework. For example, PatchScout [ 49 ] introduces 22 features including the number",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 50,
+    "content": "of shared words, function names, etc. between the CVE description and the code [ 49 ]. Although count-based features are\n\neasy to understand, they often have lower accuracy than deep learning models [ 30 ]. Maintaining too many handcrafted",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 51,
+    "content": "features can also make the method hard to manage and reproduce. Second, while existing work [ 14, 30, 54 ] leverage\n\ndeep learning models (e.g., BERT [ 54 ], CodeBERT [ 14 ], BertScore + CodeReviewer [ 30 ]), they have not explicitly studied",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 52,
+    "content": "how to handle the long diff code, which includes 12,000-19,000 tokens in average (Table 3), while the maximum input\n\nlength of BERT is 512. As a result, existing work [ 14, 30, 54 ] has to truncate the diff code to 512 tokens, leading to",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 53,
+    "content": "significant loss of information, especially when the commit message of the patch is less informative, e.g., the commit\n\nmessage for CVE-2021-41079’s patch [41] is: \" *Improving robustness* \".\n\n**3** **Approach**\n\n**3.1** **Overview**",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 54,
+    "content": "**3** **Approach**\n\n**3.1** **Overview**\n\nFollowing existing work [ 30 ], we propose to first pre-rank all commits in a repository using a low-cost retrieval model,\n\nthen re-rank the top results using a more expensive model. The two phases are described below.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 55,
+    "content": "**Pre-Ranking using TF-IDF/BM25** . For pre-ranking, we propose to implement BM25 using the inverted index, which\n\nis a data structure that maps words to the documents they appear, enabling fast and efficient full-text searches [ 58 ]. We",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 56,
+    "content": "use ElasticSearch [ 15 ] 7.9.0, We further leverage the time between the CVE and commit, which takes negligible time to\n\ncompute but can effectively improve the patch retrieval score [49].",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 57,
+    "content": "**Re-Ranking using Code Embedding** . After achieving a high recall at position 10,000, we propose to use text\n\nembedding [ 4, 32, 33, 38, 39, 43 ] to further re-rank the top-10,000 commits. We thus only index the union of the top\n\n\n\n\n\n\n-----",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 58,
+    "content": "-----\n\nImproving the Context Length and Efficiency of Code Retrieval for Tracing Security Vulnerability Fixes 5\n\nThe diff code in a commit typically contains 12,000 to 19,000 tokens (Table 3), which is longer than most open-source",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 59,
+    "content": "embedding models [ 33, 38 ] can effectively handle. To reduce code truncation, we propose a hierarchical embedding\n\napproach (Section 3.3). Our hierarchical embedding approach splits each diff code into files, indexes the commit message",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 60,
+    "content": "and the first 512 tokens of each file, and then aggregates the file-level embedding at query time to compute different\n\nsimilarity features.\n\n**Overview of SITPatchTracerFramework** . The final SITPatchTracerframework is shown in Figure 2. It includes",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 61,
+    "content": "the following component. First, it pre-ranks all commits in a repo using BM25+Time with ElasticSearch (Section 3.2).\n\nSecond, for the top-10000 commits, it computes the code embedding using our hierarchical embedding approach",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 62,
+    "content": "(Section 3.3). Third, to bridge the gap when the CVE description mentions out-of-commit entities (e.g., package names,\n\nfunction names), it includes a path similarity feature by searching for the file paths matching these entities, then",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 63,
+    "content": "computing their similarity with the commit paths (Section 3.4). Finally, it leverages learning-to-rank [ 7, 26 ] (Section 3.5)\n\nto combine all features. We summarize the features of SITPatchTracerin Table 1.\n\nTable 1. Features used in SITPatchTracer\n\nFeature Grou p Features",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 64,
+    "content": "Feature Grou p Features\n\n1. GritLM cosine with truncated diff\nCode embedding 2. Max GritLM cosine with all files in diff\n3. GritLM cosine with mean of top-1 vectors of all files in diff\n4. GritLM cosine with mean of top-2 vectors of all files in diff\nBM25 5. BM25 ElasticSearch",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 65,
+    "content": "6. #commits between CVE reserve time\nTime\nand commit\n\n7. #commits between CVE publish time\nand commit\n\n8. Jaccard Index between NER-paths and\nPath\ncommit-paths\n9. Voyage AI [ 4 ] cosine between NERp aths and commit- p aths\n\n**3.2** **Pre-Ranking Large Repo using ElasticSearch and Time Distance**",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 66,
+    "content": "We use ElasticSearch 7.9.0 [ 15 ] to pre-rank all commits in a repository using the BM25 model. To improve the recall of\n\nBM25, we compute the similarity with each commit’s commit message and diff code separately, then aggregate them",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 67,
+    "content": "using weighted sum. For each repository, we thus create two indices: one for commit messages and one for the diff. For\n\nthe diff, we further use the camel/snake case tokenization in ElasticSearch to more effectively handle the code.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 68,
+    "content": "**Using Time Distance to Improve Pre-Ranking** . To further improve the recall of BM25, we propose to leverage the\n\ndifference in the number of commits between the CVE and the commit. The intuition is that a security vulnerability",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 69,
+    "content": "needs to be fixed before or shortly after the CVE is published, thus the time difference between the CVE and the commit\n\nshould be small. Existing work also leverage the time affinity to improve the ranking [ 49 ]. In particular, we sort all the",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 70,
+    "content": "commits in a repository by their commit time and store the index of each commit in this list. During the query time, we\n\nuse binary search to locate the position of the CVE time in the sorted list, then we compute the number of commits",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 71,
+    "content": "between the CVE time and each commit. This approach allows us to decouple the time difference calculation between\n\nManuscript submitted to ACM\n\n\n-----\n\n6 Xueqing Liu, Jiangrui Zheng, Guanqun Yang, Siyan Wen, and Qiushi Liu",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 72,
+    "content": "the CVE and the commit, achieving a significant improvement in recall with minimal overhead. For each CVE, we use\n\nboth the publish time and the reserve time (i.e., \" *datePublished* \" and \" *dateReserved* \" in the MITRE CVE database [ 1 ]).",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 73,
+    "content": "The scores of (commit message, diff code, reserve time, and publish time) are combined using the weighted sum with\n\nweight [0.35, 0.15, 0.3, 0.2]. To make the scores comparable, we convert each score to the reciprocal rank (i.e., 1/rank)\n\nbefore combining them.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 74,
+    "content": "before combining them.\n\n**3.3** **Encoding Full-Context Commit using Hierarchical Embedding**\n\n**Model Selection** . To build a model for embedding the long diff code, we select from state-of-the-art text embedding",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 75,
+    "content": "models following the massive text embedding benchmark (MTEB) [ 39 ]. In particular, we select from top models on\n\nthe CoIR [ 31 ] and CodeSearchNet [ 24 ] benchmark, which includes VoyageAI [ 4 ], a commercial embedding model",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 76,
+    "content": "specialized at code embedding and handling long context, and GritLM [ 38 ], an open-source 7B parameter LLM trained\n\njointly to learn embedding and generation tasks. The context length of VoyageAI is 32,000; GritLM leverages a sliding",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 77,
+    "content": "window and can handle arbitrary length inputs [ 38 ]. The dimensions of embedding are 1,024 and 4,096. We select\n\nGritLM mainly due to its good performance and fast inference speed, as it leverages the KV caching technique [ 38 ] to\n\nreduce the inference time cost.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 78,
+    "content": "reduce the inference time cost.\n\n**Achieving the Full Context Embedding using Hierarchical Embedding with GritLM** . Since the financial cost of\n\nrunning VoyageAPI depends on the input tokens, it is not cost-effective to apply Voyage to retrieve the full repository.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 79,
+    "content": "To this end, we use GritLM as the backbone for building our method.\n\nAlthough GritLM can handle arbitrary length inputs, the inference time cost of longer context are significantly",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 80,
+    "content": "higher. Furthermore, our observation shows that keeping a longer context can result in a lower recall than when using a\n\nshorter context. The reason may be that the training data for GritLM’s embedding model are usually shorter sentences,",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 81,
+    "content": "the optimal context length we find is 512 tokens (Figure 5).\n\nTo minimize the truncation of the diff code, we propose the following hierarchical embedding approaches. First, we",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 82,
+    "content": "split each diff code into files, then index the concatenation of the commit message and the first 512 tokens of each file\n\ncommit using the GritLM embedding: \" *Commit message: [commit_msg], Diff code: [file_diff]* \". Second, during the query",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 83,
+    "content": "time, we aggregate the file-level embeddings to compute multiple features on the similarity with the CVE. Furthermore,\n\nwe leverage the BM25 score between the CVE and each file diff to guide the aggregation. In particular, we propose the\n\nfollowing aggregated features (Table 1):",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 84,
+    "content": "following aggregated features (Table 1):\n\n- 2. *𝑚𝑎𝑥* *𝑓* ∈ *𝑑𝑖𝑓𝑓* *𝑐𝑜𝑠* ( *𝑣* *𝑓* *, 𝑣* *𝐶𝑉𝐸* ) : the maximum cosine similarity between the CVE and all file embeddings in the diff",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 85,
+    "content": "- 3. *𝑐𝑜𝑠* ( *𝑣* *𝑡𝑜𝑝* −1 ∈ *𝑑𝑖𝑓𝑓* *, 𝑣* *𝐶𝑉𝐸* ) : the cosine similarity between the CVE and the top-1 file embedding in the diff, where\n\nthe top-1 file is selected based on the BM25 score between the CVE and the files;",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 86,
+    "content": "- 4. *𝑐𝑜𝑠* ( *𝑣* *𝑡𝑜𝑝* −2 ∈ *𝑑𝑖𝑓𝑓* *, 𝑣* *𝐶𝑉𝐸* ) : the cosine similarity between the CVE and the mean of the top-2 file embedding in\n\nthe diff, where the top-2 files are selected based on the BM25 score between the CVE and the files;",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 87,
+    "content": "**Improving GritLM Embedding using Instructions** . To improve GritLM Embedding, we use a prompt for both\n\nthe CVE and file/commit embedding to resemble the prompt used in GritLM’s training. The prompt for each commit",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 88,
+    "content": "message and file diff is: \" *This is a commit (commit message + diff code) of a repository. Represent it to retrieve the patching*\n\n*commit for a CVE description: [commit_msg_and_diff]* \"; the prompt for the CVE is: \" *Represent this CVE description to*",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 89,
+    "content": "*retrieve the commit (commit message + diff code) that patches this CVE.* \". In our preliminary study using 78800 commits\n\nand 96 CVEs of apache/tomcat, we find that this instruction can improve the recall@100 of GritLM embedding by 15%,\n\ncompared to without the instruction.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 90,
+    "content": "compared to without the instruction.\n\nManuscript submitted to ACM\n\n\n-----\n\nImproving the Context Length and Efficiency of Code Retrieval for Tracing Security Vulnerability Fixes 7",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 91,
+    "content": "**Discussion of Hierarchical Embedding** . By splitting the diff code into files, our method thus cannot capture cross-file\n\ncontextual dependencies. That is, when the model needs to reason the relevance by examining two files simultaneously.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 92,
+    "content": "We argue that such dependencies are not crucial for patch retrieval, as patch retrieval primarily aims to localize the\n\ncode changes referenced in the CVE description, rather than reasoning across the entire diff’s context.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 93,
+    "content": "As Table 3 shows the average tokens in each file in our datasets are 2,454 and 2,577, thus even our hierarchical\n\nembedding approach needs to truncate the files. However, unlike existing work [ 30 ], our approach ensures that every",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 94,
+    "content": "file is considered; it also preserves the structure of each file. Our hierarchical embedding method can be extended to\n\nincorporate the full context by adding more embeddings per file, but such extensions come at the cost of increased\n\nindexing overhead.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 95,
+    "content": "indexing overhead.\n\nOne advantage of our hierarchical embedding approach is that once the file embeddings are indexed, the aggregated\n\nfeatures can be computed efficiently using matrix operation (matrix multiplication, segmented matrix reduction, matrix",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 96,
+    "content": "grouping) between the CVE embeddings and the commit/file embeddings, making it easy to introduce and test new\n\nfeatures quickly.\n\n**3.4** **Bridging CVE-Patch Gap using NER and In-Repo Search**",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 97,
+    "content": "After building the code embedding, we identify that one challenge for matching the CVE description and diff code is\n\nthat some entities mentioned in the CVE description are not in the diff code. For example, for CVE-2021-41079 [ 40 ]:",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 98,
+    "content": "\" *Apache Tomcat 8.5.0 to 8.5.63, 9.0.0-M1* - · · *to use* ***NIO+OpenSSL*** *or* ***NIO2+OpenSSL*** - · · \" (Table 2), NIO2 is not found in\n\nthe patching commit [ 41 ]. Instead, it refers to related files under the *apache/tomcat/java/util/net* directory. Since the",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 99,
+    "content": "patching commit is under the same directory, searching for \" *NIO2* \" can help bridge the gap between the CVE description\n\nand the patching commit.\n\nTable 2. Prompt and example for NER and In-Repo search.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 100,
+    "content": "Prompt *Given the CVE description of [software name], extract*\n*the entities (variable, file, method, class, other modules)*\n*in the code to help retrieve the patching commit of the*\n*vulnerability. Extract entities that are camel/snake case*",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 101,
+    "content": "*or similar, e.g., connected using -, :, +. Only output words*\n*in the description. Do not extract: (1): words describing*\n*the software name/versions; (2): words describing the*\n*vulnerabilit* *y* *and ex* *p* *loit method.*\nExample *Apache Tomcat 8.5.0 to 8.5.63, 9.0.0-M1 to 9.0.43 and*",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 102,
+    "content": "(CVE-2021- *10.0.0-M1 to 10.0.2 did not properly validate incom-*\n41079) *ing TLS packets. When Tomcat was configured to use*",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 103,
+    "content": "***NIO+OpenSSL*** *or* ***NIO2+OpenSSL*** *for TLS, a specially*\n*crafted packet could be used to trigger an infinite loop*\n*resultin* *g* *in a denial o* *f* *service.*\n\n*java/org/apache/tomcat/* ***util*** */* ***net*** */Nio2Channel.java*",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 104,
+    "content": "\" *java/org/apache/tomcat/* ***util*** */net/Nio2Endpoint.java*\nSearch \" *NIO2*",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 105,
+    "content": "*java/org/apache/coyote/ajp/AjpNio2Protocol.java*\n*j* *ava/or* *g* */a* *p* *ache/tomcat/* ***util*** */* ***net*** */SecureNio2Channel.* *j* *ava*\nPatch file *j* *ava/or* *g* */a* *p* *ache/tomcat/* ***util*** */* ***net*** */o* *p* *enssl/O* *p* *enSSLEn* *g* *ine.java*",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 106,
+    "content": "To bridge the gap, we propose to use Named Entity Recognition (NER) to extract the entities in the CVE description,\n\nthen use GitHub’s code search API [ 18 ] to find file paths containing the entities. The entities we look for are the\n\nManuscript submitted to ACM\n\n\n-----",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 107,
+    "content": "Manuscript submitted to ACM\n\n\n-----\n\n8 Xueqing Liu, Jiangrui Zheng, Guanqun Yang, Siyan Wen, and Qiushi Liu\n\nexact phrases that help uniquely identify the location of the patch. We avoid extracting words describing the software",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 108,
+    "content": "name/versions, the vulnerability, the exploit method, and natural language phrases. We query OpenAI’s GPT-4o API\n\nwith the prompt in Table 2 and 8 input/output examples. We encode the file paths using the VoyageAI embedding [ 4 ],",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 109,
+    "content": "and compute the cosine similarity between the NER-path and the file paths in each commit as the path similarity\n\nfeature (Table 1). We also compute the Jaccard index [ 57 ] between the NER-paths and the commit paths as another",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 110,
+    "content": "path similarity feature. To address cases where paths may be incomplete or only partially specified—such as compar\ning src/utils/file.py with file.py, we additionally incorporate filename similarity computed through sequence\n\nmatching using the difflib package in Python.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 111,
+    "content": "matching using the difflib package in Python.\n\n**3.5** **Learning to Rank**\n\nAfter building the features, we use learning-to-rank to learn how to combine the features. We use the LightGBM",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 112,
+    "content": "library [ 26 ] for its faster training speed (e.g., comparing with similar libraries [ 8 ]). More specifically, we use the\n\nLambdaRank algorithm [ 7 ]. We further perform automated hyperparameter tuning using the FLAML library [ 53 ].",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 113,
+    "content": "FLAML (Fast and Lightweight AutoML) is employed to automatically optimize hyperparameters such as learning\n\nrate, number of leaves, and minimum data per leaf of the LambdaRank model. The model was trained to optimize",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 114,
+    "content": "evaluation metrics including NDCG, recall, and Mean Reciprocal Rank (MRR) at retrieval positions 10, 100, and 1000.\n\nWe run FLAML for approximately one hour, conducting around 30 trials to identify the optimal hyperparameter set.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 115,
+    "content": "The search space of FLAML is defined as follows: learning rate: tune.loguniform(0.005, 0.2), number of leaves:\n\ntune.qrandint(20, 64, q=1), minimum data per leaf: tune.qrandint(5, 50, q=1) . The optimal hyperparameters\n\nare then used to train the final model.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 116,
+    "content": "are then used to train the final model.\n\n**Preparing the Training Data** . To reduce the indexing cost of the training data, for each CVE for training, we randomly\n\nsample a set of 1000 commits as the negative commits, including 500 hard negative commits which are the top-500",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 117,
+    "content": "commits ranked by BM25+Time, and 500 random negative commits. Notice we only sample the negative commits for\n\ntraining, but not for testing. The negative sampling makes the pos:neg ratio in the test dataset much smaller than the",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 118,
+    "content": "training set; however, we observe that the gap in the pos:neg ratio has minimal impact on the learning-to-rank result,\n\nsince LTR algorithms (e.g., LambdaRank, LambdaMART [ 7 ]) are designed to handle the imbalance between the positive\n\nand negative samples.\n\n**4** **Evaluation**",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 119,
+    "content": "and negative samples.\n\n**4** **Evaluation**\n\n**4.1** **Research Questions**\n\nOur evaluation for SITPatchTraceris guided by the following research questions:\n\n- **RQ1** : How effective is SITPatchTracerin tracing the patching commit?",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 120,
+    "content": "- **RQ2** : How costly is SITPatchTracerin tracing the patching commit?\n\n- **RQ3** : How does each feature in SITPatchTracercontribute to the final performance?\n\n**4.2** **Dataset Construction**",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 121,
+    "content": "**4.2** **Dataset Construction**\n\n**Constructing a New Dataset** . To evaluate the effectiveness of SITPatchTracerand existing work, we use two datasets:\n\n(1) PatchFinder, a dataset collected by the PatchFinder paper [ 30 ], and (2) GirtHubAD, a dataset we construct based on",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 122,
+    "content": "the GitHub commit URL in the reference links of the GitHub Advisory database [ 17 ]. The reason we need to collect a\n\nsecond dataset is that there are only 510 repositories in the PatchFinder dataset, and the distribution for the number\n\nManuscript submitted to ACM\n\n\n-----",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 123,
+    "content": "Manuscript submitted to ACM\n\n\n-----\n\nImproving the Context Length and Efficiency of Code Retrieval for Tracing Security Vulnerability Fixes 9\n\nof CVEs are highly skewed, with 24 repositories (e.g., Linux, tensorflow) containing 80% CVEs. As a result, using",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 124,
+    "content": "PatchFinder alone cannot show the method’s effectiveness on the majority OSS repositories with a smaller number of\n\nCVEs.\n\n**The GitHubAD Dataset** . To comprehensively evaluate SITPatchTracer’s effectiveness on OSS repositories, we collect",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 125,
+    "content": "a new dataset named GitHubAD based on the GitHub Advisory database [ 17 ]. GitHub Advisory database maintains CVE\n\ninformation by organizing vulnerabilities into ecosystems (e.g., Maven, PyPI, NPM). For each CVE, GitHub AD clones",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 126,
+    "content": "the metadata information from NVD [ 2 ] (e.g., CVE description, patch, fixed version), and allows users to easily add or\n\nupdate the metadata information by submitting pull requests, which are then reviewed and validated by security experts",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 127,
+    "content": "in GitHub’s security team. For each CVE, we collect the commit URLs in the reference links as the patching commits\n\nfor this CVE, e.g., [ 19 ], which is similar to the data collection process of VFCFinder [ 14 ]. Arguably, the reference links",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 128,
+    "content": "may include commits that have not been officially confirmed by the vendor as the patch. However, since these commits\n\nare all relevant to the CVE, a higher ranking score indicates that the model is also effective in retrieving the correct\n\npatching commit.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 129,
+    "content": "patching commit.\n\n**Train/Test Split for Evaluating Challenging Test Repositories** . To evaluate SITPatchTracerand existing work,\n\nwe split both PatchFinder and GitHubAD into training and testing sets by repositories. That is, each repository only",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 130,
+    "content": "belongs to one of the training and testing dataset, but not both. This approach follows previous work [ 9, 14 ] and it\n\nreduces the contamination between the training and testing datasets.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 131,
+    "content": "On the other hand, while existing work often splits the train/test datasets randomly (e.g., PatchFinder [ 30 ] randomly\n\nsplits the dataset into 8:1:1 train/validate/test), we argue that this approach may over-estimate the model performance,",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 132,
+    "content": "since the challenging repositories have a higher chance to locate in the training dataset. To this end, we propose to sort\n\nthe repositories based on the difficulty of the patch retrieval task, and use the more challenging repositories for test,\n\nand the easier repositories for training.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 133,
+    "content": "and the easier repositories for training.\n\nTo find out which repositories are more challenging, we leverage the number of commits in the repository and\n\nthe scores of BM25+Time (Section 3.2). The intuition is that for repositories containing a larger number of commits,",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 134,
+    "content": "if BM25+Time cannot achieve a high recall, the repository is likely more challenging; on the other hand, it is easier\n\nfor smaller repositories with fewer commits to achieve a higher retrieval score, therefore the difficulty score should",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 135,
+    "content": "penalize the repositories with smaller number of commits. In addition, we also consider the number of CVEs in the\n\nrepository to make the indexing more cost-effective for VoyageAI [4].\n\nMore specifically, we introduce the following difficulty metric (Equation 1).",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 136,
+    "content": "*𝐷𝑖𝑓𝑓𝑖𝑐𝑢𝑙𝑡𝑦* = *𝑀𝑅𝑅* *𝐵𝑀* 25+ *𝑇𝑖𝑚𝑒* + 0 *.* 1 × *𝑅𝑒𝑐𝑎𝑙𝑙* @100 *𝐵𝑀* 25+ *𝑇𝑖𝑚𝑒*\n\n+ 0 *.* 1 × *𝑅𝑒𝑐𝑎𝑙𝑙* @500 *𝐵𝑀* 25+ *𝑇𝑖𝑚𝑒*\n\n+ 0 *.* 1 × *𝑅𝑒𝑐𝑎𝑙𝑙* @1000 *𝐵𝑀* 25+ *𝑇𝑖𝑚𝑒* (1)\n\nFor repositories with more than 5000 commits, we select the most difficult repositories based on *𝐷𝑖𝑓𝑓𝑖𝑐𝑢𝑙𝑡𝑦* ; for",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 137,
+    "content": "repositories with less than 5000 commits, we select the difficult repositories based on *𝐷𝑖𝑓𝑓𝑖𝑐𝑢𝑙𝑡𝑦* / *𝑚𝑎𝑡ℎ.𝑙𝑜𝑔* ( 100 +\n\n# *𝑐𝑜𝑚𝑚𝑖𝑡𝑠* ) . Within the difficult repositories, we select the ones with the largest number of CVEs. For PatchFinder, this",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 138,
+    "content": "leads to 101 test repositories (629 CVEs), for GitHubAD, this leads to 148 test repositories (952 CVEs). The number of\n\nrepositories to keep in the test datasets are chosen mainly based on the cost for indexing the VoyageAI embedding",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 139,
+    "content": "model [ 4 ]. For every dataset, we leave all the remaining repositories as the training dataset. The statistics of the datasets\n\nManuscript submitted to ACM\n\n\n-----\n\n10 Xueqing Liu, Jiangrui Zheng, Guanqun Yang, Siyan Wen, and Qiushi Liu\n\nTable 3. Statistics of the datasets used in this paper",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 140,
+    "content": "Statistics PatchFinder GitHubAD",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 141,
+    "content": "Tokens (commit msg) 56 44\nTokens per diff (white space) 3,498 3,217\nTokens per diff (voyage tokenizer) 12,370 16,236\nTokens per diff (GritLM tokenizer) 14,293 19,241\nTokens p er file ( GritLM tokenizer ) 2,454 2,577\n# repos (train) 343 477 (sampled)\n# repos (test) 101 148",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 142,
+    "content": "# repos (test) 101 148\n# CVEs (train) 3,682 1,290\n# CVEs (test) 629 952\n# commits 1,597,753 1,846,915\n# commits (train) 918,125 617,686\n# commits ( test ) 679,628 1,229,229\nPos:ne g 1:20415 1:13449",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 143,
+    "content": "are shown in Table 3. For GitHubAD’s training set, we randomly sample 477 repositories to reduce the indexing cost for\n\ntraining.\n\n**4.3** **Experiment Setup**\n\nOur experiments are conducted on a university-managed high-performance computing (HPC) cluster where the jobs",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 144,
+    "content": "are managed by SLURM. The cluster consists of 2 nodes, each containing 4 x NVIDIA L40S GPUs of 46G GPU Ram,\n\n64 CPUs, and 250G CPU Ram; and 4 nodes, each containing 4 x NVIDIA H100 GPUs of 80G GPU Ram, 64 CPUs and",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 145,
+    "content": "250G CPU Ram. We use 3TB storage space to store the repositories, extracted features, and indices of ElasticSearch,\n\nSITPatchTracerand the baseline models. We run the experiments of GritLM on the L40S nodes, while the experiments",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 146,
+    "content": "on PatchScout, PatchFinder, and VFCFinder are run on the L40S nodes and H100 nodes. We compare the runtime cost\n\nof all methods by rerunning all experiments on the L40S nodes (Table 5).\n\n**4.4** **Baselines**\n\nWe compare SITPatchTracerwith the following baselines:",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 147,
+    "content": "- **PatchFinder Phase-1** [ 30 ]: PatchFinder leverages a two-phase approach for patch retrieval. We only compare\n\nwith the Phase-1 model, since the Phase-2’s ranking score is upper-bounded by the recall of Phase-1. We have",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 148,
+    "content": "optimized PatchFinder’s code to make it more memory-efficient for our setting for larger repositories; [2] ;\n\n- **PatchScout** [ 49 ]: We compare against PatchScout using PatchFinder’s implementation [ 51 ], as PatchScout’s\n\noriginal implementation is unavailable;",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 149,
+    "content": "original implementation is unavailable;\n\n- **VFCFinder** [ 14 ]: VFCFinder requires a prohibitively higher cost than any other method (Table 5), since VFCFinder\n\nis designed to operate directly with the raw directory. While it is possible for us to refactor VFCFinder to",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 150,
+    "content": "use our processed data, it would require a significant change of the code and it is prone to error. As a re\nsult, we compare SITPatchTracerand VFCFinder on a subset of 8 repositories from GitHubAD (234 CVEs):",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 151,
+    "content": "2 The original implementation has an out-of-memory error by attempting to store the entire final layer (a 3-dimensional tensor) of all commits of a\nrepository in the CPU memory.\n\nManuscript submitted to ACM\n\n\n-----",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 152,
+    "content": "Manuscript submitted to ACM\n\n\n-----\n\nImproving the Context Length and Efficiency of Code Retrieval for Tracing Security Vulnerability Fixes 11",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 153,
+    "content": "mindsdb/mindsdb, apache/tomcat, spring-projects/spring-framework, vantage6/vantage6, answerde\nv/answer, directus/directus, OpenNMS/opennms, and cloudfoundry/uaa . The 8 repositories are among the\n\nmost challenging repositories in GitHubAD.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 154,
+    "content": "most challenging repositories in GitHubAD.\n\n- **Voyage-3** [ 4 ]: VoyageAI is a commercial company focusing on training embedding models. As of Nov 2024,\n\nVoyage-3 was the top-1 model on the CoIR [ 31 ] benchmark. The cost of Voyage-3 is $0.06 per 1M tokens. In our",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 155,
+    "content": "experiment, the estimated cost for indexing each 10,000 commits using Voyage-3 is $1.8. To save the cost of\n\nrunning Voyage-3, we truncate each commit diff code as the first 50,000 characters (which is approximately 15,000",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 156,
+    "content": "to 20,000 tokens by the Voyage tokenizer). After the truncation, the cost for running the entire PatchFinder test\n\ndataset is approximately $122, and for the GitHubAD test dataset is $220. On the other hand, Voyage-code-3 and",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 157,
+    "content": "Voyage-3-large further outperformed Voyage-3 on the CoIR benchmark since they use larger models. However,\n\ntheir prices are 3 times higher than Voyage-3. We do not include them in our experiment since they are not\n\ncost-effective for patch retrieval.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 158,
+    "content": "cost-effective for patch retrieval.\n\n**Discussion on VCMatch** . Besides the baselines above, another candidate comparative method is VCMatch [ 54 ], which\n\nextends the PatchScout framework by adding additional features and fine-tuning the BERT model. VCMatch’s score is",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 159,
+    "content": "stronger than PatchScout and weaker than PatchFinder on the PatchFinder dataset (as reported by the PatchFinder\n\npaper [ 30 ]). However, although VCMatch’s code is available [ 50 ], there remains a significant challenge in successfully",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 160,
+    "content": "compiling and reproducing the code, even after reaching out to the authors of both VCMatch and PatchFinder. As a\n\nresult, we skip the comparison with VCMatch.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 161,
+    "content": "Table 4. Comparison between SITPatchTracerand baselines on two datasets: GitHubAD and PatchFinder [ 30 ]. * denote the method\ndoes not require training. Grit_head2 is Feature 2 in Table 1. t and p are the t-value and p-value of the paired t-test between\nSITPatchTracerand Voyage.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 162,
+    "content": "Manuscript submitted to ACM\n\n\n-----\n\n12 Xueqing Liu, Jiangrui Zheng, Guanqun Yang, Siyan Wen, and Qiushi Liu\n\n**4.5** **Evaluation Metrics**\n\nFor evaluating the effectiveness of SITPatchTracerand the baselines, we use the following metrics:",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 163,
+    "content": "- **Mean Reciprocal Rank**, which evaluates the model’s performance of the top-1 retrieved commits;\n\n- **Recall@k**, which evaluates the model’s completeness to include all patching commits in the top-k positions.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 164,
+    "content": "Recall@k is frequently used by previous work [ 14, 30 ], and it is a crucial metric for evaluating the model’s\n\npotential as a *pre-ranking method* .\n\n- **NDCG@k** . Compared to recall, NDCG focuses more on ranking the patching commits to the higher position,",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 165,
+    "content": "thus it can be used to evaluate the model’s potential for the final ranking. For CVEs with more than one patching\n\ncommit, it provides finer-grained evaluation than MRR.\n\n**5** **Experimental Results**\n\n**5.1** **RQ1: Effectiveness Analysis**",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 166,
+    "content": "**5.1** **RQ1: Effectiveness Analysis**\n\nOur overall evaluation results are shown in Table 4, where we compare SITPatchTracerwith PatchFinder, PatchScout,\n\nand Voyage. SITPatchTracer’s result in Table 4 is highlighted in bold if it significantly outperforms Voyage. We",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 167,
+    "content": "annotate 0-shot methods using * to indicate that they do not require any training. To speed up the calculation, we apply\n\nthe BM25+Time top-10000 pre-ranking to all methods. Since the recall of BM25+Time’s top-10000 commits are 96.2%",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 168,
+    "content": "and 94.5% for PatchFinder and GitHubAD, this approach has minimal impact on the final evaluation.\n\nFrom Table 4 we can make the following observations. First, PatchScout’s scores are lower than the other methods. It",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 169,
+    "content": "is also lower than BM25+Time, showing that the traditional count-based feature extraction method is not sufficient\n\nto capture the semantic relatedness between CVE and the patch. Second, while PatchFinder shows better scores than",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 170,
+    "content": "PatchScout, it is lower than Voyage, Grit_head2, and SITPatchTracer. This result may be because the CodeReviewer\n\nmodel is not optimized for text embedding tasks; in addition, since PatchFinder truncated each diff code to the first",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 171,
+    "content": "512 tokens, it is prone to missing key information in the diff code. Finally, SITPatchTracersignificantly outperforms\n\nVoyage on the GitHubAD dataset; on the PatchFinder dataset, SITPatchTraceroutperforms Voyage on MRR and",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 172,
+    "content": "Recall@10; on the other metrics, SITPatchTracer’s improvement is not significant according to the results of the paired\n\nt-test (Table 4). These results show that SITPatchTraceris effective in retrieving the patching commits by matching",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 173,
+    "content": "or outperforming the state-of-the-art commercial embedding model. The lower improvement on PatchFinder may be\n\nbecause GritLM contains less code-specific training data [ 20 ], whereas Voyage-3’s training data includes code [ 52 ].",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 174,
+    "content": "One potential approach for improving SITPatchTraceris to fine-tune the GritLM to better understand the code and\n\nvulnerability data. For example, by training the model to understand the association between semantic similarity\n\nbetween the CVE description and the diff code (Section 7).",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 175,
+    "content": "Due to the higher time cost of VFCFinder (Table 5), we only compare SITPatchTracerand VFCFinder on a subset of 8\n\nrepositories from GitHubAD (234 CVEs). The results are shown in Figure 3. We can see that SITPatchTraceroutperforms",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 176,
+    "content": "VFCFinder on all metrics. In particular, VFCFinder’s recall stays the same across all top k. This is because VFCFinder\n\nonly retrieves a small set of commits within the fixed version, thus the recall will not keep increasing. As a result,",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 177,
+    "content": "VFCFinder is not effective as a pre-ranking approach like the other methods. By inspecting the output of VFCFinder, we\n\nfind that many CVEs (60%) are not processed successfully due to the failure in its pipeline to handle the fixed version or\n\nthe fixed version is not available.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 178,
+    "content": "the fixed version is not available.\n\nManuscript submitted to ACM\n\n\n-----\n\nImproving the Context Length and Efficiency of Code Retrieval for Tracing Security Vulnerability Fixes 13",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 179,
+    "content": "Fig. 3. Comparison between SITPatchTracerand VFCFinder [14] on 8 repositories in the GitHubAD (234 CVEs) (Section 4.4)",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 180,
+    "content": "Table 5. Time/financial cost of the main components of SITPatchTracerand baselines. Each cell shows the cost of processing 10,000\ncommits of one CVE. We benchmark the runtime of SITPatchTracer, PatchScout, and PatchFinder on the same node equipped with\nan NVIDIA L40S GPU for consistency",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 181,
+    "content": "Method Ste p Time\n\nIndex BM25 20s\n\nIndex BM25 file 48s\n\nSITPatchTracer Index GritLM 2 mins\n\nIndex GritLM file 29min\nQuerying GritLM 14s\nQuerying GritLM 72s\nfile\n\nPath embeddin g $0.021\n\nFeature Extraction 9min\nPatchScout\nLearnin g 2.6min\nPatchFinder Phase-1 9 mins",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 182,
+    "content": "Vo y a g e Commit embeddin g $1.8\nVFCFinder Feature Extraction 50min\n\n**RQ1** : SITPatchTracersignificantly outperforms PatchFinder [ 30 ], PatchScout [ 49 ], VFCFinder [ 14 ]. SITPatch\nTraceroutperforms VoyageAI by 13% and 28% on Recall@10, and it is significantly more cost-effective than",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 183,
+    "content": "VoyageAI.\n\n**5.2** **RQ2: Cost Analysis**\n\nWe report the time and financial cost of the main components of SITPatchTracerand the baselines in Table 5. The\n\ntime cost is measured by the time taken to process 10,000 commits of one CVE. The financial cost is measured by the",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 184,
+    "content": "cost of using the commercial API for processing 10,000 commits. We benchmark the runtime of SITPatchTracer,\n\nManuscript submitted to ACM\n\n\n-----\n\n14 Xueqing Liu, Jiangrui Zheng, Guanqun Yang, Siyan Wen, and Qiushi Liu",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 185,
+    "content": "Fig. 4. Performance changes (MRR, Recall@K, and NDCG@K) on the GitHubAD (top) and PatchFinder dataset (bottom), when\ndifferent feature groups are incrementally removed.\n\nPatchScout, and PatchFinder on the same L40S node for consistency, despite their experiments being run on different",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 186,
+    "content": "nodes (Section 4.3).\n\nFrom Table 5, we can see that SITPatchTracertakes about 40 mins to process every 10,000 commits when using an\n\nL40S GPU, including all the indexing and querying time. Although SITPatchTracer’s time cost is higher than the",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 187,
+    "content": "baselines, considering that the indexing cost is a one-time effort, this time cost is manageable for practical deployment\n\nto large repositories.\n\n**RQ2** : SITPatchTracertakes about 40 mins to process every 10,000 commits when using an L40S GPU, which",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 188,
+    "content": "is practical for large repositories. The financial cost of SITPatchTraceris $0.021 for processing 10,000 commits,\n\nsignificantly lower than the $1.8 cost of VoyageAI [ 4 ], and it can be reduced by replacing the path embedding with\n\nopen-source models.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 189,
+    "content": "open-source models.\n\n**5.3** **RQ3: Evaluating the Effectiveness of SITPatchTracerComponents**\n\n*5.3.1* *Ablation Study on Features.* To study how each feature affects the effectiveness of SITPatchTracer, in this",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 190,
+    "content": "section, we conduct an ablation study on different features in SITPatchTracer. While the feature importance can\n\nbe analyzed using explainable machine learning methods [ 36, 44 ], we find such analysis results are less stable and",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 191,
+    "content": "more difficult to explain. We thus conduct the ablation study by removing one feature group at a time and observing\n\nthe performance changes. The feature groups are shown in Table 1. We start from the model trained with the best",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 192,
+    "content": "hyperparameter (found by FLAML) using the full feature set. Each time, one feature group is removed and we retrain\n\nthe model using the same hyperparameters.\n\nThe results of our ablation study on the PatchFinder and GitHubAD are shown in Figure 4. We can see that every",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 193,
+    "content": "feature group positively contributes to the overall performance of SITPatchTracer. In particular, for the recall, the\n\ndrop brought by removing the embedding features is the most significant, followed by the time features and the path",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 194,
+    "content": "features. This result shows that embedding is crucial for improving the recall. For NDCG, this feature is more important\n\nto GitHubAD than the PatchFinder dataset.\n\n*5.3.2* *Evaluating the Effect of Context Lengths of GritLM.* When building the hierarchical embedding, we truncate",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 195,
+    "content": "each file of the diff code to the first 512 tokens. How does the context length affect the performance of GritLM and\n\nManuscript submitted to ACM\n\n\n-----\n\nImproving the Context Length and Efficiency of Code Retrieval for Tracing Security Vulnerability Fixes 15",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 196,
+    "content": "Fig. 5. Evaluating the effect of context lengths of GritLM on the apache/tomcat dataset. The context length varies from 512 to 4096.\n\nSITPatchTracer? To answer this question, we study the retrieval scores using GritLM on apache/tomcat, a repository",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 197,
+    "content": "with 78800 commits and 96 CVEs. We vary the context length from 512 to 4096, the results are shown in Figure 5.\n\nFrom Figure 5, we can see that the context length has a negative impact on the performance of GritLM. The MRR",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 198,
+    "content": "and Recall@10 scores drop significantly when the context length is larger than 512. We believe this counter-intuitive\n\nresult is due to the fact that the embedding model of GritLM is trained on pairs of text that are relatively short (e.g.,",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 199,
+    "content": "the training data of GritLM [ 20 ]). As a result, longer context lengths may hurt the model’s performance instead. To\n\nextend the context length of SITPatchTracer, we can either use a model that better handles long context, or index",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 200,
+    "content": "more chunks in the same file, but the latter approach will increase the cost of indexing.\n\nTable 6. Manual annotation results of NER accuracy\n\nPrecision Recall\n\nAD train 1.0 0.81\n\nAD test 1.0 0.82\n\nPatchFinder train 1.0 0.85\n\nPatchFinder test 1.0 0.76",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 201,
+    "content": "PatchFinder test 1.0 0.76\n\n*5.3.3* *Evaluating the Accuracy of NER.* We evaluate the accuracy of the NER model for identifying named entities in\n\nthe CVE description (Section 3.4). To evaluate the NER model, one author samples 100 CVEs from each of the training",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 202,
+    "content": "and test sets of each dataset. The author manually inspects the CVE description to annotate the ground truth entities\n\nbased on the labeling result of the GPT model. The criteria are whether the entities follow the requirements in the GPT",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 203,
+    "content": "prompt (Section 3.4), i.e., it refers to a file name, class name, function name, variable name, etc. unique to the commit,\n\nand it does not include the software name/version, etc.\n\nManuscript submitted to ACM\n\n\n-----\n\n16 Xueqing Liu, Jiangrui Zheng, Guanqun Yang, Siyan Wen, and Qiushi Liu",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 204,
+    "content": "The results of NER’s accuracy are shown in Table 6, where the precision means the CVE does not contain any wrongly\n\nannotated entities, and the recall means the GPT results include all the correctly annotated entities. The precision is",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 205,
+    "content": "more important than the recall, since incorrect entities will introduce noise to the path feature. From Table 2 we can see\n\nthat the annotated entities have a high precision, and a reasonably high recall.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 206,
+    "content": "**RQ3** : SITPatchTracer’s performance is more significantly affected by the embedding than the time and path\n\nfeatures. The context length of GritLM has a negative impact on the performance of SITPatchTracer.\n\n**6** **Related Work**\n\nIn this section, we summarize the related work.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 207,
+    "content": "In this section, we summarize the related work.\n\n**Security Vulnerability Data Management** . One critical defense against security exploits to OSS is to enable the\n\nknowledge-sharing of known vulnerabilities. Security knowledge sharing of open-source vulnerabilities is led by the",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 208,
+    "content": "efforts of security advisory databases including NVD [ 2 ], GitHub Advisories [ 17 ], Snyk [ 46 ], GitLab [ 3 ], and OSV [ 42 ].\n\nSuch knowledge includes the CVE description, the affected software and version, the patch location, the severity score,\n\netc.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 209,
+    "content": "etc.\n\nDue to the tremendous growth of CVEs, existing work builds automated systems to maintain the metadata information.\n\nThe patching commit serves as an important meta-information source to help with these automated tasks. First, affected",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 210,
+    "content": "software. Existing works automatically extract affected package information based on the CVE description. For example,\n\nusing named entity recognition (NER) [ 5, 13, 28, 63 ], extreme multi-class classification [ 11, 21, 34 ], large language model",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 211,
+    "content": "ranking and generation [ 9, 10 ], and learning to rank [ 59 ]. When the affected package name is not exactly mentioned\n\nin the CVE description, the patch information can help justify the predicted affected package. For example, Wu et",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 212,
+    "content": "al. [ 59 ] recommend the affected package name by searching through the Maven central repository for the package\n\nclosest to the code change in the patch. Second, affected version. To reduce false alarms and narrow down the affected",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 213,
+    "content": "version range, existing works study how to identify the vulnerability-inducing commit [ 6, 60 ] by starting from the\n\npatching commit and tracing back along the version history graph using the SZZ algorithm [ 6, 60 ]. Third, severity",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 214,
+    "content": "score. The severity score of a CVE is important information for managing the priority for fixing and mitigating different\n\nvulnerabilities. Existing work leverages the diff code content to automatically assess the severity (i.e., CVSS) score of\n\nthe vulnerability [29].",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 215,
+    "content": "the vulnerability [29].\n\nIn summary, the patching commit is an important information source for security vulnerability data management.\n\nTo improve the traceability of vulnerability patches, Xu et al. [ 62 ] propose to extract the patching commit URL by",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 216,
+    "content": "crawling the reference links of a CVE; Sun et al. [48] localize the patch at the file level.\n\n**Text Embedding Models** . Text embedding models are a special type of models that learn how to represent the entire",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 217,
+    "content": "text into one vector embedding. Different from generative LLMs, text embedding models are trained by encoding two\n\npieces of text using the same model, and then learning their similarity. Text embedding allows the cosine similarity",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 218,
+    "content": "calculation to be decoupled between the query and the candidate. Therefore, we can first index all the candidates in a\n\nrepository as candidate embeddings, then rank all candidates efficiently using matrix multiplication or approximate",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 219,
+    "content": "nearest neighbor search [ 25, 27, 35, 61 ]. State-of-the-art text embedding models such as Voyage AI [ 4 ] achieve 90%\n\nNDCG@10 [37, 39] on the CoIR [31] benchmark (a benchmark for evaluating code retrieval models).",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 220,
+    "content": "An important requirement of text embedding models is to improve the inference speed for fast retrieval. Many\n\nembedding models are built upon the smaller language models such as all-mpnet [ 47 ]. To improve the effectiveness\n\nManuscript submitted to ACM\n\n\n-----",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 221,
+    "content": "Manuscript submitted to ACM\n\n\n-----\n\nImproving the Context Length and Efficiency of Code Retrieval for Tracing Security Vulnerability Fixes 17\n\nof retrieval, recent works develop embedding models based on large language models. For example, GritLM [ 38 ] is",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 222,
+    "content": "based on the Mistral-7B models. GritLM is trained with a joint objective function for the model to learn to generate and\n\nembed at the same time, improving the generality of the embedding. It leverages the KV caching technique to reduce",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 223,
+    "content": "the inference time cost. GritLM is trained with general-domain datasets as well as several code-related datasets such as\n\nsplash question to sql and splash explanation to sql [ 20 ]. On the other hand, existing works develop embedding models",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 224,
+    "content": "that focus on the code data, e.g., Voyage-Code-3 [ 4 ] and CodeXEmbed [ 33 ]. We choose to use GritLM for building\n\nSITPatchTracerdue to its good performance, high inference speed and low financial cost.\n\n**7** **Discussions and Future Work**",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 225,
+    "content": "**7** **Discussions and Future Work**\n\n**Improving the Semantic Matching between CVE and Code** . Although SITPatchTracerachieves a higher recall on\n\nthe GitHubAD and PatchFinder datasets, there remain challenges in improving the semantic matching between the",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 226,
+    "content": "CVE description and the commit diff code. For example, how to bridge the gap between the vulnerability type (e.g.,\n\n\" *this could lead to an infinite loop and denial-of-service* \") with the diff code containing the infinite loop? This question is",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 227,
+    "content": "challenging for GritLM since it contains limited training data on security vulnerabilities. For example, we can fine-tune\n\nGritLM’s embedding model using pairs of (CVE, vulnerable function) from existing vulnerability datasets [ 16, 55, 66 ].",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 228,
+    "content": "This approach enables the model to learn the associations between vulnerable code and the vulnerability types.\n\n**8** **Threats to Validity**\n\n**External Threats** . External threats include the reproducibility of baselines such as PatchFinder [ 30 ], PatchScout [ 49 ],",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 229,
+    "content": "and VFCFinder [ 14 ]. We have made efforts to reproduce these baselines using the code provided by the original authors.\n\nHowever, we encountered challenges, particularly when handling large datasets. To ensure successful execution, we",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 230,
+    "content": "have refactored parts of the baseline implementations to align with our hardware configurations (e.g., mitigating\n\nout-of-memory errors). These modifications, while necessary for execution, may introduce deviations from the original\n\nimplementations, potentially affecting direct comparability.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 231,
+    "content": "**Internal Threats** . Internal threats include the potential bias brought by our datasets. For example, for GitHubAD\n\nwe use the reference commit links as the patching commits, which may not be officially confirmed. However, since",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 232,
+    "content": "these commits are all relevant to the CVE, we argue that such bias has minimal threats to the fair comparison between\n\nmodels.\n\n**9** **Conclusion**\n\nIn this work, we introduce SITPatchTracer, a scalable and effective patch retrieval system for security vulnerabilities",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 233,
+    "content": "that can scale to large-scale OSS repositories. SITPatchTracerleverages the GritLM embedding model as the backbone,\n\nit leverages a hierarchical embedding technique to reduce the truncation of the commit diff code. It further leverages",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 234,
+    "content": "pre-ranking using ElasticSearch and the time difference between CVE and commit, as well as NER + path search to\n\nbridge the gap by out-of-commit mentions in the CVE description. By combining these features in a learning-to-rank",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 235,
+    "content": "framework, SITPatchTraceroutperforms existing work [ 14, 30, 49 ]; it further outperforms the Recall@10 of VoyageAI,\n\na commercial embedding API with state-of-the-art performance, by 13% and 28% on our two datasets. It is more",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 236,
+    "content": "cost-effective than VoyageAI, and the time cost is manageable for practical deployment to large repositories.\n\nManuscript submitted to ACM\n\n\n-----\n\n18 Xueqing Liu, Jiangrui Zheng, Guanqun Yang, Siyan Wen, and Qiushi Liu\n\n**A** **An Empirical Study on the Accuracy of the Version Information**",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 237,
+    "content": "In this section, we conduct an empirical study on the accuracy of the version information in the CVE description. We\n\nsample 2,614 CVEs from NVD which contain at least one patch. We then calculate that starting from the extracted",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 238,
+    "content": "version, the size of the version window to include the ground truth patch. The results are summarized in Table 7. We\n\nfind that the exact extracted version only includes 60.24% ground truth patches. As a result, filtering candidate commits",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 239,
+    "content": "using the version information [14] is prone to a lower recall for patch retrieval.\n\nTable 7. Statistics of the version distance between the mentioned fix version and the ground truth fix version\n\nRan g e Count Recall ( % )\n\n0 1,677 60.24\n\n±1 1,875 67.35\n\n±5 2,136 76.72\n\n±50 2,614 93.89",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 240,
+    "content": "±1 1,875 67.35\n\n±5 2,136 76.72\n\n±50 2,614 93.89\n\nManuscript submitted to ACM\n\n\n-----\n\nImproving the Context Length and Efficiency of Code Retrieval for Tracing Security Vulnerability Fixes 19\n\n**References**",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 241,
+    "content": "**References**\n\n[[1] 2023. Common Vulnerabilities and Exposures Website. https://cve.mitre.org/](https://cve.mitre.org/)\n\n[[2] 2023. NATIONAL VULNERABILITY DATABASE. https://nvd.nist.gov/](https://nvd.nist.gov/)\n\n[[3] 2024. GitLab. http://gitlab.com](http://gitlab.com)",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 242,
+    "content": "[4] [Voyage AI. 2024. voyage-3, voyage-3-lite: A new generation of small yet mighty general-purpose embedding models. https://blog.voyageai.com/](https://blog.voyageai.com/2024/09/18/voyage-3/)\n\n[2024/09/18/voyage-3/](https://blog.voyageai.com/2024/09/18/voyage-3/)",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 243,
+    "content": "[5] Afsah Anwar, Ahmed Abusnaina, Songqing Chen, Frank Li, and David Mohaisen. 2021. Cleaning the NVD: Comprehensive quality assessment,",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 244,
+    "content": "improvements, and analyses. *IEEE Transactions on Dependable and Secure Computing* [(2021). https://ieeexplore.ieee.org/abstract/document/9601266](https://ieeexplore.ieee.org/abstract/document/9601266)",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 245,
+    "content": "[6] Lingfeng Bao, Xin Xia, Ahmed E Hassan, and Xiaohu Yang. 2022. V-SZZ: automatic identification of version ranges affected by CVE vulnerabilities.\n\nIn *Proceedings of the 44th International Conference on Software Engineering* . 2352–2364.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 246,
+    "content": "[7] Christopher JC Burges. 2010. From ranknet to lambdarank to lambdamart: An overview. *Learning* 11, 23-581 (2010), 81.\n\n[8] Tianqi Chen and Carlos Guestrin. 2016. Xgboost: A scalable tree boosting system. In *Proceedings of the 22nd acm sigkdd international conference on*",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 247,
+    "content": "*knowledge discovery and data mining* . 785–794.\n\n[9] Tianyu Chen, Lin Li, Bingjie Shan, Guangtai Liang, Ding Li, Qianxiang Wang, and Tao Xie. 2023. Identifying vulnerable third-party libraries from\n\ntextual descriptions of vulnerabilities and libraries. *arXiv preprint arXiv:2307.08206* (2023).",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 248,
+    "content": "[10] Tianyu Chen, Lin Li, Liuchuan Zhu, Zongyang Li, Guangtai Liang, Ding Li, Qianxiang Wang, and Tao Xie. 2023. Vullibgen: Identifying vulnerable\n\nthird-party libraries via generative pre-trained model. *arXiv preprint arXiv:2308.04662* (2023).",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 249,
+    "content": "[11] Yang Chen, Andrew E Santosa, Asankhaya Sharma, and David Lo. 2020. Automated identification of libraries from vulnerability data. In *ACM/IEEE*",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 250,
+    "content": "*International Conference on Software Engineering: Software Engineering in Practice* [. https://dl.acm.org/doi/abs/10.1145/3377813.3381360](https://dl.acm.org/doi/abs/10.1145/3377813.3381360)",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 251,
+    "content": "[12] [Eric Chin. 2024. National Vulnerability Database: Opaque changes and unanswered questions. https://anchore.com/blog/national-vulnerability-](https://anchore.com/blog/national-vulnerability-database-opaque-changes-and-unanswered-questions/)",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 252,
+    "content": "[database-opaque-changes-and-unanswered-questions/](https://anchore.com/blog/national-vulnerability-database-opaque-changes-and-unanswered-questions/)\n\n[13] Qingxiu Dong, Lei Li, Damai Dai, Ce Zheng, Zhiyong Wu, Baobao Chang, Xu Sun, Jingjing Xu, and Zhifang Sui. 2022. A survey for in-context",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 253,
+    "content": "learning. *arXiv preprint arXiv:2301.00234* [(2022). https://arxiv.org/abs/2301.00234](https://arxiv.org/abs/2301.00234)\n\n[14] Trevor Dunlap, Elizabeth Lin, William Enck, and Bradley Reaves. 2024. VFCFinder: Pairing Security Advisories and Patches. In *Proceedings of the*",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 254,
+    "content": "*19th ACM Asia Conference on Computer and Communications Security* . 1128–1142.\n\n[[15] ElasticSearch. 2024. ElasticSearch. https://www.elastic.co/elasticsearch](https://www.elastic.co/elasticsearch)",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 255,
+    "content": "[16] Jiahao Fan, Yi Li, Shaohua Wang, and Tien N. Nguyen. 2020. A C/C++ Code Vulnerability Dataset with Code Changes and CVE Summaries. In\n\n*Proceedings of the 17th International Conference on Mining Software Repositories* (Seoul, Republic of Korea) *(MSR ’20)* . Association for Computing",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 256,
+    "content": "[Machinery, New York, NY, USA, 508–512. doi:10.1145/3379597.3387501](https://doi.org/10.1145/3379597.3387501)\n\n[[17] GitHub. 2024. GitHub Advisory Database. https://github.com/advisories](https://github.com/advisories)",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 257,
+    "content": "[[18] GitHub. 2024. GitHub Code Search API. https://docs.github.com/en/rest?apiVersion=2022-11-28](https://docs.github.com/en/rest?apiVersion=2022-11-28)",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 258,
+    "content": "[[19] GitHubAD. 2021. CVE-2021-41079’s GitHub page. https://github.com/advisories/GHSA-59g9-7gfx-c72p](https://github.com/advisories/GHSA-59g9-7gfx-c72p)",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 259,
+    "content": "[[20] GritLM. 2024. MEDI2: GritLM’s training data. https://huggingface.co/datasets/GritLM/MEDI2/tree/main](https://huggingface.co/datasets/GritLM/MEDI2/tree/main)\n\n[21] Stefanus A Haryono, Hong Jin Kang, Abhishek Sharma, Asankhaya Sharma, Andrew Santosa, Ang Ming Yi, and David Lo. 2022. Automated",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 260,
+    "content": "Identification of Libraries from Vulnerability Data: Can We Do Better?. In *IEEE/ACM International Conference on Program Comprehension* [. https:](https://dl.acm.org/doi/abs/10.1145/3524610.3527893)\n\n[//dl.acm.org/doi/abs/10.1145/3524610.3527893](https://dl.acm.org/doi/abs/10.1145/3524610.3527893)",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 261,
+    "content": "[22] [Simon Hendery. 2024. Update delays to NIST vulnerability database alarms researchers. https://www.scmagazine.com/news/update-delays-to-nist-](https://www.scmagazine.com/news/update-delays-to-nist-vulnerability-database-alarms-researchers)",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 262,
+    "content": "[vulnerability-database-alarms-researchers](https://www.scmagazine.com/news/update-delays-to-nist-vulnerability-database-alarms-researchers)",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 263,
+    "content": "[[23] Chris Hughes. 2024. Death Knell of the NVD? https://www.resilientcyber.io/p/death-knell-of-the-nvd](https://www.resilientcyber.io/p/death-knell-of-the-nvd)",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 264,
+    "content": "[24] Hamel Husain, Ho-Hsiang Wu, Tiferet Gazit, Miltiadis Allamanis, and Marc Brockschmidt. 2019. Codesearchnet challenge: Evaluating the state of\n\nsemantic code search. *arXiv preprint arXiv:1909.09436* (2019).",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 265,
+    "content": "[25] Vladimir Karpukhin, Barlas Oğuz, Sewon Min, Patrick Lewis, Ledell Wu, Sergey Edunov, Danqi Chen, and Wen-tau Yih. 2020. Dense passage\n\nretrieval for open-domain question answering. *arXiv preprint arXiv:2004.04906* (2020).",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 266,
+    "content": "[26] Guolin Ke, Qi Meng, Thomas Finley, Taifeng Wang, Wei Chen, Weidong Ma, Qiwei Ye, and Tie-Yan Liu. 2017. Lightgbm: A highly efficient gradient\n\nboosting decision tree. *Advances in neural information processing systems* 30 (2017).",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 267,
+    "content": "[27] Omar Khattab and Matei Zaharia. 2020. Colbert: Efficient and effective passage search via contextualized late interaction over bert. In *Proceedings of*\n\n*the 43rd International ACM SIGIR conference on research and development in Information Retrieval* . 39–48.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 268,
+    "content": "[28] Philipp Kuehn, Markus Bayer, Marc Wendelborn, and Christian Reuter. 2021. OVANA: An approach to analyze and improve the information quality",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 269,
+    "content": "of vulnerability databases. In *International Conference on Availability, Reliability and Security* [. https://dl.acm.org/doi/abs/10.1145/3465481.3465744](https://dl.acm.org/doi/abs/10.1145/3465481.3465744)",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 270,
+    "content": "[29] Triet Huynh Minh Le, David Hin, Roland Croft, and M Ali Babar. 2021. Deepcva: Automated commit-level vulnerability assessment with deep\n\nmulti-task learning. In *2021 36th IEEE/ACM International Conference on Automated Software Engineering (ASE)* . IEEE, 717–729.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 271,
+    "content": "[30] Kaixuan Li, Jian Zhang, Sen Chen, Han Liu, Yang Liu, and Yixiang Chen. 2024. PatchFinder: A two-phase approach to security patch tracing for\n\ndisclosed vulnerabilities in open-source software. In *Proceedings of the 33rd ACM SIGSOFT International Symposium on Software Testing and Analysis* .",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 272,
+    "content": "590–602.\n\nManuscript submitted to ACM\n\n\n-----\n\n20 Xueqing Liu, Jiangrui Zheng, Guanqun Yang, Siyan Wen, and Qiushi Liu\n\n[31] Xiangyang Li, Kuicai Dong, Yi Quan Lee, Wei Xia, Yichun Yin, Hao Zhang, Yong Liu, Yasheng Wang, and Ruiming Tang. 2024. Coir: A comprehensive",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 273,
+    "content": "benchmark for code information retrieval models. *arXiv preprint arXiv:2407.02883* (2024).\n\n[32] Zehan Li, Xin Zhang, Yanzhao Zhang, Dingkun Long, Pengjun Xie, and Meishan Zhang. 2023. Towards general text embeddings with multi-stage\n\ncontrastive learning. *arXiv preprint arXiv:2308.03281* (2023).",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 274,
+    "content": "[33] Ye Liu, Rui Meng, Shafiq Joty, Silvio Savarese, Caiming Xiong, Yingbo Zhou, and Semih Yavuz. 2024. CodeXEmbed: A Generalist Embedding Model\n\nFamily for Multiligual and Multi-task Code Retrieval. *arXiv preprint arXiv:2411.12644* (2024).",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 275,
+    "content": "[34] Yunbo Lyu, Thanh Le-Cong, Hong Jin Kang, Ratnadira Widyasari, Zhipeng Zhao, Xuan-Bach D Le, Ming Li, and David Lo. 2023. Chronos:",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 276,
+    "content": "Time-aware zero-shot identification of libraries from vulnerability reports. In *International Conference on Software Engineering* [. https://doi.org/10.](https://doi.org/10.1109/ICSE48619.2023.00094)\n\n[1109/ICSE48619.2023.00094](https://doi.org/10.1109/ICSE48619.2023.00094)",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 277,
+    "content": "[35] Yu A Malkov and Dmitry A Yashunin. 2018. Efficient and robust approximate nearest neighbor search using hierarchical navigable small world\n\ngraphs. *IEEE transactions on pattern analysis and machine intelligence* 42, 4 (2018), 824–836.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 278,
+    "content": "[36] Edoardo Mosca, Ferenc Szigeti, Stella Tragianni, Daniel Gallagher, and Georg Groh. 2022. SHAP-based explanation methods: a review for NLP\n\ninterpretability. In *Proceedings of the 29th international conference on computational linguistics* . 4593–4603.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 279,
+    "content": "[[37] MTEB. 2024. MTEB Leaderboard on Hugging Face. https://huggingface.co/spaces/mteb/leaderboard](https://huggingface.co/spaces/mteb/leaderboard)\n\n[38] Niklas Muennighoff, SU Hongjin, Liang Wang, Nan Yang, Furu Wei, Tao Yu, Amanpreet Singh, and Douwe Kiela. 2024. Generative representational",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 280,
+    "content": "instruction tuning. In *ICLR 2024 Workshop: How Far Are We From AGI* .\n\n[39] Niklas Muennighoff, Nouamane Tazi, Loïc Magne, and Nils Reimers. 2022. MTEB: Massive text embedding benchmark. *arXiv preprint arXiv:2210.07316*\n\n(2022).",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 281,
+    "content": "(2022).\n\n[[40] NVD. 2021. CVE-2021-41079. https://nvd.nist.gov/vuln/detail/CVE-2021-41079](https://nvd.nist.gov/vuln/detail/CVE-2021-41079)",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 282,
+    "content": "[[41] NVD. 2021. CVE-2021-41079’s patching commit. https://github.com/apache/tomcat/commit/34115fb3c83f6cd97772232316a492a4cc5729e0](https://github.com/apache/tomcat/commit/34115fb3c83f6cd97772232316a492a4cc5729e0)\n\n[[42] OSV. 2024. OSV Database. https://osv.dev/](https://osv.dev/)",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 283,
+    "content": "[43] N Reimers. 2019. Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks. *arXiv preprint arXiv:1908.10084* (2019).\n\n[44] Marco Tulio Ribeiro, Sameer Singh, and Carlos Guestrin. 2016. \"Why should i trust you?\" Explaining the predictions of any classifier. In *Proceedings*",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 284,
+    "content": "*of the 22nd ACM SIGKDD international conference on knowledge discovery and data mining* . 1135–1144.\n\n[45] Kedi Shen, Yun Zhang, Lingfeng Bao, Zhiyuan Wan, Zhuorong Li, and Minghui Wu. 2023. Patchmatch: A tool for locating patches of open source",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 285,
+    "content": "project vulnerabilities. In *2023 IEEE/ACM 45th International Conference on Software Engineering: Companion Proceedings (ICSE-Companion)* . IEEE,\n\n175–179.\n\n[[46] Snyk. 2024. SNYK Open Source Vulnerability Database. https://security.snyk.io/](https://security.snyk.io/)",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 286,
+    "content": "[47] Kaitao Song, Xu Tan, Tao Qin, Jianfeng Lu, and Tie-Yan Liu. 2020. Mpnet: Masked and permuted pre-training for language understanding. *Advances*\n\n*in neural information processing systems* 33 (2020), 16857–16867.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 287,
+    "content": "[48] Jiamou Sun, Jieshan Chen, Zhenchang Xing, Qinghua Lu, Xiwei Xu, and Liming Zhu. 2024. Where is it? tracing the vulnerability-relevant files from\n\nvulnerability reports. In *Proceedings of the IEEE/ACM 46th International Conference on Software Engineering* . 1–13.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 288,
+    "content": "[49] Xin Tan, Yuan Zhang, Chenyuan Mi, Jiajun Cao, Kun Sun, Yifan Lin, and Min Yang. 2021. Locating the security patches for disclosed oss vulnerabilities\n\nwith vulnerability-commit correlation ranking. In *Proceedings of the 2021 ACM SIGSAC Conference on Computer and Communications Security* .",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 289,
+    "content": "3282–3299.\n\n[[50] VCMatch. 2024. Reproduing Package for the VCMatch Model. https://figshare.com/s/0f3ed11f9348e2f3a9f8?file=32403518](https://figshare.com/s/0f3ed11f9348e2f3a9f8?file=32403518)",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 290,
+    "content": "[[51] VFCFinder. 2024. VFCFinder replication package. https://github.com/s3c2/vfcfinder](https://github.com/s3c2/vfcfinder)",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 291,
+    "content": "[52] [Voyage. 2024. voyage-3 & voyage-3-lite: A new generation of small yet mighty general-purpose embedding models. https://blog.voyageai.com/](https://blog.voyageai.com/2024/09/18/voyage-3/)\n\n[2024/09/18/voyage-3/](https://blog.voyageai.com/2024/09/18/voyage-3/)",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 292,
+    "content": "[53] Chi Wang, Qingyun Wu, Markus Weimer, and Erkang Zhu. 2021. Flaml: A fast and lightweight automl library. *Proceedings of Machine Learning and*\n\n*Systems* 3 (2021), 434–447.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 293,
+    "content": "*Systems* 3 (2021), 434–447.\n\n[54] Shichao Wang, Yun Zhang, Liagfeng Bao, Xin Xia, and Minghui Wu. 2022. Vcmatch: a ranking-based approach for automatic security patches",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 294,
+    "content": "localization for OSS vulnerabilities. In *2022 IEEE International Conference on Software Analysis, Evolution and Reengineering (SANER)* . IEEE, 589–600.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 295,
+    "content": "[55] Xinda Wang, Shu Wang, Pengbin Feng, Kun Sun, and Sushil Jajodia. 2021. Patchdb: A large-scale security patch dataset. In *2021 51st Annual IEEE/IFIP*\n\n*International Conference on Dependable Systems and Networks (DSN)* . IEEE, 149–160.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 296,
+    "content": "[[56] Wikipedia. 2024. 2017 Equifax Data Breach. https://en.wikipedia.org/wiki/2017_Equifax_data_breach](https://en.wikipedia.org/wiki/2017_Equifax_data_breach)\n\n[[57] Wikipedia. 2024. Jaccard Index. https://en.wikipedia.org/wiki/Jaccard_index](https://en.wikipedia.org/wiki/Jaccard_index)",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 297,
+    "content": "[[58] Wikipedia. 2024. Wikipedia page of Inverted index. https://en.wikipedia.org/wiki/Inverted_index](https://en.wikipedia.org/wiki/Inverted_index)\n\n[59] Susheng Wu, Wenyan Song, Kaifeng Huang, Bihuan Chen, and Xin Peng. 2024. Identifying Affected Libraries and Their Ecosystems for Open",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 298,
+    "content": "Source Software Vulnerabilities. In *Proceedings of the IEEE/ACM 46th International Conference on Software Engineering* . 1–12.\n\n[60] Susheng Wu, Ruisi Wang, Kaifeng Huang, Yiheng Cao, Wenyan Song, Zhuotong Zhou, Yiheng Huang, Bihuan Chen, and Xin Peng. 2024. Vision:",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 299,
+    "content": "Identifying affected library versions for open source software vulnerabilities. In *Proceedings of the 39th IEEE/ACM International Conference on*\n\n*Automated Software Engineering* . 1447–1459.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 300,
+    "content": "*Automated Software Engineering* . 1447–1459.\n\n[61] Lee Xiong, Chenyan Xiong, Ye Li, Kwok-Fung Tang, Jialin Liu, Paul Bennett, Junaid Ahmed, and Arnold Overwijk. 2020. Approximate nearest\n\nneighbor negative contrastive learning for dense text retrieval. *arXiv preprint arXiv:2007.00808* (2020).",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 301,
+    "content": "Manuscript submitted to ACM\n\n\n-----\n\nImproving the Context Length and Efficiency of Code Retrieval for Tracing Security Vulnerability Fixes 21\n\n[62] Congying Xu, Bihuan Chen, Chenhao Lu, Kaifeng Huang, Xin Peng, and Yang Liu. 2022. Tracking patches for open source software vulnerabilities.",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 302,
+    "content": "In *Proceedings of the 30th ACM Joint European Software Engineering Conference and Symposium on the Foundations of Software Engineering* . 860–871.\n\n[63] Guanqun Yang, Shay Dineen, Zhipeng Lin, and Xueqing Liu. 2021. Few-sample named entity recognition for security vulnerability reports by",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 303,
+    "content": "fine-tuning pre-trained language models. In *Deployable Machine Learning for Security Defense: Second International Workshop* [. https://link.springer.](https://link.springer.com/chapter/10.1007/978-3-030-87839-9_3)",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 304,
+    "content": "[com/chapter/10.1007/978-3-030-87839-9_3](https://link.springer.com/chapter/10.1007/978-3-030-87839-9_3)\n\n[64] Junwei Zhang, Xing Hu, Lingfeng Bao, Xin Xia, and Shanping Li. 2024. Dual Prompt-Based Few-Shot Learning for Automated Vulnerability Patch",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 305,
+    "content": "Localization. In *2024 IEEE International Conference on Software Analysis, Evolution and Reengineering (SANER)* . IEEE, 940–951.\n\n[65] Tianyi Zhang, Varsha Kishore, Felix Wu, Kilian Q Weinberger, and Yoav Artzi. 2019. Bertscore: Evaluating text generation with bert. *arXiv preprint*",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 306,
+    "content": "*arXiv:1904.09675* (2019).\n\n[66] Jiayuan Zhou, Michael Pacheco, Zhiyuan Wan, Xin Xia, David Lo, Yuan Wang, and Ahmed E Hassan. 2021. Finding a needle in a haystack: Automated",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  },
+  {
+    "chunk_id": 307,
+    "content": "mining of silent vulnerability fixes. In *2021 36th IEEE/ACM International Conference on Automated Software Engineering (ASE)* . IEEE, 705–716.\n\nManuscript submitted to ACM\n\n\n-----",
+    "metadata": {
+      "source": "2503.22935v1.md"
+    }
+  }
+]

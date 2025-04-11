@@ -1,0 +1,870 @@
+[
+  {
+    "chunk_id": 0,
+    "content": "# Optimizing Retrieval-Augmented Generation with Elasticsearch for Enhanced Question-Answering Systems\n\n\nJiajing Chen\nNew York University\n\nNew York, USA\n\nZhen Qi\n\nNortheastern University\n\nBoston, USA\n\n\nRunyuan Bao\nJohns Hopkins University\n\nBaltimore, USA",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 1,
+    "content": "Baltimore, USA\n\nJianjun Wei\nWashington University in St. Louis\n\nSt Louis, USA\n\n\nHongye Zheng\n\nThe Chinese University of Hong\n\nKong\nHong Kong, China\n\nJiacheng Hu*\nTulane University\n\nNew Orleans, USA",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 2,
+    "content": "***Abstract*** **—This study aims to improve the accuracy and**\n**quality** **of** **large-scale** **language** **models** **(LLMs)** **in**\n**answering questions by integrating Elasticsearch into the**\n**Retrieval Augmented Generation (RAG) framework. The**",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 3,
+    "content": "**experiment uses the Stanford Question Answering Dataset**\n**(SQuAD) version 2.0 as the test dataset and compares the**\n**performance of different retrieval methods, including**\n**traditional** **methods** **based** **on** **keyword** **matching** **or**",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 4,
+    "content": "**semantic similarity calculation, BM25-RAG and TF-IDF-**\n**RAG, and the newly proposed ES-RAG scheme. The**\n**results show that ES-RAG not only has obvious advantages**\n**in retrieval efficiency but also performs well in key**\n**indicators such as accuracy, which is 0.51 percentage**",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 5,
+    "content": "**points** **higher** **than** **TF-IDF-RAG.** **In** **addition,**\n**Elasticsearch's** **powerful** **search** **capabilities** **and** **rich**\n**configuration options enable the entire question-answering**\n**system to better handle complex queries and provide more**",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 6,
+    "content": "**flexible and efficient responses based on the diverse needs**\n**of users. Future research directions can further explore**\n**how to optimize the interaction mechanism between**\n**Elasticsearch and LLM, such as introducing higher-level**\n**semantic** **understanding** **and** **context-awareness**",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 7,
+    "content": "**capabilities, to achieve a more intelligent and humanized**\n**question-answering experience.**",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 8,
+    "content": "***Keywords-Retrieval-enhanced generation, Elasticsearch,***\n***Large language models, Information retrieval***\n\nI. I NTRODUCTION",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 9,
+    "content": "In today's era of information explosion, efficiently extracting\nvaluable information from massive data has become a crucial\nissue. With the continuous advancement of natural language\nprocessing technology, Large Language Models (LLMs) have",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 10,
+    "content": "shown unprecedented application potential in many fields with\ntheir powerful text understanding and generation capabilities",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 11,
+    "content": "[1]. However, although LLMs are able to answer questions or\ncomplete tasks based on their internally learned knowledge\nbase, they often have limitations in mastering the latest or\nspecific domain knowledge [2]. To solve this problem,",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 12,
+    "content": "researchers proposed a method that combines retrievalaugmented generation (RAG), which combines external\ndocument retrieval with LLM so that the model can take\nadvantage of more information when generating responses. An\nextensive and up-to-date information source significantly",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 13,
+    "content": "improves the quality and accuracy of answers [3]. The core\nidea of RAG is that when faced with a query, the retrieval\nsystem is first used to find the most relevant documents from a\nlarge-scale document collection, and then these documents are",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 14,
+    "content": "provided to LLM as context to help it better understand the\nbackground of the problem. And generate more accurate\nanswers accordingly [4].",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 15,
+    "content": "The traditional RAG framework usually uses a method based\non keyword matching or semantic similarity calculation to\nimplement the document retrieval process. Although this\nmethod has achieved certain success, it has difficulty in\nprocessing complex queries, improving the recall rate, and",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 16,
+    "content": "ensuring the diversity of retrieval results. There are still certain\nlimitations. To this end, this article proposes an innovative\nimprovement plan—that is, using Elasticsearch (ES) as the core\nsearch engine in RAG. Elasticsearch is an open-source",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 17,
+    "content": "distributed search and analysis engine. It not only supports fulltext search but also provides rich aggregation functions to\nquickly and accurately index and retrieve unstructured data.\nCompared with traditional methods, using Elasticsearch can",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 18,
+    "content": "define query conditions more flexibly, support multiple types\nof field types such as text, numbers, etc., and have powerful\nsorting capabilities and efficient performance, which is\nimportant for improving the overall performance of the RAG\nsystem. The combination of RAG and NLP has been widely",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 19,
+    "content": "applied in many areas, such as credit fraud [5-8] and risk\nmanagement [9-11].",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 20,
+    "content": "-----",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 21,
+    "content": "Specifically, by introducing Elasticsearch as the retrieval\ncomponent, we can achieve the following optimizations: First,\nthe retrieval speed and efficiency are improved. Since ES uses\nan inverted index structure, it can even handle large data",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 22,
+    "content": "volumes of PB level. Maintaining extremely high response\nspeed; secondly, it enhances the relevance and coverage of\nsearch results. With the help of its advanced word segmentation\ntechnology and scoring mechanism, ES can automatically\nadjust the weight distribution according to user needs, thereby",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 23,
+    "content": "filtering out content that truly meets the requirements; In\naddition, ES also supports complex Boolean logic\ncombinations and geographical location filtering functions,\nwhich enables the RAG system to cope with more diverse\napplication scenarios[12]. For example, in a medical and health",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 24,
+    "content": "consultation scenario [13-14], the recognition rate of\nprofessional vocabulary can be improved by setting up a\nglossary of professional terms; in an e-commerce\nrecommendation system, the order of product display can be\ndynamically adjusted based on the user's browsing history.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 25,
+    "content": "More importantly, Elasticsearch [15], as a highly scalable\nplatform, allows developers to easily add new nodes to adapt to\nbusiness growth needs. It also provides a complete set of\nmonitoring tools to facilitate operation and maintenance",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 26,
+    "content": "personnel to grasp the cluster status and troubleshoot in real\ntime. Check. This means that the RAG solution built based on\nES can not only meet the needs of current projects but also\ncontinue to evolve with the expansion of enterprise scale and",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 27,
+    "content": "technology iteration, laying a solid foundation for the longterm development of the enterprise. In short, integrating\nElasticsearch into the RAG architecture not only greatly\nenriches the functional features of the original system, but also",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 28,
+    "content": "opens up new possibilities for further exploring how to use\nartificial intelligence technology to improve human life. In\nfuture research work, we will continue to explore in depth how\nto make full use of the advantages of ES to promote RAG\ntechnology in a more intelligent and efficient direction.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 29,
+    "content": "II. RELATED WORK",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 30,
+    "content": "Recent advancements in question-answering systems and\ninformation retrieval have largely been driven by the\nintegration of sophisticated retrieval mechanisms and deep\nlearning models. This section highlights key developments in\npre-trained models, sentiment analysis, text classification, and",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 31,
+    "content": "neural networks, all of which are closely related to optimizing\nthe Retrieval-Augmented Generation (RAG) framework using\nElasticsearch.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 32,
+    "content": "Pre-trained models have demonstrated significant\nimprovements in NLP tasks such as text classification and\nnamed entity recognition (NER) [16]. An ensemble learning\napproach driven by the ALBERT model has been shown to\nenhance text classification, providing insights into how",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 33,
+    "content": "domain-specific models can improve task accuracy when\napplied to large-scale data [17]. Comparative studies of pretrained models for NER also offer valuable benchmarks,\nunderscoring how various pre-trained architectures improve\nentity extraction in RAG systems [18]. These approaches",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 34,
+    "content": "highlight the potential for further enhancing Elasticsearchbased retrieval within RAG. In sentiment analysis, the use of\ngraph neural networks (GNNs) combined with syntactic",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 35,
+    "content": "features provides an advanced framework for understanding\nand classifying sentiment in text [19]. This method\ndemonstrates the importance of syntactic and semantic feature\nintegration, a concept that aligns with enhancing the semantic",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 36,
+    "content": "retrieval capabilities in Elasticsearch to support more complex\nquestion-answering systems.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 37,
+    "content": "Methods for transforming multidimensional data into\ninterpretable formats also play a crucial role in advanced data\nmining tasks [20]. A novel approach for converting time-series\ndata into event sequences has been proposed to improve the",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 38,
+    "content": "interpretability of machine learning outcomes [21]. This focus\non transforming complex data into structured, retrievable\ninformation supports the idea that Elasticsearch’s advanced\nindexing can facilitate more effective retrieval in RAG systems.\nFinally, multimodal transformers, which combine word",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 39,
+    "content": "embeddings such as ELMo with deep learning algorithms, have\nbeen applied in image description tasks, further illustrating the\npotential for integrating various data types into NLP models",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 40,
+    "content": "[22]. This multimodal approach supports the broader goal of\nenhancing RAG systems, particularly in scenarios where both\ntextual and non-textual data must be retrieved and processed",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 41,
+    "content": "efficiently. The integration of deep learning models, graphbased techniques, and advanced pre-trained architectures has\nsignificantly improved NLP tasks such as text classification,\nNER, and sentiment analysis. By leveraging Elasticsearch’s",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 42,
+    "content": "querying flexibility and indexing efficiency, this study builds\nupon these foundations to optimize retrieval and generation\nprocesses in question-answering systems.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 43,
+    "content": "III. METHOD",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 44,
+    "content": "In the process of integrating Elasticsearch (ES) into the\nRetrieval-Augmented Generation (RAG) framework, the core\nof the algorithm lies in how to efficiently retrieve the most\nrelevant documents to the query through ES and pass these\ndocuments as context to the Large Language Model (LLM) to",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 45,
+    "content": "generate high-quality answers. This process involves multiple\naspects such as text similarity calculation, document scoring\nmechanism, and the final document selection strategy [23].\nBelow we will introduce the key formulas and reasoning\ninvolved in this process in detail.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 46,
+    "content": "First, consider the relevance evaluation problem between a\nquery q and a series of candidate documents\n\n. We use the TF-IDF weighted vector to\n\nrepresent each document and its corresponding query, where\nTF stands for term frequency and IDF stands for inverse",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 47,
+    "content": "document frequency. For any term t in document, its TF\nIDF value is defined as:",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 48,
+    "content": "Here, N is the total number of documents, and the\ndenominator represents the number of documents containing\nword t. This representation method can help highlight words\nthat appear frequently in specific documents but are relatively\nrare in the entire corpus, thus better reflecting the topic",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 49,
+    "content": "characteristics of the document.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 50,
+    "content": "-----\n\nNext, after constructing the TF-IDF vectors of all documents\nand queries, we can use cosine similarity to measure the degree\nof relevance between them. Given two vectors A and B, the\ncosine similarity between them is defined as:",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 51,
+    "content": "Among them, the dot product A*B reflects the product of the\nprojection lengths in the two vector directions, and the\ndenominator is the Euclidean norm of each vector. This method\ncan effectively capture the angular relationship between two\nsets of data in high-dimensional space and is suitable for",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 52,
+    "content": "processing sparse and large-scale data sets.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 53,
+    "content": "However, relying solely on the similarity of text content may\nnot be enough to fully reflect the relevance between documents\nand queries. To this end, we introduced the ES scoring function,\nwhich is a ranking algorithm widely used in the field of",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 54,
+    "content": "information retrieval. It aims to further optimize the quality of\nsearch results by combining factors such as word frequency\nstatistics and document length. For each word w in a query q\nand the number of times it appears in document d f(q, w, d), the\nES score can be expressed as:",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 55,
+    "content": "Among them, parameter k1 is used to adjust the influence of\nword frequency, and K is a factor adjusted based on document\nlength. The specific form is:\n\nThis controls the weight of the document length on the final\nscore, and represents the average document length. In",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 56,
+    "content": "order to further improve the retrieval efficiency and ensure that\nthe selected document set has a certain diversity, we also adopt\nthe Top-K nearest neighbor search strategy. That is, the top K\ndocuments with the highest similarity to the query are selected",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 57,
+    "content": "from all candidate documents as output. Assuming that the",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 58,
+    "content": "similarity score of each document relative\n\nto the query has been obtained, the final document list L can be\ndetermined in the following way:",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 59,
+    "content": "This step not only ensures the relevance of the returned\nresults, but also promotes the fusion of information between\ndifferent topics, which helps LLM generate more diverse\nanswers in the subsequent stage.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 60,
+    "content": "Finally, in practical applications, considering the differences\nin user preferences or business needs, it is sometimes necessary\nto make appropriate adjustments to the above basic process.\nFor example, the importance of each evaluation indicator can\nbe balanced by introducing custom weights",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 61,
+    "content": "to form a comprehensive scoring\n\n\nsystem. Let represent the new score of document i after\n\nweighted processing, then:\n\nHere, represents the jth evaluation criterion, such",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 62,
+    "content": "as the cosine similarity or BM25 score mentioned above. In\nthis way, a retrieval algorithm that better meets actual needs\ncan be flexibly customized according to specific circumstances\nto achieve the best application effect.\n\nIV. E XPERIMENT\n\n*A.* *Datasets*",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 63,
+    "content": "In order to verify the effectiveness and superiority of\nintegrating Elasticsearch (ES) as a retrieval component into\nthe Retrieval Augmentation Generation (RAG) framework, we\nselected the Stanford Question Answering Dataset (SQuAD).\nSQuAD is a widely used English question-answering dataset",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 64,
+    "content": "created by the Natural Language Processing Group at Stanford\nUniversity. The dataset contains a large number of paragraphs\nextracted from Wikipedia and corresponding question-answer\npairs, which aims to evaluate the ability of the model to\nunderstanding text and answer questions. SQuAD version 2.0",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 65,
+    "content": "not only contains more than 100,000 question-answer pairs,\nbut also introduces unanswerable questions to test the ability\nof the model to identify unanswered situations. This dataset is\nwidely used to evaluate the performance of reading\ncomprehension and question-answering systems due to its",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 66,
+    "content": "high-quality annotations and diversity.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 67,
+    "content": "Our experiments used the SQuAD version 2.0 dataset,\nwhich includes about 536 articles carefully selected from\nWikipedia, covering multiple subject areas. Each article is\naccompanied by a series of questions asked by human\nannotators and the corresponding answers. When preparing the",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 68,
+    "content": "data, we first preprocessed all the texts, including removing\nHTML tags, unifying capitalization, and deleting stop words,\nto improve the quality of subsequent analysis. Then, using the\npowerful indexing capabilities of Elasticsearch, we imported",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 69,
+    "content": "the entire dataset into the ES cluster and configured\nappropriate word segmenters and mapping rules as needed to\noptimize search performance. In addition, considering the\nvarious query types that may be encountered in practical\napplications, we also specially designed a set of benchmark",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 70,
+    "content": "question sets, which cover common knowledge questions and\nanswers, professional terminology explanations, and long-tail\ninformation search, etc., in order to comprehensively evaluate\nthe performance of the proposed method in different scenarios.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 71,
+    "content": "By comparing the differences between the traditional RAG\narchitecture and the improved model after the introduction of\nES in terms of response quality, retrieval speed, etc., we hope\nto provide a valuable reference for future related research and\ntechnology development.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 72,
+    "content": "*B.* *Experiment*\n\nIn order to comprehensively evaluate the effect of\nintegrating Elasticsearch (ES) into the Retrieval Augmentation\n\n\n-----",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 73,
+    "content": "Generation (RAG) framework, we designed a series of\nexperiments and selected several key evaluation indicators to\nmeasure the performance of different methods. These\nevaluation indicators include: 1. Precision: measures the\nproportion of relevant documents returned by the system to all",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 74,
+    "content": "returned documents. 2. Recall: measures the proportion of all\nrelevant documents that the system can find to the total\nnumber of actual relevant documents. 3. F1 Score: the\nharmonic mean of precision and recall, used to\ncomprehensively evaluate the performance of the system. We",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 75,
+    "content": "compare the is proposed Elasticsearch-based RAG method\nwith the following baseline models:\n(1) Traditional RAG: Use traditional full-text search engines\nfor document retrieval.\n(2) BM25-RAG: RAG using BM25 scoring function as the\nretrieval mechanism.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 76,
+    "content": "retrieval mechanism.\n(3) TF-IDF-RAG: RAG that uses TF-IDF vectors to represent\ndocuments and perform similarity calculations.\n(4) ES-RAG: The Elasticsearch-based RAG method proposed\nin this paper.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 77,
+    "content": "The following table shows the performance of each model\non the SQuAD 2.0 dataset. It can be seen that ES-RAG\noutperforms other methods in multiple indicators, especially in\naccuracy, F1 score and response time, which shows that the\nintroduction of Elasticsearch significantly improves the overall",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 78,
+    "content": "performance of the RAG system.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 79,
+    "content": "Table 1 Model experimental results",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 80,
+    "content": "From the experimental results shown in Table 1, we can see\nthat the ES-RAG model performs well on the three key\nevaluation indicators of accuracy (Acc), F1 score, and recall\n(Recall), and is significantly better than the other three\nbaseline models. Specifically, the accuracy of the ES-RAG",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 81,
+    "content": "model reaches 68.29%, which is 0.51 percentage points higher\nthan the closest performing TF-IDF-RAG model; its F1 score\nis 68.42%, which is also higher than all comparison models,\nshowing that in the comprehensive When considering\nprecision and recall, ES-RAG can provide better overall",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 82,
+    "content": "performance; in terms of recall, ES-RAG also reached 68.13%,\nwhich is slightly higher than TF-IDF-RAG's 67.23%. These\ndata not only prove the effectiveness of Elasticsearch as a\nretrieval engine in improving the performance of the RAG\nsystem, but also show that by introducing a more flexible and",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 83,
+    "content": "efficient document retrieval mechanism, the relevance and\naccuracy of the final generated answers can be significantly\nimproved.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 84,
+    "content": "Further analyzing the differences between the models, we\ncan find that although BM25-RAG and TF-IDF-RAG have",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 85,
+    "content": "improved compared to the traditional RAG model, the gap\nbetween them is not very significant. For example, although\nBM25-RAG is slightly ahead of traditional RAG in terms of\naccuracy and F1 score, this improvement is relatively limited.\nIn contrast, ES-RAG has achieved significant progress,",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 86,
+    "content": "especially in accuracy, which is 0.51 percentage points higher\nthan TF-IDF-RAG, which means more in practical\napplications. The query can be responded to correctly. In\naddition, it is worth noting that even on the basis of TF-IDFRAG, which already performed better, ES-RAG can still",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 87,
+    "content": "achieve better results in all three indicators, which shows that\nElasticsearch can not only effectively support large-scale\nRapid retrieval of large-scale text data can also optimize the\noutput quality of the overall system by finely adjusting the\nretrieval results.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 88,
+    "content": "In summary, the experimental results strongly support the\nsuperiority of integrating Elasticsearch into the RAG\nframework. By leveraging Elasticsearch's powerful search\ncapabilities and rich configuration options, we not only\nimprove retrieval efficiency, but also enhance support for",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 89,
+    "content": "complex queries, allowing the entire Q&A system to\ndemonstrate higher performance in the face of diverse user\nneeds. Adaptability and flexibility. Future research can\ncontinue to explore how to further optimize the interaction\nmechanism between Elasticsearch and LLM, such as by",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 90,
+    "content": "introducing more advanced functions such as semantic\nunderstanding, context awareness, etc., in order to achieve a\nmore intelligent and humanized question-and-answer\nexperience. At the same time, taking into account the specific\nneeds that may exist in different application scenarios,",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 91,
+    "content": "researchers can also develop customized indexing strategies\nand scoring algorithms for specific fields or tasks to further tap\nthe potential of Elasticsearch in enhancing RAG system\nperformance. To further demonstrate our experimental results,\nwe use a line chart to represent.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 92,
+    "content": "Figure 1 Experiment result\n\nV. C ONCLUSION",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 93,
+    "content": "V. C ONCLUSION\n\nThis study shows that integrating Elasticsearch into the\nRAG framework significantly improves the overall\nperformance of the question-answering system. Compared to\ntraditional methods, such as document retrieval technologies\nbased on keyword matching or semantic similarity\n\n\n-----",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 94,
+    "content": "calculations, as well as the more advanced BM25-RAG and\nTF-IDF-RAG models, ES-RAG has demonstrated excellent\nperformance, especially in improving answer accuracy. The\nimprovement in answer accuracy is particularly notable. The\nimprovement benefits from Elasticsearch's powerful indexing",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 95,
+    "content": "function and its flexible configuration possibilities, which\nwork together to enhance the system's support for complex\nqueries and its ability to quickly locate relevant information. It\nis worth noting that even on the basis of TF-IDF-RAG, which",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 96,
+    "content": "is already better than the baseline level, ES-RAG can still\nachieve better results in all three evaluation indicatorsprecision, recall and F1 score. This fully demonstrates its\neffectiveness as an efficient solution. Looking forward to the",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 97,
+    "content": "future, as the field of natural language processing continues to\nadvance and develop, researchers can continue to explore in\ndepth how to further enhance the collaboration efficiency\nbetween Elasticsearch and large language models, such as by",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 98,
+    "content": "developing more sophisticated indexing strategies and scoring\nalgorithms to meet specific application scenarios. or explore\nhow to integrate higher-level functions such as semantic\nunderstanding and situational awareness to build a more\nintelligent Q&A platform that is closer to human",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 99,
+    "content": "intelligent Q&A platform that is closer to human\ncommunication habits. These efforts will not only help\novercome the limitations of existing technologies, but will also\nlay a solid foundation for promoting the development of nextgeneration information retrieval and generation technologies.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 100,
+    "content": "In short, through continuous technological innovation and\npractical verification, we have reason to believe that in the\nnear future, people will enjoy a new era of fast and accurate\ninformation services.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 101,
+    "content": "R EFERENCES\n\n[1] K. Pranusha and P. V. K. Raja, \"External Information on Large\nLinguistic Models Utilizing Retrieval Enhanced Generation\n(RAG),\" Journal of Healthcare Informatics Research, 2024.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 102,
+    "content": "[2] M. Orozco, M. Delgado, and S. Ford, \"Model Distillation for\nEnhanced Contextual Response Prediction Using RetrievalAugmented Generation in Large Language Models,\" Authorea\nPreprints, 2024.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 103,
+    "content": "[3] S. Sivarajkumar, H. A. Mohammad, D. Oniani, et al., \"Clinical\ninformation retrieval: A literature review,\" Journal of Healthcare\nInformatics Research, 2024, pp. 1-40.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 104,
+    "content": "[4] P. Jafarzadeh, F. Ensan, M. A. A. Alavi, et al., \"A Knowledge\nGraph Embedding Model for Answering Factoid Entity\nQuestions,\" ACM Transactions on Information Systems, 2024.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 105,
+    "content": "[5] Y. Dong, J. Yao, J. Wang, Y. Liang, S. Liao and M. Xiao,\n\"Dynamic Fraud Detection: Integrating Reinforcement Learning\ninto Graph Neural Networks\", arXiv preprint arXiv:2409.09892,\n2024.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 106,
+    "content": "[6] B. Liu, I. Li, J. Yao, Y. Chen, G. Huang and J. Wang,\n\"Unveiling the Potential of Graph Neural Networks in SME\nCredit Risk Assessment\", arXiv preprint arXiv:2409.17909,\n2024.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 107,
+    "content": "[7] M. Jiang, J. Lin, H. Ouyang, J. Pan, S. Han and B. Liu,\n\"Wasserstein Distance-Weighted Adversarial Network for\nCross-Domain Credit Risk Assessment\", arXiv preprint\narXiv:2409.18544, 2024.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 108,
+    "content": "[8] Y. Wu, K. Xu, H. Xia, B. Wang and N. Sang, \"Adaptive Feature\nInteraction Model for Credit Risk Prediction in the Digital\nFinance Landscape\", Journal of Computer Science and Software\nApplications, vol. 3, no. 1, pp. 31-38, 2023.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 109,
+    "content": "[9] K. Xu, Y. Wu, H. Xia, N. Sang and B. Wang, \"Graph Neural\nNetworks in Financial Markets: Modeling Volatility and\nAssessing Value-at-Risk\", Journal of Computer Technology and\nSoftware, vol. 1, no. 2, 2022.\n\n[10] J. Yao, J. Wang, B. Wang, B. Liu and M. Jiang, \"A Hybrid",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 110,
+    "content": "CNN-LSTM Model for Enhancing Bond Default Risk\nPrediction\", Journal of Computer Technology and Software, vol.\n3, no. 6, 2024.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 111,
+    "content": "[11] W. Gu, M. Sun, B. Liu, K. Xu and M. Sui, \"Adaptive spatio\ntemporal aggregation for temporal dynamic graph-based fraud\nrisk detection\", Journal of Computer Technology and Software,\nvol. 3, no. 5, 2024.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 112,
+    "content": "[12] S. B. Islam, M. A. Rahman, K. S. M. T. Hossain, et al., \"OPEN\nRAG: Enhanced Retrieval-Augmented Reasoning with OpenSource Large Language Models,\" 2024.\n\n[13] Y. Liang, X. Liu, H. Xia, Y. Cang, Z. Zheng and Y. Yang,",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 113,
+    "content": "\"Convolutional Neural Networks for Predictive Modeling of\nLung Disease\", arXiv preprint arXiv:2408.12605, 2024.\n\n[14] Y. Li, W. Zhao, B. Dang, X. Yan, M. Gao, W. Wang, and M.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 114,
+    "content": "Xiao, \"Research on adverse drug reaction prediction model\ncombining knowledge graph embedding and deep learning\",\nProceedings of the 2024 4th International Conference on\nMachine Learning and Intelligent Systems Engineering\n(MLISE), pp. 322-329, June 2024.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 115,
+    "content": "[15] Q. Guo, J. Hu and Z. Liang, \"A Scalable Target Indexing and\n\nRetrieval System for Massive Video Data Processing based on\nElasticsearch and Hadoop,\" 2024 IEEE 7th Advanced\nInformation Technology, Electronic and Automation Control\nConference (IAEAC), pp. 1805-1809, 2024",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 116,
+    "content": "[16] W. Dai, J. Tao, X. Yan, Z. Feng, and J. Chen, \"Addressing\n\nunintended bias in toxicity detection: An LSTM and attentionbased approach\", Proceedings of the 2023 5th International\nConference on Artificial Intelligence and Computer\nApplications (ICAICA), pp. 375-379, 2023.",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 117,
+    "content": "[17] Y. Cang, W. Yang, D. Sun, Z. Ye and Z. Zheng, \"ALBERT\nDriven Ensemble Learning for Medical Text Classification\",\nJournal of Computer Technology and Software, vol. 3, no. 6,\n2024.\n\n[18] Z. Zheng, Y. Cang, W. Yang, Q. Tian and D. Sun, \"Named",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 118,
+    "content": "entity recognition: A comparative study of advanced pre-trained\nmodel\", Journal of Computer Technology and Software, vol. 3,\nno. 5, 2024.\n\n[19] L. Wu, Y. Luo, B. Zhu, G. Liu, R. Wang and Q. Yu, \"Graph",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 119,
+    "content": "neural network framework for sentiment analysis using syntactic\nfeature\", arXiv preprint arXiv:2409.14000, 2024.\n\n[20] Q. Wang, Z. Gao, T. Mei, X. Cheng, W. Gu and H. Xia, \"Deep",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 120,
+    "content": "Learning-based Multimodal Fusion for Improved Object\nRecognition Accuracy\", 2024 3rd International Conference on\nRobotics, Artificial Intelligence and Intelligent Control (RAIIC),\npp. 471-474, 2024.\n\n[21] X. Yan, Y. Jiang, W. Liu, D. Yi, and J. Wei, \"Transforming",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 121,
+    "content": "Multidimensional Time Series into Interpretable Event\nSequences for Advanced Data Mining\", arXiv preprint,\narXiv:2409.14327, 2024.\n\n[22] X. Cheng, T. Mei, Y. Zi, Q. Wang, Z. Gao and H. Yang,",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 122,
+    "content": "\"Algorithm Research of ELMo Word Embedding and Deep\nLearning Multimodal Transformer in Image Description\", arXiv\npreprint arXiv:2408.06357, 2024.\n\n[23] J. Yamanaka and T. Kido, \"Evaluating Large Language Models",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  },
+  {
+    "chunk_id": 123,
+    "content": "with RAG Capability: A Perspective from Robot Behavior\nPlanning and Execution,\" Proceedings of the AAAI Symposium\nSeries, vol. 3, no. 1, pp. 452-456, 2024.\n\n\n-----",
+    "metadata": {
+      "source": "2410.14167v1.md"
+    }
+  }
+]

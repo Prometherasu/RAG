@@ -45,6 +45,7 @@ def chunk_markdown_file_embedding(md_path, model, chunk_size=300, chunk_overlap=
             }
         }
         texts.append(chunk["content"])
+        chunks.append(chunk)
     embeddings = model.encode(texts, normalize_embeddings=True)
 
     for i, chunk in enumerate(chunks):

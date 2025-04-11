@@ -1,0 +1,1689 @@
+[
+  {
+    "chunk_id": 0,
+    "content": "JOURNAL OF IEEE TRANSACTIONS ON PARALLEL AND DISTRIBUTED SYSTEMS 1\n## Sherlock in OSS: A Novel Approach of Content-Based Searching in Object Storage System\n#### Jannatun Noor, Rizwanul Haque Ratul*, Mir Rownak Ali Uday*, Joyanta Jyoti Mondal*, Md. Sadiqul Islam Sakif*, A. B. M. Alim Al Islam",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 1,
+    "content": "**Abstract** —Object Storage Systems (OSS) inside a cloud promise scalability, durability, availability, and concurrency. However,\nopen-source OSS does not have a specific approach to letting users and administrators search based on the data, which is contained",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 2,
+    "content": "inside the object storage, without involving the entire cloud infrastructure. Therefore, in this paper, we propose Sherlock, a novel\nContent-Based Searching (CoBS) architecture to extract additional information from images and documents. Here, we store the",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 3,
+    "content": "additional information in an Elasticsearch-enabled database, which helps us to search for our desired data based on its contents. This\napproach works in two sequential stages. First, the data will be uploaded to a classifier that will determine the data type and send it to the",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 4,
+    "content": "specific model for the data. Here, the images that are being uploaded are sent to our trained model for object detection, and the\ndocuments are sent for keyword extraction. Next, the extracted information is sent to Elasticsearch, which enables searching based on",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 5,
+    "content": "the contents. Because the precision of the models is so fundamental to the search’s correctness, we train our models with comprehensive\ndatasets (Microsoft COCO Dataset for multimedia data and SemEval2017 Dataset for document data). Furthermore, we put our",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 6,
+    "content": "designed architecture to the test with a real-world implementation of an open-source OSS called OpenStack Swift. We upload images\ninto the dataset of our implementation in various segments to find out the efficacy of our proposed model in real-life Swift object storage.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 7,
+    "content": "**Index Terms** —Content-Based Searching (CoBS), Content-Based Image Retrieval (CBIR), Deep Learning, OpenStack Swift, Object\nStorage System (OSS), Distributed Systems\n#### !\n\n#### **1 I NTRODUCTION**",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 8,
+    "content": "#### **1 I NTRODUCTION**\n\nR emendous amount of data is being produced every day\n# T which is stored and retrieved from various cloud servers.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 9,
+    "content": "A recent estimation [1] shows people create about 328.77\nmillion terabytes of data on a daily basis. In order to store\nhuge amounts of data, object storage is well-known to have\nan upper hand because of its flexibility and consistency. One",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 10,
+    "content": "of the distributed and consistent open-source cloud systems\nis OpenStack. OpenStack provides cloud object storage, allowing us to preserve and pull up large amounts of data\nusing an API called OpenStack Swift. OpenStack Swift is",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 11,
+    "content": "**These authors contributed equally to this work.*",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 12,
+    "content": "*• Jannatun Noor is with the Department of CSE, Bangladesh Univer-*\n*sity of Engineering and Technology, Dhaka, Bangladesh, and with Com-*\n*puting for Sustainability and Social Good (C2SG) Research Group, School*\n*of Data and Sciences, BRAC University, Dhaka, Bangladesh. Email: jan-*",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 13,
+    "content": "*natun.noor@bracu.ac.bd*",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 14,
+    "content": "*• Rizwanul Haque Ratul is with C2SG Research Group, and Optimizely,*\n*Dhaka, Bangladesh. Email: rizwanulratul192@gmail.com*\n\n*•* *Mir* *Rownak* *Ali* *Uday* *is* *with* *C2SG* *Research* *Group.* *Email:*\n*mir.rownak.ali.uday@g.bracu.ac.bd*",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 15,
+    "content": "*• Joyanta Jyoti Mondal is with the Department of Computer Science, University*\n*of Alabama at Birmingham, United States, and with C2SG Research Group.*\n*Email: jmondal@uab.edu*",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 16,
+    "content": "*•* *Md.* *Sadiqul* *Islam* *Sakif* *is* *with* *C2SG* *Research* *Group,*\n*and* *with* *mPower-Social* *Enterprise,* *Dhaka,* *Bangladesh.* *Email:*\n*md.sadiqul.islam.sakif@g.bracu.ac.bd*",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 17,
+    "content": "*• A. B. M. Alim Al Islam is with Next-generation Computing Research Group,*\n*Department of CSE, Bangladesh University of Engineering and Technology,*\n*Dhaka, Bangladesh. Email: ali* *m* *razi@cse.buet.ac.bd*",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 18,
+    "content": "scalable and has been designed to be durable, and available\nfor the whole data set. Swift is a well-suited storage system\nfor unstructured data that can be increased immensely [2].\nSwift object storage stores every single piece of data as an",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 19,
+    "content": "object, unlike the storage systems, for instance, file-based\nstorage or block storage, which stores data as a file. This\nstorage system is built to house massive amounts of data\nat a time because of its flexibility. The retrieval of relevant\ndata has become a significant issue as the amount of data",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 20,
+    "content": "increases significantly [3]. Storing consumer and business\ndata in either public clouds or private clouds has made it\ndifficult to efficiently and effectively retrieve meaningful data",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 21,
+    "content": "[3].\nAs a result, cloud-based storage is being developed using\nobject storage. Various well-known cloud service providers\nsuch as Amazon S3, OpenStack Swift, Caringo Swarm, and\nmany others provide object storage. Although the problem\nof storing massive amounts of structured and unstructured",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 22,
+    "content": "data is solved due to the complex architecture of objectbased storage systems, retrieving or searching for a certain\nobject/file has become a major challenge [4]. Object storage,\nfor instance, OpenStack Swift uses the HEAD or GET method\nin order to get an object from the storage which is not very",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 23,
+    "content": "efficient when it comes to content-based searching. Moreover,\nthe exact path of the object is also needed in order to get some",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 24,
+    "content": "-----\n\ndata from this storage system, which is an inefficient task if\nthere are massive amounts of data.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 25,
+    "content": "Even so, compared to block and file storage, object storage\nmay produce higher delay and require more processing time,\nbut it also has a number of advantages, including scalability,",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 26,
+    "content": "cost-effectiveness, robustness, and easier management. It offers great redundancy and data durability, making it particularly useful for managing massive amounts of unstructured\ndata. Another benefit of using Open Stack Swift as an Object\nStorage is, Swift object storage allows simultaneous access",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 27,
+    "content": "from several servers, therefore server binding is not a problem. It provides fault tolerance, scalability, and adaptability\nwithout impairing system performance.\nFurthermore, the linear searching method inside this storage is very time-consuming as the different replica copies",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 28,
+    "content": "are located in different regions. Searching in object storage is not significant or efficient that way, since it stands.\nContent-Based Search (CoBS) primarily denotes the search\nthat investigates the contents of inputted data rather than\nthe metadata connected with the data, such as keywords,",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 29,
+    "content": "tags, or descriptions. In this usage, “content” may indicate\ncolors, forms, materialistic details, or any other information\nobtained from the data itself. Manually annotating photos by\ninserting keywords or information into a huge database takes",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 30,
+    "content": "time and may not catch the keywords intended to identify\nthe data.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 31,
+    "content": "The interest in CoBS is starting to grow as the usage of\ndata is increasing and metadata-based systems are struggling\nto work on a large amount of data. Existing technology\ncan rapidly search for information about any data, but this\nrequires humans to manually characterize each image in the",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 32,
+    "content": "database. This can be difficult for extremely big databases\nor photos created automatically, such as those from surveillance cameras. Images that utilize various synonyms in their",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 33,
+    "content": "descriptions may also be overlooked. Systems based on classifying photos in semantic classes like “cat” as a subclass of\n“animal” may avoid the miscategorization problem, but will\ntake more labor by a user to locate images that may be “cat”,\nbut are only classed as an “animal”. Many standards for",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 34,
+    "content": "categorizing photos have been proposed, but all encounter\nscaling and miscategorization difficulties. Besides, to our\nknowledge, there has been no work based on content searching across different types of information in one architecture.\nIn this paper, we propose Sherlock, a CoBS architecture",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 35,
+    "content": "for an object storage system that enables us to extract additional metadata from images and keywords from documents\nand store them in a metadata database that helps us search\nfor our desired data based on its contents. In our paper,\nwe are referring to content as the objects present in images",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 36,
+    "content": "and documents. In order to do so, we first identify the type\nof the file. Considering the file is an image, we extract the\ninformation using an object detection Convolutional Neural\nNetwork (CNN) model named DarkNet, YOLOv4[5] and\nYOLOv8[6] architecture to detect objects. On the other hand,",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 37,
+    "content": "for document files, we extract the information using one of\nthe Natural Language Processing (NLP) architectures, BERT",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 38,
+    "content": "[7]. Afterwards, we retrieve additional data such as the object\npath in the form of an HTTP link. The data is passed to an\nElasticsearch Cluster (ESC)[8] and the object is uploaded to\nobject storage systems like OpenStack Swift. When the user",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 39,
+    "content": "searches for an object, our proposed interface takes input\nfrom the user, performs a search in the ESC, and returns a\nlist of objects. The user can be able to access the objects from\nSwift. In this way, there is only one GET request to the object",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 40,
+    "content": "storage system. Besides, the enriched content metadata are\ncreated using BERT and DarkNet and stored in ESC ensuring\nmore relevant content searching for the user.\nWe propose the following contributions to this paper\nbased on our findings\n*•* Our work is the first to come up with an architecture",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 41,
+    "content": "that can jointly do CoBS inside images and documents.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 42,
+    "content": "*•* We create the OpenStack Swift JOSS client User Interface (UI) in order to access Swift and the Elasticsearch\ncluster at the same time using user-level authentication tokens.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 43,
+    "content": "*•* We rigorously test our BERT, YOLOv4 (Darknet), and\nYOLOv8 algorithms with different custom-weighted\nfiles to get maximum accuracy. We use three different datasets and calculate the response time of the\nYOLOv4 and YOLOv8 object detectors as well as",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 44,
+    "content": "YOLOv4 and YOLOv8 object detectors as well as\ntheir precision in detecting multiple objects in a single\nimage.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 45,
+    "content": "*•* We use a pre-trained BERT model to extract keywords\nfrom Documents. Besides, in the Elasticsearch cluster,\nwe perform multiple query requests from our User\nInterface to get the elastic cluster’s response time and\nthe average query time. Lastly, we add different filters",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 46,
+    "content": "to the search engine using the elastic cloud API.\n#### **2 R ELATED W ORK**",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 47,
+    "content": "The concept of searching in Object storage is not entirely\nnew to us. Platforms like Amazon S3, and OpenStack Swiftall have their own kind of searching approaches. Although\nthere has been very little research related to searching in\nobject storages they have not been implemented on platforms",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 48,
+    "content": "like OpenStack Swift and other object storages. As a result,\nwe study these research papers in order to understand their\nwork and the complications they faced while working with\nobject storage. We segment the search into two different\ncategories. The first part aims to review previous relevant",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 49,
+    "content": "works in the field of searching in object storage, specifically\ndifferent types of metadata-related searches. The second part\nemphasizes on Query related searches in Object storage.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 50,
+    "content": "**2.1** **Metadata Searching**\n\nLeung et al. [9] suggest a scalable index-based file metadata\nsearch system that outperforms competing solutions in terms\nof query performance while using less disk space, [9] named\n“The SpyGlass”. The type of programs that operate with\n\n\n-----",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 51,
+    "content": "millions of data generate need to be analyzed petabytes of\ndata which are divided into millions of files or objects, according to Singh et al. [10]. They propose a Metadata Catalog\nService (MCS) which can store and access different types of",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 52,
+    "content": "metadata, and users can query for any type of metadata they\nwant.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 53,
+    "content": "**2.2** **Query Searching**",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 54,
+    "content": "Searching in object storage is now common in cloud systems.\nThrough our studies and findings, we try to find out the\ndrawbacks, and issues of searching, and how they can be",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 55,
+    "content": "solved. A study [26] describes that Swift is a proxy serverbased design that has the scale-ability of clusters. They propose a change in Swift’s architecture that will provide much\nfaster bandwidth with minimal latency while interacting\nwith technology like RoCE, InfiniBand, and Remote Direct",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 56,
+    "content": "Memory Access (RDMA) [20].\nImran et al. [27] present some probable problems with\nmetadata-related issues that we may face. In cloud storage, a\nlot of metadata are created which hampers the performance\nof the system. They propose an optimized solution for storing",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 57,
+    "content": "massive metadata which has improved load balancing modules and merges storage facility. Xue et al. [28] use HAproxy\nand UCARP to handle when huge amounts of metadata and\nit also reduces the buffering and accelerates read and write\nperformances and overall throughput. Metadata is basically",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 58,
+    "content": "stored in a system as small files and with the increasing use\nof automated technology and remote sensing technology, lots\nof metadata is produced every day.\nBiswas et al. [23] show how Access Control List (ACL)\nmaintains accessibility and data security for all users. With",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 59,
+    "content": "ACL, it can be described who to give access to or not. As\nfor the storing policies they make, two types of policies for\ntwo types of data. One is LaBAC for user label data and\nobjects label values, another is content level for JSON paths\nand labels. They find a drawback to their work, stating as",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 60,
+    "content": "it can only work with objects with applications or in JSON.\nObjects without a JSON file create issues with sending the\nfull content of the files without requesting.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 61,
+    "content": "**2.3** **Content-based Image Retrieval System**",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 62,
+    "content": "Ren et al. [11] introduce an Approaching-and-Centralizing\nNetwork, which can jointly optimize sketch-to-photo synthesis and image retrieval, in which the retrieval module\naids the synthesis module in producing large amounts of different photo-like images that gradually approach the photo\ndomain.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 63,
+    "content": "Kakizaki et al. [12] introduce a defense approach, to fight\nagainst adversarial examples (AXs), that uses deep neural\nnetwork (DNN) based content-based image retrieval (CBIR).\nChoe et al. [14] propose a CNN based CBIR approach\nto diagnosing Interstitial Lung Disease with Chest CT.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 64,
+    "content": "Monowar et al. [15] introduce a Deep CNN-based selfsupervised image retrieval system.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 65,
+    "content": "Keisham et al. [16] present a Deep Search and Rescue\n(SAR) Algorithm-based CBIR approach. The steps involved\nin the proposed Deep Neural Network-SAR (DNN-SAR) are\npre-processing, multiple feature extraction, feature fusion,\nclustering, and classification.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 66,
+    "content": "clustering, and classification.\nSchall et al. [29] come up with a protocol for testing\ndeep learning based models for their general-purpose retrieval qualities. After analyzing the currently existing and\ncommonly used evaluation datasets they conclude with the",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 67,
+    "content": "result that none of the available test sets are suitable for the\ndesired purpose and present the GPR1200 (General Purpose\nRetrieval) test set.\nWang et al. [13] propose a secure and efficient ciphertext\nimage retrieval scheme based on image content retrieval",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 68,
+    "content": "(CBIR) and approximate homomorphic encryption (HE).\nNoor et al. [17] propose a novel approach to retrieve\nimages faster by customizing the attributes in bit pixels of\ndistinct luma and chroma components (Y, Cb, and Cr) of\nprogressive JPEG images.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 69,
+    "content": "**2.4** **Keyword Extraction from Document**",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 70,
+    "content": "Researchers [30] present a multimodal key-phrase extraction approach, namely Phraseformer, using transformer and\ngraph embedding techniques. Xiong et al. [31] propose Semantic Clustering TextRank (SCTR), a semantic clustering\nnews keyword extraction algorithm based on TextRank that",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 71,
+    "content": "uses BERT to perform k-means clustering to represent semantic clustering. Then, the clustering results are used to\nconstruct a TextRank weight transfer probability matrix. Finally, Iterative calculation of word graphs and extraction of\nkeywords is performed.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 72,
+    "content": "keywords is performed.\nThe recent solutions for searching in object storage and\ntheir findings are presented in Table 1. Their drawbacks\ninspire us to come up with a new solution with the help\nof object detection and natural language processing that is",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 73,
+    "content": "robust. To the best of our knowledge, our proposed methodology is the first to focus on these aspects.\n#### **3 B ACKGROUND**",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 74,
+    "content": "This section goes over the fundamental architectural framework of Swift, YOLO, BERT, and Elasticsearch.\n\n**3.1** **Architectural Overview of Swift**",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 75,
+    "content": "OpenStack Swift is a highly scalable object storage that\nis designed keeping in mind the phrase that “failure is a\ncommon occurrence”. As a result, Swift is divided into 4\nsubsections: Proxy, Account, Container, and Object nodes. A\nproxy server is located in the first layer. Data that goes in and",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 76,
+    "content": "out of the storage has to go through the HTTP file transfer\nprotocol. The requests for data are done by API requests. The\ntask of the proxy server is to capture the requests and work\naccordingly. The proxy server determines the location of the",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 77,
+    "content": "data or its storage node by the URL. There are Rings, which\nkeep the address of the information like names and entries",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 78,
+    "content": "-----\n\n\n\nTABLE 1: Noteworthy findings from literature review",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 79,
+    "content": "that are stored on the cluster. It also keeps track of the path\nof the data. The way Rings keep the mapping work is by\nintroducing zones, devices, partitions, and replicas. Zones\ncan be any storage device, for instance, a hard drive to a",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 80,
+    "content": "full server. After that, there are containers and accounts. The\nlist of containers in a particular account is stored in that\naccount’s database. Swift has multiple object nodes which\nare independent of each other. These object nodes are easily",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 81,
+    "content": "replaceable in the event of any failure. However, Swift has\nan internal replication system that replicates the stored object\ninto a minimum of three different nodes. So when one node\nis replaced the objects are not lost[18]. Figure 1a presents",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 82,
+    "content": "the architectural overview of OpenStack Swift and Figure\n1b presents the different consistency processes and layers in\nproxy and storage nodes of OpenStack Swift.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 83,
+    "content": "**3.2** **YOLOv4**\n\nYOLOv4 [32], *You Only Look Once* Version 4, is a sophisticated technique for single-stage object detection that utilizes\nregression techniques to gain a good precision score and can\nbe performed concurrently, It is the predecessor of the YOLO",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 84,
+    "content": "line of algorithms. This algorithm is introduced in 2020 by\nBochkovskiy et al. [32] and builds upon the capabilities of\nprevious versions such as YOLOv1, YOLOv2, and YOLOv3.,\nachieving the finest potential balance between detection efficiency and precision at this time. Its architecture, which",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 85,
+    "content": "includes the backbone, the neck, and the prediction, is shown\nin Figure 2.\nThe authors suggested the following backbones for the\nYOLOv4 object detector: CSPResNext50, CSPDarknet53, and",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 86,
+    "content": "EfficientNet-53 [32]. As for our purpose, we use CSPDarknet53. In YOLOv4, the CSPDarkNet53 architecture is introduced. This architecture includes a residual module where\nthe feature layer is re-entered, resulting in increased feature\ninformation. This entitles the model to learn the distinction",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 87,
+    "content": "between output and input.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 88,
+    "content": "**3.3** **YOLOv8**\n\nYOLOv8 is the successor of all the previous YOLO models\npresented. It is introduced by Jocher et al. [6]. YOLOv8 has\nan architecture similar to one of its ancestors, YOLOv5. It\nis based on PyTorch. And it has a Python backbone rather\n\n\n-----",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 89,
+    "content": "-----\n\n(a) Overview of the storage architecture [21] (b) Different consistency processes and layers in proxy and storage nodes\nof OpenStack Swift",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 90,
+    "content": "Fig. 1: OpenStack Swift\nthan Darknet, which is based on C used in YOLOv4. This is analytics, or a combination of all three as this is built for realconvenient for the users to make it customizable and bring time, distributed search and data analysis [37]. The highly",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 91,
+    "content": "improvements through the model. adaptable query API of Elasticsearch allows for the simultaOn the MS COCO dataset, YOLOv8m achieve an AP of neous use of filtering, sorting, pagination, and aggregation in",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 92,
+    "content": "53.9% with a 640-pixel image size (compared to 50.7% for a single query [8]. Elasticsearch is capable of easily handling\nYOLOv5 on the same input size) at a speed of 280 FPS on an unstructured data, and allowing for the indexing of JSON",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 93,
+    "content": "NVIDIA A100 and TensorRT [33]. files without the need for a prior schema. It automatically",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 94,
+    "content": "attempts to identify class mappings and adjusts for new\nor removed fields. It also offers built-in functionality for\n\n**3.4** **BERT**\n\nclustering, data replication, and instantaneous fail-over, all",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 95,
+    "content": "Bidirectional Encoder Representations from Transformers of which are transparent to the user [8].\n(BERT) architecture is based on a multi-layer Transformer\n#### encoder, developed by Vaswani et al. [34]. Devlin et al. [7] 4 S YSTEM D ESIGN AND I MPLEMENTATION",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 96,
+    "content": "present BERT Transformer, which is based on bidirectional\n\nFigure 3 (on left) presents the methodology of our proposed",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 97,
+    "content": "self-attention. This bidirectional process eliminates the lim\nsystem. First, it checks if the file is an image or a docu\nitation that self-attention may only integrate context from\n\nment. Based on the file type, the content is sent to extract",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 98,
+    "content": "one side: the left or the right. Unlike previous embedding\ngeneration architectures, such as Word2Vec [35], BERT does the crucial information. For images, the content is sent to\n\nextract the metadata. And for documents, the content is\n\nnot take input vectors that represent words. Instead, it takes",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 99,
+    "content": "inputted to extract the keyword. YOLO (for image) and\n\nsegment, token, and position embeddings as input. The token\n\nBERT (for document) process the metadata and send the data\n\nembedding is a WordPiece embedding with 30,000 tokens\n\n[36]. to the Elasticsearch cluster. The object detection/keyword",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 100,
+    "content": "extraction is done on the client app. When the metadata is\n\nIn this study, we employ the fundamental BERT model,\nwhich is available on TensorFlow Hub. It includes 12 trans- uploaded in the Elasticsearch cluster, the content is uploaded\n\nto the Swift server.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 101,
+    "content": "to the Swift server.\n\nformer blocks, 12 self-attention heads, and 768 hidden size.\n\n**4.1** **Developing Client-side**\n\n**3.5** **ElasticSearch Overview**\n\nWe use Java client for OpenStack Swift (JOSS)[38], mentioned",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 102,
+    "content": "Elasticsearch is a full-text search library based on the open- in the right side of Figure 3, to build the client app. We use\nsource search engine Apache Lucene. It is capable of per- Elasticsearch as it offers multi-language support for handling",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 103,
+    "content": "forming a full-text search. It can conduct a structured search, request and response data, language detection libraries, and",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 104,
+    "content": "-----\n\nInput image\n\n\n\n\n\n\n\nFig. 2: Workflow of YOLOv4",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 105,
+    "content": "plugins and integrations to provide additional languagespecific functionality. And our JOSS client connects well\nwith Elasticsearch. The location path of the content in our\nstorage server is saved in the Elasticsearch cluster. We use\nElasticsearch as it offers multi-language support for handling",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 106,
+    "content": "request and response data, language detection libraries, and\nplugins and integrations to provide additional languagespecific functionality. And our JOSS client connects well with\nElasticsearch. When the user searches for content, the client",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 107,
+    "content": "app performs a search in the Elasticsearch cluster and returns\ncontent suggestions to the user with the Swift location path.\nThis ensures minimum load on the Swift server and accurate\nsearching based on the metadata. Because of this extraction,",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 108,
+    "content": "the proposed system has a sound knowledge of each content.\nOpenStack has a few libraries to interact with the Swift\nobject storage system[26]. We use the Java library for Openstack Swift (JOSS)[38] to develop our client app. It is a",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 109,
+    "content": "desktop-based application where we have our object detection model as well. Object detection is done using the client\ndevice’s computational power. Then we upload the metadata\ndata to the Elasticsearch cluster and the content to the Swift",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 110,
+    "content": "server. JOSS provides many features to interact with the Swift\nservers including authentication, object uploading, content\nlocation path generation, and so forth [39].",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 111,
+    "content": "**4.2** **Developing Keyword Extraction**",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 112,
+    "content": "BERT is one of the state-of-the-art models to solve problems related to Natural Language Processing (NLP) which\nuses attention-based mechanisms. In our case, we take a\ndocument (docx/pdf) and then take all the text from that\ndocument and put it in the BERT model and we the get best",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 113,
+    "content": "five three-word keywords out of the document we input.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 114,
+    "content": "**4.3** **Developing Object Detection**",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 115,
+    "content": "Figure 4 shows how our proposed YOLOv4 algorithm works\nafter it gets an image. YOLOv4 provides us with fast and\naccurate object detection with the help of bounding boxes\nand non-maximum suppression. However, in our case, we\ndo not want an edited image with bounding boxes. As a",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 116,
+    "content": "result, we propose a different workflow for the YOLOv4\nwhere after getting an image it will make a copy of that\nimage and perform necessary detections. We also followed\nthe same approach for the latest YOLOv8 too And we used\na pre-trained YOLOv8m like we used a pre-trained model",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 117,
+    "content": "for YOLOv4 which is already trained with the MSCOCO-17\ndataset which has 80 classes of data.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 118,
+    "content": "At that time, the actual image will be sent directly to\nthe storage server. And after that, the detection is done the\ncopied image will be dumped and the object detection set\nwith other metadata related to the image including the object\nURL path will be written into a JSON document. Lastly, the",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 119,
+    "content": "JSON document will be pushed into the Elasticsearch server.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 120,
+    "content": "**4.4** **Developing the Storage System**",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 121,
+    "content": "Figure 1a shows the overall architecture of the storage system. After Detection is done and the object is pushed to\nSwift, it goes into Swift using the Swift proxy pipeline. In\nour model, we use a multi-node Swift setup. There are 3\nproxy servers and multiple object servers. The load balancer",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 122,
+    "content": "chooses the suitable proxy server for the object. The proxy\nserver sends the object to the Ring, from where the object is\nsent to the appropriate object server. In our model, we do not\nchange how Swift handles these requests in order to maintain\nits scalability and compactness.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 123,
+    "content": "**4.5** **ElasticSearch Cluster**",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 124,
+    "content": "Figure 5 shows the workflow for JSON document in Elastic\ncluster. We set up an Elasticsearch server in a different\nVirtual Machine with a Logstash pipeline where the JSON file\ngenerated by the object detector gets pushed. Our Logstash\npipeline filters out the unnecessary data from the JSON file",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 125,
+    "content": "such as the coordinates of the bounding boxes, and class\nid. It also formats the JSON file in a way that is easier for\nElasticsearch to index properly based on the image file name\nand the contents of the image which in our case are the\ndetected objects.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 126,
+    "content": "-----\n\nFig. 3: Overview of the proposed architecture [on left] and Java library for OpenStack Swift (JOSS) [on right]",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 127,
+    "content": "servers are included in the object server machines which are\nshown in Figure 6. We use our local machine to detect and\nupload images for this testing. The configuration for our local\nmachine is as follows: Intel(R) Core i5-7300HQ CPU having",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 128,
+    "content": "Image metadata a 2.50 GHz base clock speed, 8 GB ram, and an Nvidia GTX\n\nNext, we use another graphics unit Nvidia RTX 2070\nwhere we run our testbed with YOLOv8.\n\nCopy Document Furthermore, we use another virtual machine as the",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 129,
+    "content": "Elasticsearch server, which is configured to get data dumps\nfrom our local machine. For all the Virtual machines, we use\nthe same kind of setup: 4 GB ram, 60 GB storage, and the\n\nBounding box operating system is Ubuntu 18.04.\n\n**5.2** **Dataset**",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 130,
+    "content": "**5.2** **Dataset**\n\nboxes For our object detection module, we use the Microsoft COCO\n\nDataset [40]. We take a part of the dataset which consists\n\nMake an object of 26,000 images and 80 classes in total. After, we divide\n\ndetection set our dataset into three segments for our testing purposes",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 131,
+    "content": "having 1000, 5000, and 20000 Images each. We use pre\nDump trained YOLOv4 and YOLOv8m models to test these images.\nresized For our keyword extraction, we use the SemEval2017\n\ncopy Dataset [41] which consists of paragraphs selected from",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 132,
+    "content": "500 ScienceDirect journal papers from Computer Science,\nMaterial Sciences, and Physics domains.\n\nFig. 4: Overview of the modified YOLOv4 and YOLOv8\nobject detector\n#### **5 P ERFORMANCE E VALUATION 5.3 Experimental Results**\n\nIn this section, we report the results after using the datasets",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 133,
+    "content": "We measure the performance of our suggested architecture\n\nin our system, starting with the image dataset, and afterward\n\nusing a real-world implementation. Before this, we first elab\nthe document dataset.\n\norate on proposed experimental settings.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 134,
+    "content": "orate on proposed experimental settings.\n\n*Image Dataset Test.* From Table 2, we can see different matrices from our testing sets. The precision level is important\n\n**5.1** **Experimental Setup**\n\nfor our model because it indicates how well our system is",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 135,
+    "content": "We set up multiple virtual machines using the Google Cloud able to give the user the appropriate image they want. In\nPlatform (GCP). One machine work as a proxy server and the our case, we get an mAP (Mean Average Precision) of 0.71",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 136,
+    "content": "other one as the object server node. Account and container for 5k images and 0.73 for 20 thousand images with a total",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 137,
+    "content": "-----\n\n\n\nFig. 5: Workflow for JSON document in Elastic Cluster\n\n\n\n\nElasticsearch\n\nserver Query response\n\nQuery request\n\nImage upload\n\nObject server\n\n\nLocal machine\n\nProxy server\n\n\n\n\nFig. 6: Experimental setup overview\n\n\n\n\nTABLE 2: Dataset testing metrics",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 138,
+    "content": "TABLE 2: Dataset testing metrics\n\n\n\n\nTABLE 3: Average time to do different tasks for different data\nsizes with YOLOv4 (Time = second)",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 139,
+    "content": "TABLE 4: Average time to do different tasks for different data\nsizes with YOLOv8 (Time = second)\nprecision of 68.5%. In Figure 7, we can see both single and\nmultiple objects are being detected by the model.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 140,
+    "content": "multiple objects are being detected by the model.\n*Detection time test.* Figure 8a and 8d represents the different times it takes to detect 1,000, 5,000, and 20,000 images.\nWe can see a very low upward-sloping curve which tells us\nthe detection time is very little compared to the number of",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 141,
+    "content": "TABLE 5: Extracted keywords from BERT\nimages. We are able to achieve this because of the YOLO\nalgorithm which as its name suggests, *ONLY LOOKS AT*\n*AN IMAGE ONCE* . However, removing the bounding box\ndrawing method only increases the speed very slightly which\ncan be overlooked.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 142,
+    "content": "*Upload time test.* In the uploading part, we limit our\nupload speed to 2mbps (megabit) and calculate the upload\ntime of the images. In Figure 8b and 8e, we get a relatively\nhigher curve because of the low upload speed compared to\nthe file sizes of the images.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 143,
+    "content": "the file sizes of the images.\n*Total time for proposed model.* After we calculate the Detection & Upload time separately, we go ahead and initialize our\nsystem to find out the combined time it needs for uploading\nand detecting the different image sets. From Figure 8c and",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 144,
+    "content": "8f, we can see the curve going higher ever so slightly.\n*Uploading and detection time comparison.* From Figure 9, we\ncan see the comparison between the Uploading time and\nthe Detection-Upload combined time, indicating that, the\nadditional requirements of object detection and our system",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 145,
+    "content": "necessitates take a little more time to deliver the image to\nSwift. But the difference is relatively insignificant compared\nto the work done behind the scenes. One important thing to\nnote is that we use a comparatively older graphical processing unit model, Nvidia GTX 1050 which is without CUDNN",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 146,
+    "content": "functionality, and as a result, our GPU usage was up to\n15-20% at max. So using a newer version of GPU or even\nan older version with CUDNN enabled will exponentially\ndecrease the detection time which in turn will decrease the\noverall upload & detection time of the system bringing the",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 147,
+    "content": "two curves in Figure 9 much closer to each other. Table 3 and\nTable 4 shows the average time our models took to detect &\nupload different data segments.\n*Result evaluation for document.*\nTable 5 presents the tentative document and the extracted\nkeywords. We find the documents which are most similar",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 148,
+    "content": "to the document and these are those keywords that can best\nrepresent our document. We use cosine similarity between\nvectors and the document. We select only top three keywords",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 149,
+    "content": "-----\n\n(a) Aeroplane (b) Aeroplane (Detected) (c) Man in Horse (d) Man in Horse (Detected)\n\nFig. 7: Object Detection (Single and Multiple)\n\n(a) Detection time (seconds) (b) Upload time (seconds) (c) Upload & detection time (seconds)",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 150,
+    "content": "(d) Detection time (seconds) (e) Upload time (seconds) (f) Upload & detection time (seconds)\n\nFig. 8: Time graph for YOLOv4 (a, b, c) and YOLOv8 (d, e, f)",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 151,
+    "content": "*Completion Suggester.* The completion suggester provides\nauto-complete/search-as-you-type functionality. This navigational feature helps users to get relevant results as they\ntype, improving search precision. We achieve completion\nsuggestions with the help of Elasticsearch API, which we",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 152,
+    "content": "integrate with our Client API.\n*Search based on Image Content and Metadata.* Elasticsearch\nAPI uses the Elasticsearch cluster as an endpoint base where\nall the documents are stored and indexed. Leveraging the\nAPI, we successfully implement search based on both image\ncontent and metadata.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 153,
+    "content": "content and metadata.\nAfter we perform a search using 80 keywords (as the\ndataset has 80 classes), we calculate the average query time",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 154,
+    "content": "Fig. 9: Comparison graph\n\nand average request time given in the table 6. We observe that\n\nfrom most similar candidates (documents) to the input document which has three words on each. although the average request time fluctuates a little bit, the",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 155,
+    "content": "average query time remains very low and almost constant.\n#### **5.4 Search Analysis 6 D ISCUSSION & C OMPARATIVE A NALYSIS**",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 156,
+    "content": "Here, we discuss the functionalities of searching in our The model which we propose is a novel approach to searchsystem. ing for images in OpenStack Swift. As a result, direct com\n\n-----",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 157,
+    "content": "TABLE 6: Average query time and request time for different\ndata sizes\nparison with other Swift models is not possible. And again, it\nadopts a middleware model to improve searching efficiency\nand make the entire storage system more object-aware. The",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 158,
+    "content": "middleware increases the speed and effectiveness of searching within the object storage, making it simpler to find\nand retrieve particular objects. It also increases the storage\nsystem’s object awareness, giving it more functionality and\nflexibility for managing and accessing objects. Overall, the",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 159,
+    "content": "proposed solution offers OpenStack Swift users a beneficial\nimprovement, increasing the effectiveness and functionality\nof their object storage system. However, we divide our comparison part into two sub-sections. We compare how different swift models and content-based image search models do",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 160,
+    "content": "searching compared to our model based on some parameters.\n*Different Swift Models.* After using each of the platforms,\nwe set up some parameters for effective image search in swift\nstorage and compare them with our proposed model. From",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 161,
+    "content": "Table 9, we can see the comparison of the various implementation of Swift using different techniques for searching.\nIn Table 7, we compare the user availability level of the\ndifferent implementations based on the model’s availability\nand scalability to work in different environments.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 162,
+    "content": "*Different CBIR Engines.* There are multiple CBIR engines\nthat extract different features from images to conduct a\nsearch. In Table 8, we compare our proposed model with\ndifferent models from other related works based on what\nfeatures get extracted and how the search is conducted.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 163,
+    "content": "Moreover, we compare the precision of these various models.\nWhen we upload any picture to the server, after inputting\nthe image to YOLOv4 or YOLOv8, the image does not lose\nit. It shows no change in the image quality (SSIM 100%\nand VQMT 100%) after the images are passed through the",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 164,
+    "content": "detection algorithm.\n#### **7 C ONCLUSION AND F UTURE W ORK**",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 165,
+    "content": "In our work, we integrate machine learning features and\nOpenStack Swift to come up with a better solution to the\nproblem of efficient searching. With the help of Elasticsearch,\nwe are able to complete the entire design. Although our main\nobjective is to find a solution to the searching method of",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 166,
+    "content": "Swift, we also come up with a secondary objective to make\na user-centered content-based image searching [44] system\nusing a text-based database where a user can manipulate the\nYOLOv4 and YOLOv8 algorithm based on their preferences,\nwhich would neither hinder the performance of the Swift",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 167,
+    "content": "storage nor the Elasticsearch cluster as they are independent\nof each other. As YOLOv4 and YOLOv8 can do object detec",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 168,
+    "content": "tion for both images and live video feeds, it adds a variety of\nchoices for different kinds of users.\nDifferent search techniques based on content level metadata are not thoroughly focused on in OpenStack Swift\nliterature. Hence in our paper, we externally integrate an",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 169,
+    "content": "object detection framework and an Elasticsearch cluster to\nour overall swift storage and perform multiple tests to find\nout the viability and responsiveness of our model. Although\nwe get results with very little delay, there is still room for",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 170,
+    "content": "improvement. As a result, we select three future goals in\norder to make our system more robust and easy to use. At\nfirst, we plan to integrate the whole system more compactly\nusing a desktop-based application. Then, we aim to add an\nauthentication token system to our Elasticsearch server to",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 171,
+    "content": "keep the documents safe from unauthorized access. Afterward, our target is to use our system to store live video feeds\nin order to find out the viability of our system as a state-ofthe-art video surveillance application.\n#### **R EFERENCES**",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 172,
+    "content": "[1] [F. Duarte, “Amount of data created daily (2023),” https:](https://explodingtopics.com/blog/data-generated-per-day)\n[//explodingtopics.com/blog/data-generated-per-day,](https://explodingtopics.com/blog/data-generated-per-day)\nMar. 2023, accessed: 2023-4-20.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 173,
+    "content": "[2] J. Noor, S. I. Salim, and A. A. Al Islam, “Strategizing secured image storing and efficient image retrieval\nthrough a new cloud framework,” *Journal of Network and*\n*Computer Applications*, vol. 192, p. 103167, 2021.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 174,
+    "content": "[3] M. Imran and H. Hlavacs, “Searching in cloud object\nstorage by using a metadata model,” in *2013 Ninth In-*\n*ternational Conference on Semantics, Knowledge and Grids* .\nIEEE, 2013, pp. 121–128.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 175,
+    "content": "[4] O’Reilly, “What’s wrong with object storage?”\n[https://www.networkcomputing.com/data-centers/](https://www.networkcomputing.com/data-centers/whats-wrong-object-storage)",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 176,
+    "content": "[whats-wrong-object-storage, Networkcomputing, 2015.](https://www.networkcomputing.com/data-centers/whats-wrong-object-storage)",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 177,
+    "content": "[5] J. Redmon, S. Divvala, R. Girshick, and A. Farhadi, “You\nonly look once: Unified, real-time object detection,” in\n*Proceedings of the IEEE conference on computer vision and*\n*pattern recognition*, 2016, pp. 779–788.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 178,
+    "content": "[6] G. Jocher, A. Chaurasia, and J. Qiu, “Yolo by ultralyt[ics.” https://github.com/ultralytics/ultralytics, 2023,](https://github.com/ultralytics/ultralytics)\naccessed: 2023-4-27.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 179,
+    "content": "[7] J. Devlin, M.-W. Chang, K. Lee, and K. Toutanova,\n“BERT: Pre-training of deep bidirectional transformers\nfor language understanding,” 2018.\n\n[8] C. Gormley and Z. Tong, *Elasticsearch: the definitive guide:*",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 180,
+    "content": "”\n*a distributed real-time search and analytics engine* .\nO’Reilly Media, Inc.”, 2015.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 181,
+    "content": "[9] A. Leung, M. Shao, T. Bisson, S. Pasupathy, and\nE. Miller, “High-performance metadata indexing and\nsearch in petascale data storage systems,” in *Journal of*\n*Physics: Conference Series*, vol. 125, no. 1. IOP Publishing, 2008, p. 012069.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 182,
+    "content": "[10] G. Singh, S. Bharathi, A. Chervenak, E. Deelman,\nC. Kesselman, M. Manohar, S. Patil, and L. Pearlman,\n“A metadata catalog service for data intensive appli\n\n-----\n\n\n\nTABLE 7: Difficulty and availability of various implementations of Swift",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 183,
+    "content": "TABLE 8: Comparison between various CBIR engines (Here, TBIR = Texture Based Image Retrieval)\n\n\nTABLE 9: Comparison of various implementations of Swift\n(Here, ✓=Yes and X=No)\n\n\n\n\ncations,” in *SC’03: Proceedings of the 2003 ACM/IEEE*\n*conference on Supercomputing* . IEEE, 2003, pp. 33–33.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 184,
+    "content": "[11] H. Ren, Z. Zheng, Y. Wu, H. Lu, Y. Yang, Y. Shan, and S.K. Yeung, “ACNet: Approaching-and-centralizing network for zero-shot sketch-based image retrieval,” *IEEE*\n*Transactions on Circuits and Systems for Video Technology*,\npp. 1–1, 2023.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 185,
+    "content": "[12] K. Kakizaki, K. Fukuchi, and J. Sakuma, “Certified\ndefense for content based image retrieval,” in *2023*\n*IEEE/CVF Winter Conference on Applications of Computer*\n*Vision (WACV)*, 2023, pp. 4550–4559.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 186,
+    "content": "[13] Y. Wang, L. Chen, G. Wu, K. Yu, and T. Lu,\n“Efficient and secure content-based image retrieval\nwith deep neural networks in the mobile cloud\ncomputing,” *Computers & Security*, vol. 128, p. 103163,",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 187,
+    "content": "[2023. [Online]. Available: https://www.sciencedirect.](https://www.sciencedirect.com/science/article/pii/S0167404823000731)\n[com/science/article/pii/S0167404823000731](https://www.sciencedirect.com/science/article/pii/S0167404823000731)",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 188,
+    "content": "[14] J. Choe, H. J. Hwang, J. B. Seo, S. M. Lee, J. Yun, M.-J.\nKim, J. Jeong, Y. Lee, K. Jin, R. Park, J. Kim, H. Jeon,",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 189,
+    "content": "N. Kim, J. Yi, D. Yu, and B. Kim, “Content-based image\nretrieval by using deep learning for interstitial lung\ndisease diagnosis with chest CT,” *Radiology*, vol. 302,\nno. 1, pp. 187–197, 2022.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 190,
+    "content": "[15] M. M. Monowar, M. A. Hamid, A. Q. Ohi, M. O.\nAlassafi, and M. F. Mridha, “AutoRet: A self-supervised\nspatial recurrent network for content-based image retrieval,” *Sensors (Basel)*, vol. 22, no. 6, p. 2188, 2022.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 191,
+    "content": "[16] N. Keisham and A. Neelima, “Efficient content-based\nimage retrieval using deep search and rescue algorithm,” *Soft Comput.*, vol. 26, no. 4, pp. 1597–1616, 2022.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 192,
+    "content": "[17] J. Noor, M. N. H. Shanto, J. J. Mondal, M. G. Hossain,\nS. Chellappan, and A. B. M. A. A. Islam, “Orchestrating\nimage retrieval and storage over a cloud system,” *IEEE*\n*Trans. Cloud Comput.*, 2022.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 193,
+    "content": "[18] S. Lima, A. Rocha, and L. Roque, “An overview of openstack architecture: a message queuing services node,”\n*Cluster Computing*, vol. 22, no. 3, pp. 7087–7098, 2019.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 194,
+    "content": "[19] Evans, “Object storage essential capabilities #3 – searching, indexing and metadata,” [https://www.architecting.it/blog/](https://www.architecting.it/blog/object-storage-critical-capabilities-3-searching-indexing-and-metadata/)",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 195,
+    "content": "[object-storage-critical-capabilities-3-searching-indexing-and-meta](https://www.architecting.it/blog/object-storage-critical-capabilities-3-searching-indexing-and-metadata/)\n2018.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 196,
+    "content": "[20] S. Gugnani, X. Lu, and D. K. Panda, “Swift-x: Accelerating openstack swift with rdma for building an efficient\nhpc cloud,” in *2017 17th IEEE/ACM International Sym-*\n*posium on Cluster, Cloud and Grid Computing (CCGRID)* .\nIEEE, 2017, pp. 238–247.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 197,
+    "content": "[21] J. Noor and A. A. Al Islam, “ibuck: Reliable and secured\nimage processing middleware for openstack swift,” in\n\n\n-----",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 198,
+    "content": "-----\n\n*2017 International Conference on Networking, Systems and* [35] T. Mikolov, I. Sutskever, K. Chen, G. Corrado, and\n*Security (NSysS)* . IEEE, 2017, pp. 144–149. J. Dean, “Distributed representations of words and",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 199,
+    "content": "[22] Yigal, “Openstack monitoring with elasticsearch, phrases and their compositionality,” 2013.\nlogstash, and kibana,” [https://logz.io/blog/](https://logz.io/blog/openstack-monitoring/) [36] Y. Wu, M. Schuster, Z. Chen, Q. V. Le, M. Norouzi,",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 200,
+    "content": "[openstack-monitoring/, 2016.](https://logz.io/blog/openstack-monitoring/) W. Macherey, M. Krikun, Y. Cao, Q. Gao, K. Macherey,",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 201,
+    "content": "[23] P. Biswas, F. Patwa, and R. Sandhu, “Content level ac- J. Klingner, A. Shah, M. Johnson, X. Liu, Ł. Kaiser,\ncess control for openstack swift storage,” in *Proceedings* S. Gouws, Y. Kato, T. Kudo, H. Kazawa, K. Stevens,",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 202,
+    "content": "*of the 5th ACM Conference on Data and Application Security* G. Kurian, N. Patil, W. Wang, C. Young, J. Smith, J. Riesa,\n*and Privacy*, 2015, pp. 123–126. A. Rudnick, O. Vinyals, G. Corrado, M. Hughes, and",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 203,
+    "content": "[24] H. Wang, Y. Cai, Y. Zhang, H. Pan, W. Lv, and H. Han, J. Dean, “Google’s neural machine translation system:\n“Deep learning for image retrieval: What works and Bridging the gap between human and machine translawhat doesn’t,” in *2015 IEEE International Conference on* tion,” 2016.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 204,
+    "content": "*Data Mining Workshop (ICDMW)* . IEEE, 2015, pp. 1576– [37] “Elasticsearch architecture: 7 key com1583. ponents,” [https://cloud.netapp.com/blog/](https://cloud.netapp.com/blog/cvo-blg-elasticsearch-architecture-7-key-components)",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 205,
+    "content": "[25] S. A. Brandt, E. L. Miller, D. D. Long, and L. Xue, “Effi- [cvo-blg-elasticsearch-architecture-7-key-components,](https://cloud.netapp.com/blog/cvo-blg-elasticsearch-architecture-7-key-components)\ncient metadata management in large distributed storage NetApp, 2021.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 206,
+    "content": "systems,” in *20th IEEE/11th NASA Goddard Conference on* [38] A. Iyengar *et al.*, “Enhanced storage clients,” *US Appl*,\n*Mass Storage Systems and Technologies, 2003.(MSST 2003).* no. 14/985,509, 2015.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 207,
+    "content": "*Proceedings.* IEEE, 2003, pp. 290–298. [39] E. Bacis, S. De Capitani di Vimercati, S. Foresti, D. Gutta\n[26] “Object storage essential capabilities #3 - searching, doro, S. Paraboschi, M. Rosa, P. Samarati, and A. Saullo,",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 208,
+    "content": "indexing and,” [https://www.architecting.it/blog/](https://www.architecting.it/blog/object-storage-critical-capabilities-3-searching-indexing-and-metadata/) “Managing data sharing in openstack swift with over[object-storage-critical-capabilities-3-searching-indexing-and-metadata/,encryption,”",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 209,
+    "content": "in](https://www.architecting.it/blog/object-storage-critical-capabilities-3-searching-indexing-and-metadata/) *Proceedings of the 2016 ACM on Workshop*",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 210,
+    "content": "(Accessed 11 Sep. 2021). *on Information Sharing and Collaborative Security*, 2016, pp.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 211,
+    "content": "[27] S. Anjanadevi, D. Vijayakumar, and D. K. Srinivasagan, 39–48.\n“An efficient dynamic indexing and metadata model for [40] T.-Y. Lin, M. Maire, S. Belongie, J. Hays, P. Perona,\nstorage in cloud environment,” *Networking and Commu-* D. Ramanan, P. Doll´ar, and C. L. Zitnick, “Microsoft",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 212,
+    "content": "*nication Engineering*, vol. 6, no. 3, pp. 124–129, 2014. coco: Common objects in context,” in *European conference*",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 213,
+    "content": "[28] S. Xue, C. Wen, X. Zhang, and Z. Wang, “Optimization *on computer vision* . Springer, 2014, pp. 740–755.\nscheme of massive meteorological data storage based on [41] I. Augenstein, M. Das, S. Riedel, L. Vikraman,",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 214,
+    "content": "openstack swift,” in *2020 12th International Conference on* and A. Mccallum, “Semeval 2017 task 10: Scienceie*Communication Software and Networks (ICCSN)*, 2020, pp. extracting keyphrases and relations from scientific pub302–306. lications,” pp. 546–555, 2017.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 215,
+    "content": "[29] K. Schall, K. U. Barthel, N. Hezel, and K. Jung, [42] R. Ashraf, M. Ahmed, U. Ahmad, M. A. Habib, S. Jab“Gpr1200: A benchmark for general-purpose content- bar, and K. Naseer, “Mdcbir-mf: multimedia data for\nbased image retrieval,” 2021. content-based image retrieval by using multiple fea",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 216,
+    "content": "[30] N. Nikzad-Khasmakhi, M.-R. Feizi-Derakhshi, tures,” *Multimedia tools and applications*, vol. 79, no. 13,\nM. Asgari-Chenaghlu, M.-A. Balafar, A.-R. Feizi- pp. 8553–8579, 2020.\nDerakhshi, T. Rahkar-Farshi, M. Ramezani, [43] K. T. Ahmed, S. Ummesafi, and A. Iqbal, “Content",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 217,
+    "content": "Z. Jahanbakhsh-Nagadeh, E. Zafarani-Moattar, and based image retrieval using image features information\nM. Ranjbar-Khadivi, “Phraseformer: Multimodal fusion,” *Information Fusion*, vol. 51, pp. 76–99, 2019.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 218,
+    "content": "key-phrase extraction using transformer and [44] A. Nazir, R. Ashraf, T. Hamdani, and N. Ali, “Content",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 219,
+    "content": "graph embedding,” 2021. [Online]. Available: based image retrieval system by using hsv color his[https://arxiv.org/abs/2106.04939](https://arxiv.org/abs/2106.04939) togram, discrete wavelet transform and edge histogram",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 220,
+    "content": "[31] A. Xiong, D. Liu, H. Tian, Z. Liu, P. Yu, and M. Kadoch, descriptor,” in *2018 international conference on computing,*\n“News keyword extraction algorithm based on semantic *mathematics and engineering technologies (iCoMET)* . IEEE,",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 221,
+    "content": "clustering and word graph model,” *Tsinghua Sci. Tech-* 2018, pp. 1–6.\n*nol.*, vol. 26, no. 6, pp. 886–893, 2021. [45] Y. Mistry, D. Ingole, and M. Ingole, “Content based",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 222,
+    "content": "[32] . L. H. Bochkovskiy A., Wang C., “Yolov4: Optimal image retrieval using hybrid features and various disspeed and accuracy of object detection.” 2020. [Online]. tance metric,” *Journal of Electrical Systems and Information*",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 223,
+    "content": "[Available: https://doi.org/10.48550/arXiv.2004.10934](https://doi.org/10.48550/arXiv.2004.10934) *Technology*, vol. 5, no. 3, pp. 874–888, 2018.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 224,
+    "content": "[33] “A comprehensive review of yolo: From yolov1 [46] P. Liu, J.-M. Guo, K. Chamnongthai, and H. Prasetyo,\n[to yolov8 and beyond,” https://arxiv.org/pdf/2304.](https://arxiv.org/pdf/2304.00501.pdf) “Fusion of color histogram and lbp-based features for",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 225,
+    "content": "[00501.pdf, (Accessed on 04/28/2023).](https://arxiv.org/pdf/2304.00501.pdf) texture image retrieval and classification,” *Information*",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 226,
+    "content": "[34] A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, *Sciences*, vol. 390, pp. 95–111, 2017.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 227,
+    "content": "L. Jones, A. N. Gomez, L. Kaiser, and I. Polosukhin, **Jannatun Noor** has been working as a Senior Lecturer at the Depart“Attention is all you need,” 2017. ment of CSE, School of Data and Sciences, Brac University. She is",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 228,
+    "content": "-----",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 229,
+    "content": "the head of Computing for Sustainability and Social Good (C2SG) Research Group at Brac University. Besides, she is working as a Graduate\nResearch Assistant under the supervision of Prof Dr. A. B. M. Alim Al\nIslam in the Department of CSE at Bangladesh University of Engineering",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 230,
+    "content": "and Technology (BUET). Prior to BRACU, she worked as a Team Lead\nof the IPV-Cloud team in IPvision Canada Inc. She received her B.Sc.\nand M.Sc. degrees in Computer Science and Engineering from BUET.\nHer research work covers Cloud Computing, Wireless Networking, Data",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 231,
+    "content": "Mining, Big Data Analysis, Internet of Things.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 232,
+    "content": "**Rizwanul Haque Ratul** is currently working as a\nSoftware Engineer at Optimizely. He completed\nhis Bachelor in Computer Science from Brac University. His research interests include Cloud Computing and Networking.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 233,
+    "content": "**Mir Rownak Ali Uday** has recently completed his\nBachelors in Computer Science and Engineering\nfrom Brac University, Dhaka, Bangladesh. His research interests include Machine Learning, Deep\nLearning, Computer Vision, and Cloud Computing.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 234,
+    "content": "**Joyanta Jyoti Mondal** is an incoming graduate\nstudent at The University of Alabama at Birmingham. He is also currently working at Computing for Sustainability and Social Good (C2SG)\nResearch Group, School of Data and Sciences,\nBRAC University. His research interests cover",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 235,
+    "content": "BRAC University. His research interests cover\nDeep Learning, Computer Vision, Cloud Computing, and Modeling & Simulation.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 236,
+    "content": "**Md. Sadiqul Islam Sakif** is currently working\nas a Machine Learning Engineer at mPowerSocial also pursuing his bachelor’s degree from\nthe School of Data and Sciences, Brac University, Dhaka, Bangladesh. Previously worked as an",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 237,
+    "content": "Engineer in Security Operation Center at an InfoSec Consultant Farm (EIC). His research interests cover Machine Learning, Computer Vision,\nNatural Language Processing, Cloud Computing,\nand & Cloud Security.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 238,
+    "content": "**A. B. M. Alim Al Islam** is working as Professor at Bangladesh University of Engineering and\nTechnology, Dhaka, Bangladesh. He has received\nB.Sc. and M.Sc. Engineering in Computer Science and Engineering from Bangladesh University of Engineering and Technology, Bangladesh.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 239,
+    "content": "He has also received a Ph.D. in Computer Science and Engineering, 2012 from the School of\nECE, Purdue University, West Lafayette in the\nUSA. His areas of research interests include\nWireless Networks, Embedded Systems, Modeling & Simulation, Computer Networks Security, and Reliability Analysis.",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  },
+  {
+    "chunk_id": 240,
+    "content": "-----",
+    "metadata": {
+      "source": "2303.02105v2.md"
+    }
+  }
+]

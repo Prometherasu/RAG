@@ -1,0 +1,1332 @@
+[
+  {
+    "chunk_id": 0,
+    "content": "# ** CDEMapper: Enhancing NIH Common Data Element Normalization using ** **Large Language Models **",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 1,
+    "content": "## **Yan Wang, PhD [1#], Jimin Huang, MS [1#], Huan He, PhD [1], Vincent Zhang, MS [1], Yujia Zhou, ** **MS [1], Xubing Hao, MS [2], Pritham Ram, MS [1], Lingfei Qian, PhD [1], Qianqian Xie, PhD [1], ** **Ruey-Ling Weng, MS [1], Fongci Lin, PhD [1], Yan Hu, MS [2], Licong Cui, PhD [2], Xiaoqian",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 2,
+    "content": "Yan Hu, MS [2], Licong Cui, PhD [2], Xiaoqian Jiang, ** **PhD [2], Hua Xu, PhD [1*], Na Hong, PhD [1* ]**",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 3,
+    "content": "**1** **Department of Biomedical Informatics and Data Science, School of Medicine, Yale University, New Haven,**\n\n**CT, USA;** **[2]** **Mcwilliam School of Biomedical Informatics, The University of Texas Health Science Center at**\n\n**Houston, Houston, TX, USA**\n\n# The authors contributed equally",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 4,
+    "content": "# The authors contributed equally\n\n- co-corresponding authors: hua.xu@yale.edu; na.hong@yale.edu\n## **Abstract **\n\n**Objective**",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 5,
+    "content": "Common Data Elements (CDEs) standardize data collection and sharing across studies, enhancing data\ninteroperability and improving research reproducibility. However, implementing CDEs presents challenges due to the",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 6,
+    "content": "broad range and variety of data elements. This study aims to develop an effective and efficient mapping tool to bridge\nthe gap between local data elements and National Institutes of Health (NIH) CDEs.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 7,
+    "content": "**Methods**",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 8,
+    "content": "We propose CDEMapper, a large language model (LLM)-powered mapping tool designed to assist in mapping local\ndata elements to NIH CDEs. CDEMapper has three core modules: (1) CDE indexing and embeddings. NIH CDEs",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 9,
+    "content": "were indexed and embedded to support semantic search; (2) CDE recommendations. The tool combines Elasticsearch\n(BM25 similarity methods) with state-of-the-art GPT services to recommend candidate CDEs and their permissible",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 10,
+    "content": "values; and (3) Human review. Users review and select the NIH CDEs/values that best match their data elements and\nvalue sets. We evaluate the tool’s recommendation accuracy against manually annotated mapping results.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 11,
+    "content": "**Results**",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 12,
+    "content": "CDEMapper offers a publicly available, LLM-powered, and intuitive user interface that consolidates essential and\nadvanced mapping services into a streamlined pipeline. It provides a step-by-step, quality-assured mapping workflow",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 13,
+    "content": "designed with a user-centered approach. The evaluation results demonstrated that augmenting BM25 with GPT\nembeddings and a ranker consistently enhances CDEMapper's mapping accuracy in three different mapping settings\nacross four evaluation datasets.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 14,
+    "content": "**Discussions and Conclusions**",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 15,
+    "content": "This work opens up the potential of using LLMs to assist with CDE recommendation and human curation when\naligning local data elements with NIH CDEs. Additionally, this effort enhances clinical research data interoperability",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 16,
+    "content": "and helps researchers better understand the gaps between local data elements and NIH CDEs.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 17,
+    "content": "**Keywords:** Common Data Element; Interoperability; Data collection; Data sharing; Large language model\n\n\n-----\n\n## **Introduction **",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 18,
+    "content": "Collecting and reusing research data for biomedical and clinical research is becoming increasingly complex due to the\ngrowing volume of data and its varying granularity, structure, and semantics. This need is particularly pronounced in",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 19,
+    "content": "long-span, multiple sites studies, for instance, in a multicenter prospective study of ankylosing spondylitis [1], which\nwas conducted from five sites (4 US sites and 1 Australian site) with follow-up of more than a decade, and the data",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 20,
+    "content": "collection was conducted every two years using four different versions of Case Report Forms (CRFs). The CRFs\ncomprised several forms and data elements, some of the items in some forms were changed over time which made the",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 21,
+    "content": "data harmonization quite challenging. Similar situations occurred in many large-scale and long-span biomedical or\nclinical research [2-4] . Therefore, there is a pressing need to address this growing demand for consistent research data",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 22,
+    "content": "collection and reuse. However, a crucial step toward realizing this vision is to build a data infrastructure based on\nsystematic and standardized frameworks.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 23,
+    "content": "The proposal of Common Data Element (CDE) encourages standardized research data collection and sharing,\nconsistently representing data elements and values [5], thus enhancing data interoperability, and facilitating the",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 24,
+    "content": "secondary use of research data. CDEs are defined as \"standardized, precisely defined questions paired with a set of\nspecific allowable responses, used systematically across different sites, studies, or clinical trials to ensure consistent",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 25,
+    "content": "data collection\" [6] . Extensive efforts were devoted by the National Institutes of Health (NIH) and other consortiums [7-13]\nto develop CDEs and promote CDE adoption in biomedical and clinical research. The NIH CDE Repository was",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 26,
+    "content": "created by the NIH in 2015 [14], guided by the FAIR principles (Findable, Accessible, Interoperable, and Reusable) [15] . It\nis designed to support structured, both human and machine-readable definitions of data elements that have been",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 27,
+    "content": "recommended or required by NIH Institutes and Centers and other organizations to use in research [16] . In addition, NIH\nreleased the National Institutes of Health Data Management and Sharing (DMS) policy, effective January 25, 2023,",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 28,
+    "content": "to encourage data sharing to the extent that it is possible. This new policy requires the submission of a DMS plan with\nall NIH-funded research submissions, with an expectation of compliance and adherence to the plan (with allowances",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 29,
+    "content": "made for updates) throughout the lifecycle of funded projects [17] . With the DMS policy effective, the NIH recommends\nusing CDEs, from which standard data collection forms and data elements can be developed and shared across research",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 30,
+    "content": "studies. Investigators can standardize data collection, combine sets of CDEs consisting of individual or more complex\nquestionnaires across multiple studies, and compare results across sites [18], which in the long run enables research\nreproducibility [19] .",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 31,
+    "content": "However, NIH CDEs have not achieved widespread adoption yet. Several factors contribute to the limited adoption\nof existing CDEs. On the one hand, policy and data culture play a significant role in adopting CDEs. For example,",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 32,
+    "content": "some existing CDEs are developed for specific projects or collaborations, with limited policies and dissemination\nplans for continuous reuse after project completion, although there are some guiding principles to encourage reuse.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 33,
+    "content": "Additionally, researchers may lack awareness of standardized practices, particularly in exploratory research initiated\nby individual investigators or research labs. On the other hand, from a technical perspective, mapping various data",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 34,
+    "content": "elements to CDEs is challenging due to the wide range of variability and the complexity involved—particularly when\ndealing with data elements defined at different levels of granularity. For instance, the existence of similar CDEs with",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 35,
+    "content": "insufficient context makes researchers confused when determining which is the best match; a value set using particular\nterminology that differs from the terminology of the source value set also complicates the selection process [14], and",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 36,
+    "content": "sometimes, a complex harmonization situation leads to a tendency to create new CDEs rather than harmonize existing\nones. These various factors collectively pose challenges that hinder CDE implementation and adoption.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 37,
+    "content": "The traditional approach to harmonizing different data elements is conducting manual transformation from source to\ntarget data elements, which is time-consuming and needs extensive domain knowledge. An efficient mapping tool can",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 38,
+    "content": "aid in this non-trivial manual transformation and/or mapping task, reducing human effort in the process. Related work\nabout developing mapping tools and algorithms currently exists, including (1) IMI-CDE [20], an interactive tool",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 39,
+    "content": "development for collaborative mapping of study variables to CDEs; (2) The GAAIN Entity Mapper [21], an intelligent\nsoftware assistant for automated data mapping across different datasets or from a dataset to a common data model; (3)",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 40,
+    "content": "eleMap [8], a tool developed by the eMERGE program [22] to facilitate harmonization of phenotype data dictionaries and\nCDEs to terminological and metadata healthcare standards for interoperable representation of phenotype data; (4)",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 41,
+    "content": "D2Refine platform [23] which provides a web-based environment to create clinical research study data dictionaries and\nenables standardization and harmonization of its variable definitions with controlled terminology resources; and (5)",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 42,
+    "content": "comparison of different algorithms for mapping of Alzheimer’s disease related data elements to the NIH CDEs [24], etc.\nNevertheless, existing tools and algorithms have not been widely adopted, partially due to suboptimal performance",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 43,
+    "content": "on the mapping algorithms, limited to project-internal users only, or some studies have focused on algorithm\ncomparisons but have not developed a practical tool. Recently, Large Language Models (LLMs) demonstrated",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 44,
+    "content": "exceptional capability and have been explored for application in biomedical data standardization tasks [25-28] . This led\nto our motivation to use LLMs to address these mapping challenges.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 45,
+    "content": "-----",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 46,
+    "content": "Therefore, in this study, to provide a practical tool and minimize human efforts during the mapping process, we\ndeveloped CDEMapper, a publicly available, user-friendly, and LLM-powered mapping tool, for biomedical and",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 47,
+    "content": "clinical researchers to map their local data elements to the NIH CDEs. Our tool not only integrated state-of-the-art\nLLM technologies into a streamlined pipeline but also adopted a modular-based architecture to allow quick updates\nof software components and support future versions of NIH CDEs.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 48,
+    "content": "## **Methods **",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 49,
+    "content": "**CDEMapper architecture and core modules**",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 50,
+    "content": "CDEMapper is a web-based online tool designed to assist researchers in mapping their local data elements to NIH\nCDEs. It indexed multiple levels of NIH CDE information to support semantic search and integrated LLM-backed",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 51,
+    "content": "multiple enhancement components. The tool is built on three core modules: CDE indexing, CDE candidate ranking,\nand interactive mapping review.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 52,
+    "content": "**Figure 1** . Overview of CDEMapper architecture",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 53,
+    "content": "***CDE indexing based on embeddings.*** We downloaded and indexed all 23,328 CDEs from 19 Collections of the NIH\nCDE Repository as of October 21, 2024. Firstly, this module preprocessed various CDE components, including",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 54,
+    "content": "collection types, element names, question texts, definitions, value sets, and other related semantic information.\nBuilding on top of this data foundation, we leverage a GPT-based embedding model to generate semantic embeddings",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 55,
+    "content": "that integrate key CDE components such as element names, definitions, and value sets. The embeddings are created\nby feeding the processed CDE content into the GPT model, where its transformer architecture captures both syntactic",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 56,
+    "content": "and semantic relationships. The model computes high-dimensional vector representations by encoding contextual\nnuances and semantic patterns, while attention mechanisms weigh the importance of different components. By",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 57,
+    "content": "combining these elements, the embeddings effectively address lexical variation and reduce ambiguity, capturing\nnuanced relationships and thematic similarities across CDE components. These embeddings are further indexed in",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 58,
+    "content": "Elasticsearch with the BM25 similarity algorithm to enhance the accessibility of relevant CDEs, providing a robust\ndata indexing for downstream mapping tasks.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 59,
+    "content": "***LLM-powered candidate ranking and value mapping.*** This module integrates multiple advanced services powered\nby GPT-4o [29] to automatically recommend candidate CDEs and values. (1) For each source data element, our tool",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 60,
+    "content": "employs a hybrid retrieval method combining a term-based ranking model (BM25 algorithm) with an LLM-based\nembedding search for CDE candidate recommendations. Furthermore, we developed tailored prompts for both the",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 61,
+    "content": "query expansion and CDE re-ranking modules, leveraging the capabilities of GPT-4o to enhance recommendation\naccuracy. For the query expansion function, the system refines and rephrases search terms, descriptions, and associated",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 62,
+    "content": "metadata to optimize their compatibility with Elasticsearch's BM25 algorithm. This process ensures that the expanded\nqueries capture semantic equivalences and contextual nuances common in medical terminologies, such as variations",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 63,
+    "content": "between terms like \"High Blood Pressure\" and \"Hypertension.\" By doing so, the system improves the recall of relevant",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 64,
+    "content": "-----",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 65,
+    "content": "CDEs for the initial query results. (2) For the CDE re-ranking function, GPT-4o is employed to re-evaluate and reprioritize the candidate CDEs recommended by Elasticsearch. This re-ranking considers both the semantic similarity",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 66,
+    "content": "between the source data element and the CDE descriptions, as well as contextual alignment with the specific research\nor clinical scenario. As a result, the most relevant and contextually appropriate CDEs are highlighted and ranked at",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 67,
+    "content": "the top, enhancing the precision of the recommendations. (3) To address cases where both the source and target data\nelements include permissible values, a GPT-powered value mapping component has been integrated into our tool.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 68,
+    "content": "This component supports mapping source values or codes to standardized values defined in the corresponding target\nCDE. The prompts designed to invoke GPT 4o services are illustrated in Figure 2.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 69,
+    "content": "**Figure 2** . Prompts designed for query expanding, CDE re-ranking, and value mapping",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 70,
+    "content": "***Interactive mapping review*** . The interactive mapping process, combining automated recommendations with manual",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 71,
+    "content": "refinement, ensures the mappings are as effective and efficient as possible. By default, the tool returns the top 10 bestmatched CDEs as automatic recommendations for each user data element. These recommendations are sourced from",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 72,
+    "content": "various NIH repositories, allowing users to configure the data collections based on their needs, such as NIH-endorsed\nCDEs, NEI, NINDS, and others. The mapping review process is simple and straightforward. Users can review the top",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 73,
+    "content": "10 recommendations and select the most relevant match. The tool also offers an extended manual search feature to\nsupport another round check for those local data elements that may not have a direct match within the algorithm",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 74,
+    "content": "recommendations. This feature allows users to perform custom searches across target CDE collections. By inputting\ncustom search terms, users can manually explore the CDE collections and map complex cases or non-standard named",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 75,
+    "content": "data elements to the most suitable CDEs. Additionally, users can access detailed information for each suggested CDE\nvia a hyperlink to the CDE display webpage on the NIH CDE repository, enabling informed decision-making.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 76,
+    "content": "**User-centered mapping workflow and interface design**",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 77,
+    "content": "CDEMapper integrates both essential and advanced services into a user-centered mapping workflow, see Figure 3,\nallowing users to select different mapping strategies based on their project's needs or preferences. The BM25-based",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 78,
+    "content": "search serves as the primary mapping strategy, while advanced LLM services (highlighted as blue nodes in Figure 3),\nsuch as embedding search, query expansion, and GPT re-ranking module, are available for users to activate as needed.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 79,
+    "content": "Users can conduct value mapping through manual review or choose LLM-assisted value mapping to receive equivalent\nvalues recommended by GPT-4o. After user confirmation, the mapping results can be exported for secondary reuse.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 80,
+    "content": "The user can choose to map the uploaded data elements one by one for thorough review or map all at once to make\nthe results promptly available for review and download.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 81,
+    "content": "-----\n\n**Figure 3** . The user-centered mapping workflow",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 82,
+    "content": "CDEMapper offers an intuitive user interface, making it easy for users from various domains to navigate and use, as\nshown in Figure 4. ***The Top Menu*** (1) supports the quick navigation of mapping features by intuitive buttons. ***The***",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 83,
+    "content": "***Source Element*** ***Panel*** (2) displays the information of source data elements, includes element names, descriptions,\nand permissible values, etc., and offers filtering, sorting, and pagination for enhanced navigation and control over the",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 84,
+    "content": "mapping process. ***The Target Element*** ***Panel*** (3) shows candidate CDEs, featuring the top 10 recommended results\nby BM25-based methods with the enhanced LLM-suggested results. The tool provides an intuitive interface for",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 85,
+    "content": "reviewing and comparing recommendations. A hyperlink is provided to navigate to the NIH CDE detailed information\nwebpage for each candidate CDE, facilitating further user review and verification. Users can sort the data from the",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 86,
+    "content": "column headers and filter columns to work with subsets of CDEs. ***The Value Mapping Panel*** (4) supports the user in\nfinding the most matched target values for the source value set of specific data elements. Target values can be",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 87,
+    "content": "automatically filled in by GPT recommendations, and users review the mappings.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 88,
+    "content": "-----",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 89,
+    "content": "**Figure 4** . The user interface of CDEMapper, including (1) a ribbon menu for mapping actions; (2) a panel for displaying source\ndata element awaiting mapping; (3) a panel displaying the candidate Top 10 target CDEs; and (4) an area under selected CDEs that",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 90,
+    "content": "for mapping source values to target values.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 91,
+    "content": "**Evaluation Methods**",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 92,
+    "content": "To evaluate the tool’s mapping capability, we collected four domains of data dictionaries or date elements, referred to\nas Eye (American Academy of Ophthalmology IRIS ® Registry (Intelligent Research in Sight) Analytics Data",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 93,
+    "content": "Dictionary [30] ), Stroke (Human Circadian/Diurnal Biology and Stroke Common Data Elements [31] ), ADRD (The\nNational Alzheimer’s Coordinating Center - Uniform Data Set (UDS) [32] ), and COVID-19 (COVID-19 Therapeutic",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 94,
+    "content": "Trial Common Data Elements [33] ). The four datasets contained a total of 494 data elements and have been manually\nmapped to different domain-related NIH CDE collections for coverage assessment and tool performance evaluation.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 95,
+    "content": "During the manual mapping process, we started by addressing the diverse data representations and formats in the four\ndata dictionaries through preprocessing steps such as deduplication and data formatting. Furthermore, we aimed to",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 96,
+    "content": "create all possible mappings wherever the source and target data elements are equivalent. However, not all source data\nelements had direct matches with NIH CDEs. If a target CDE was not found, no mapping was created for that entry.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 97,
+    "content": "Three mapping settings were established based on the annotators’ manual analysis, including \"1 vs 1,\" \"M vs 1,\" and\n\"1 vs M.\" In \"1 vs 1\" mappings, one source element maps to a unique target element. In \"M vs 1\" mappings, multiple",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 98,
+    "content": "source elements map to a single target element. In \"1 vs M\" mappings, one source element maps to multiple target\nelements. Gold standards were manually established by two annotators. In cases of conflict, the annotators engaged",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 99,
+    "content": "in discussions to resolve discrepancies and reach consensus. After achieving annotation consensus, we finalized 264\nentries with effective mapping results for results evaluation.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 100,
+    "content": "-----\n\n## **Results**",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 101,
+    "content": "The mapping coverage based on manual annotation of four datasets is shown in Table 1. Eye dataset, 17 out of 40\nelements can be mapped, resulting in a coverage rate of 42.50%. The stroke dataset has 48 elements, with 21 mappable",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 102,
+    "content": "elements, giving a coverage rate of 43.75%. The COVID-19 dataset contains 301 elements, of which 123 can be\nmapped to target CDE collections, resulting in a coverage rate of 40.86%. For the ADRD dataset, mapping coverage",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 103,
+    "content": "was not assessed in this study because the effective mappings were reused from our previous research, where the\nmapping coverage was reported as 9.74% [24] . After adjusting the target CDE mapping collections for this dataset, 103\nout of 105 mappings were successfully reused in the ADRD dataset.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 104,
+    "content": "Table 2 presents the accuracy evaluation results for the CDEMapper under three different mapping settings (\"1 vs 1,\"\n\"M vs 1,\" and \"1 vs M\") for four datasets (Eye, Stroke, ADRD, and COVID-19). The models compared include the",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 105,
+    "content": "baseline BM25, BM25 combined with GPT embedding (BM25 + Emb), BM25 enhanced with GPT-4o reranking\n(BM25 + Rank), and a combination of BM25, GPT embedding, and GPT-4o reranking (BM25 + Emb + Rank).",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 106,
+    "content": "Acc@N refers to the accuracy measure of whether the correct mapping result is included within the top N mapping\nresults. In addition, our -prompt for reranking focuses on recommending the top 1 result as \"LLM suggested\" without",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 107,
+    "content": "altering the ranks of other CDE candidates. This allows us to evaluate Acc@1 accuracy after applying the GPT-4o\nreranking method; however, evaluating Acc@5 and Acc@10 is not applicable after reranking, as shown in Table 2.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 108,
+    "content": "The Eye dataset results indicate strong performance across all methods, with almost all methods achieving high\naccuracies across different settings. In the \"1 vs 1\" and \"1 vs M\" settings, all methods, including BM25, BM25 + Emb,",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 109,
+    "content": "BM25 + Rank, and BM25 + Emb + Rank, achieved perfect Acc@1 of 100.00%. The \"M vs 1\" setting showed a slight\ndifference, with BM25 + Emb + Rank scoring 92.31% Acc@1, consistent with the performance of the other methods.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 110,
+    "content": "The overall performance for the Eye dataset shows that combining embeddings or using the ranker did not significantly\nchange the performance for this dataset due to the already high baseline performance of BM25.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 111,
+    "content": "For the Stroke dataset, all methods performed well in the \"1 vs 1\" setting, with both BM25 + Rank and BM25 + Emb\n+ Rank achieving perfect Acc@1 of 100.00%. Similarly, in the \"M vs 1\" scenario, BM25 + Rank and BM25 + Emb",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 112,
+    "content": "+ Rank achieved 100.00% Acc@1, indicating a consistent improvement over BM25 alone, which scored 0.00%. In\nthe \"1 vs M\" scenario, BM25 + Emb + Rank significantly outperformed other methods with 100.00% Acc@1",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 113,
+    "content": "compared to BM25 and BM25 + Emb, which both scored 0.00%. Overall, for the Stroke dataset, BM25 + Emb + Rank\nachieved a perfect score in all three mapping settings.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 114,
+    "content": "In the ADRD dataset, incorporating GPT embeddings and the ranker led to considerable performance improvements.\nIn the \"1 vs 1\" scenario, BM25 + Emb + Rank improved Acc@1 from 74.29% (BM25) to 81.42%. The \"M vs 1\"",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 115,
+    "content": "setting showed the most significant improvement: BM25 + Emb + Rank achieved 94.12% Acc@1, compared to 64.71%\nfor the baseline BM25. In the \"1 vs M\" setting, BM25 + Rank and BM25 + Emb + Rank both achieved 93.75% Acc@1,",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 116,
+    "content": "indicating an improvement over the baseline BM25 (87.50%). Across all mappings, the results demonstrated the\neffectiveness of combining mapping, embedding, and ranking components for improving accuracy in the ADRD\ndataset.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 117,
+    "content": "In the COVID-19 dataset, the BM25 + Emb + Rank method consistently outperformed the other methods in the \"1 vs\n1\" and \"M vs 1\" settings, achieving 76.19% and 52.94% accuracy at Acc@1, respectively. For \"1 vs 1,\" the BM25 +",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 118,
+    "content": "Emb method exhibited significant improvements over BM25, with Acc@1 increasing from 61.90% to 71.43%.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 119,
+    "content": "-----",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 120,
+    "content": "However, for the \"M vs 1\" setting, the improvements were moderate. In the \"1 vs M\" scenario, BM25 + Rank and\nBM25 + Emb + Rank methods both achieved an Acc@1 of 82.35%, which was an improvement compared to BM25",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 121,
+    "content": "alone (76.47%). Overall, for the COVID-19 dataset, BM25 + Emb + Rank outperformed other methods, indicating\nthe advantage of incorporating both embeddings and a ranker for mapping tasks.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 122,
+    "content": "**Table 2** . The accuracy performance for the CDE mapping under different mapping settings.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 123,
+    "content": "The experimental results demonstrate that augmenting BM25 with GPT embedding (BM25 + Emb) and further\nenhancing it with a GPT 4o (BM25 + Rank) generally improves the retrieval performance across different datasets",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 124,
+    "content": "and mapping settings. The methods with both embeddings and GPT 4o (BM25 + Emb + Rank) consistently",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 125,
+    "content": "-----",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 126,
+    "content": "outperformed other configurations, especially for challenging mapping scenarios like \"M vs 1.\" The Stroke and Eye\ndatasets showed strong performance across methods, suggesting less variability in the dataset or higher mapping",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 127,
+    "content": "efficacy of the baseline. The ADRD and COVID-19 datasets, however, benefited significantly from the enhanced\nmethods, with noticeable gains in accuracy.\n## **Discussions **",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 128,
+    "content": "Our work provides valuable insights into normalizing research data elements to align with NIH CDEs and highlights\nthe potential of leveraging LLMs to enhance research data interoperability. The evaluation results demonstrated that",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 129,
+    "content": "augmenting BM25 with GPT embeddings and a GPT ranker consistently enhances CDEMapper's mapping accuracy\nin three different mapping settings across four evaluation datasets.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 130,
+    "content": "Advantages of the CDEMapper include (1) it incorporates a large extent of CDE definitions and detailed information,\nsuch as element names, question text, definitions, value sets, and other semantic information, to build the indexing;",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 131,
+    "content": "(2) it integrates advanced GPT services for several mapping recommendation tasks in the tool. Based on performance\nevaluation results, the best performing BM25 method, combined with GPT embeddings and a GPT ranker, has been",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 132,
+    "content": "adopted and deployed in the tool; (3) the tool takes into account version evolvement and uses modulization\nmanagement. It can support future CDE versions with minor updates of indexing and embeddings. It also supports",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 133,
+    "content": "LLM upgrades, transitions to other advanced models, or prompt refinements, ensuring the sustainability of all\nfunctions and workflows. This tool will continue to be upgraded and integrated with the latest state-of-the-art mapping",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 134,
+    "content": "algorithms. The long-term goal of this research is to develop an openly accessible tool for mapping CDEs designed to\nserve a wide range of research communities.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 135,
+    "content": "Throughout this work, we gained valuable experience and learned many lessons, including (1) overall, the results\nindicate that the mapping coverage is generally low. This reflects the gap from real-world research data elements to",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 136,
+    "content": "NIH CDEs; however, our evaluation results based on four domain data dictionaries are not fully representative of all\nresearch cases because each study has different variables, data dictionaries, and data elements; (2) generally speaking,",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 137,
+    "content": "the current CDEs development is immature. Some NIH CDE collections were submitted as common research data\nelements of a specific domain/project into the NIH CDE repository. They typically focused on different research",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 138,
+    "content": "purposes, resulting in varying levels of granularity in data elements and value set definitions. This challenged the\nmapping tool with unstable performance; (3) although much research emphasizes the importance of CDEs, there is a",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 139,
+    "content": "lack of studies focusing on their implementation. Developing an effective and publicly accessible mapping tool could",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 140,
+    "content": "enhance the discovery and adoption of CDEs; and (4) designing interactive workflows for mapping review in a userfriendly manner is crucial to ensure the tool’s usability, efficient human-in-the-loop processes, and high-quality\nmappings deliverables.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 141,
+    "content": "Our study has limitations. (1) With the assistance of the GPT-4o ranker, our tool improved performance in some\nchallenging cases that BM25 could not effectively identify. However, since our tool relies on a pipeline-based method to",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 142,
+    "content": "map CDE, the search results from BM25 greatly influence subsequent performance. (2) We also developed a query\nexpansion function utilizing GPT-4o to enhance query expressions. However, the recommendation performance did not",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 143,
+    "content": "improve as expected after expanding the query with GPT-4o across all datasets except the COVID-19 dataset. This method\nneeds to be further refined and tested. (3) In the current CDEMapper version, the uploaded file is limited to CSV format,",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 144,
+    "content": "and three main columns of semantic information from source data elements need to be loaded into the tool for semantic\nmapping; (4) We did not differentiate between various mapping types, such as exact match, partial match, broad",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 145,
+    "content": "match, and narrow match. In this study, some partial mappings, even if not entirely identical, were also considered\nvalid mappings. (5) We have not conducted a performance evaluation of value mapping based on GPT\nrecommendations due to the lack of annotated mapping datasets.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 146,
+    "content": "In the future, we plan to improve the following four aspects: (1) Train a CDE-specific embedder to refine our hybrid\nmethod to integrate BM25 and embeddings better, thereby improving performance in cases with significant semantic",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 147,
+    "content": "differences. (2) We plan to test additional datasets, including data element mapping and value set mapping evaluations,\nusing our tool to gain a deeper understanding of the gap between real-world data elements and NIH CDEs, from",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 148,
+    "content": "coverage to semantics. (3) In addition, identifying truly common elements is an important task for future CDE",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 149,
+    "content": "development and harmonization, defining CDEs with high-quality and consistent semantics will benefit their longterm adoption. Therefore, we plan to expand the tool's functionality to assist domain experts in developing domain\nCDEs after pinpointing ‘off the shelf’ CDEs through our CDEMapper tool.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 150,
+    "content": "## **Conclusions **",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 151,
+    "content": "This effort contributes to the development of algorithms and tools for mapping local data elements to NIH CDEs. The\nfindings of this study demonstrate that the combined matching algorithm (BM25+GPT) outperforms the standalone",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 152,
+    "content": "BM25 method and can effectively facilitate the tool's mapping tasks. In addition, CDEMapper offers a publicly",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 153,
+    "content": "-----",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 154,
+    "content": "accessible, interactive interface built on a user-centered mapping workflow, enabling effective and efficient user\nengagement. In conclusion, CDEMapper will promote the reuse of NIH CDEs by providing a practical tool. The",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 155,
+    "content": "widespread adoption of CDEs, in turn, enhances interoperability across different studies and gradually ensures\nconsistent data collection and sharing.\n## **Acknowledgments**",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 156,
+    "content": "This work was supported in part by grant U24LM013755 from NIH/NLM.\n## **Conflicts of interest **\n\nThe authors have no competing interests to declare.\n## **Data availability **",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 157,
+    "content": "The CDEMapper tool is available online and can be accessed via the URL [1] . The evaluation datasets and code are\navailable at the GitHub repository [2] .\n## **References**",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 158,
+    "content": "1. Rahbar MH, Lee M, Hessabi M, et al. Harmonization, data management, and statistical issues related to\nprospective multicenter studies in Ankylosing spondylitis (AS): Experience from the Prospective Study Of",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 159,
+    "content": "Ankylosing Spondylitis (PSOAS) cohort. *Contemporary clinical trials communications.* 2018;11:127-135.\n2. Wey TW, Doiron D, Wissa R, et al. Overview of retrospective data harmonisation in the MINDMAP project:\nprocess and results. *J Epidemiol Community Health.* 2021;75(5):433-441.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 160,
+    "content": "3. Poole N, Schmidt RA, Bocking A, Bergeron J, Fortier I. The potential for fetal alcohol spectrum disorder\nprevention of a harmonized approach to data collection about alcohol use in pregnancy cohort studies.\n*International Journal of Environmental Research and Public Health.* 2019;16(11):2019.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 161,
+    "content": "4. Kaneko T, Vemulapalli S, Kohsaka S, et al. Practice patterns and outcomes of transcatheter aortic valve\nreplacement in the United States and Japan: a report from joint data harmonization initiative of STS/ACC",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 162,
+    "content": "‐\nTVT and J TVT. *Journal of the American Heart Association.* 2022;11(6):e023848.\n5. Common Data Elements: Standardizing Data Collection - FAIR Data: Data Collection and Sharing.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 163,
+    "content": "[https://www.nlm.nih.gov/oet/ed/cde/tutorial/02](https://www.nlm.nih.gov/oet/ed/cde/tutorial/02-100.html)     - 100.html. Accessed May, 2024.\n6. Common Data Elements: Standardizing Data Collection.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 164,
+    "content": "[https://www.nlm.nih.gov/oet/ed/cde/tutorial/index.html.](https://www.nlm.nih.gov/oet/ed/cde/tutorial/index.html) Accessed Nov., 2024.\n7. Osterman TJ, Terry M, Miller RS. Improving cancer data interoperability: the promise of the Minimal",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 165,
+    "content": "Common Oncology Data Elements (mCODE) initiative. *JCO clinical cancer informatics.* 2020;4:993-1001.\n8. Pathak J, Wang J, Kashyap S, et al. Mapping clinical phenotype data elements to standardized metadata",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 166,
+    "content": "repositories and controlled terminologies: the eMERGE Network experience. *Journal of the American*\n*Medical Informatics Association.* 2011;18(4):376-386.\n9. Saver JL, Warach S, Janis S, et al. Standardizing the structure of stroke clinical and epidemiologic research",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 167,
+    "content": "data: the National Institute of Neurological Disorders and Stroke (NINDS) Stroke Common Data Element\n(CDE) project. *Stroke.* 2012;43(4):967-973.\n10. Carroll EE, Der-Nigoghossian C, Alkhachroum A, et al. Common data elements for disorders of",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 168,
+    "content": "consciousness: recommendations from the electrophysiology working group. *Neurocritical care.*\n2023;39(3):578-585.\n11. Corazzini KN, Anderson RA, Bowers BJ, et al. Toward common data elements for international research in",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 169,
+    "content": "long-term care homes: Advancing person-centered care. *Journal of the American Medical Directors*\n*Association.* 2019;20(5):598-603.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 170,
+    "content": "1 [https://cdemapper.clinicalnlp.org/](https://cdemapper.clinicalnlp.org/)\n2 https://github.com/BIDS - [Xu](https://github.com/BIDS-Xu-Lab/CDE-Mapping-Tool) - Lab/CDE - Mapping - Tool\n\n\n-----",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 171,
+    "content": "12. O’Connor MJ, Warzel DB, Martínez-Romero M, et al. Unleashing the value of Common Data Elements\nthrough the CEDAR Workbench. Paper presented at: AMIA Annual Symposium Proceedings2020.\n13. Smith DH, Hicks RR, Johnson VE, et al. Pre-clinical traumatic brain injury common data elements: toward",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 172,
+    "content": "a common language across laboratories. *Journal of neurotrauma.* 2015;32(22):1725-1735.\n14. Kush RD, Warzel D, Kush MA, et al. FAIR data sharing: the roles of common data elements and\nharmonization. *Journal of biomedical informatics.* 2020;107:103421.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 173,
+    "content": "15. Wilkinson MD, Dumontier M, Aalbersberg IJ, et al. The FAIR Guiding Principles for scientific data\nmanagement and stewardship. *Sci Data.* 2016;3:160018.\n16. Villere S. Common Data Elements Repository. *Medical Reference Services Quarterly.* 2024;43(2):182-190.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 174,
+    "content": "17. Martone ME, Nakamura R. Changing the culture on data management and sharing: getting ready for the new\nNIH data sharing policy. 2022.\n18. NIH CDE Repository. [https://cde.nlm.nih.gov/](https://cde.nlm.nih.gov/) . Accessed Jan. 20, 2024.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 175,
+    "content": "19. Sciences NAo, Policy, Affairs G, et al. *Reproducibility and replicability in science.* National Academies\nPress; 2019.\n20. Tao S, Chou WC, Li J, et al. IMI-CDE: an interactive interface for collaborative mapping of study variables",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 176,
+    "content": "to common data elements. Paper presented at: 2022 IEEE 10th International Conference on Healthcare\nInformatics (ICHI)2022.\n21. Ashish N, Dewan P, Toga AW. The GAAIN entity mapper: an active-learning system for medical data\nmapping. *Frontiers in neuroinformatics.* 2016;9:30.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 177,
+    "content": "22. Electronic Medical Records and Genomics (eMERGE) Network. [https://www.genome.gov/Funded](https://www.genome.gov/Funded-Programs-Projects/Electronic-Medical-Records-and-Genomics-Network-eMERGE) Programs     - Projects/Electronic     -",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 178,
+    "content": "Programs     - Projects/Electronic     - [Medical](https://www.genome.gov/Funded-Programs-Projects/Electronic-Medical-Records-and-Genomics-Network-eMERGE)     - Records     - and     - Genomics     - Network     - eMERGE . Accessed May, 2024.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 179,
+    "content": "23. Sharma DK, Peterson KJ, Hong N, Jiang G. The D2Refine platform for the standardization of clinical\nresearch study data dictionaries: usability study. *JMIR Human Factors.* 2018;5(3):e10205.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 180,
+    "content": "24. Hao X, Abeysinghe R, Zheng F, Schulz PE, Initiative AsDN, Cui L. Mapping of Alzheimer’s disease related\ndata elements and the NIH Common Data Elements. *BMC Medical Informatics and Decision Making.*\n2024;24(Suppl 3):103.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 181,
+    "content": "2024;24(Suppl 3):103.\n25. Ram P, Hong N, Xu H, Jiang X. Mapping study variables to Common Data Elements using GPT for Sheets:\nTowards standardized data collection and sharing. The 12th IEEE International Conference on Healthcare\nInformatics (IEEE ICHI 2024); 2024; Orlando, Florida, USA.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 182,
+    "content": "26. Huser V, Amos L. Analyzing real-world use of research common data elements. Paper presented at: AMIA\nAnnual Symposium Proceedings2018.\n27. Matentzoglu N, Caufield JH, Hegde HB, et al. MapperGPT: Large Language Models for Linking and\nMapping Entities. *arXiv preprint arXiv:231003666.* 2023.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 183,
+    "content": "28. Wang A, Liu C, Yang J, Weng C. Fine-tuning Large Language Models for Rare Disease Concept\nNormalization. *bioRxiv.* 2023:2023.2012. 2028.573586.\n29. OpenAI. [https://openai.com/index/hello](https://openai.com/index/hello-gpt-4o/) - gpt - 4o/. Accessed Nov., 2024.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 184,
+    "content": "30. Pershing S, Lum F. The American Academy of Ophthalmology IRIS Registry (Intelligent Research In Sight):\ncurrent and future state of big data analytics. *Current opinion in ophthalmology.* 2022;33(5):394-398.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 185,
+    "content": "31. Saver JL, Klerman EB, Buchan AM, et al. Consensus recommendations for standardized data elements,\nscales, and time segmentations in studies of human circadian/diurnal biology and stroke. *Stroke.*\n2023;54(7):1943-1949.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 186,
+    "content": "32. The National Alzheimer’s Coordinating Center, Uniform Data Set (UDS). [https://naccdata.org/data](https://naccdata.org/data-collection/forms-documentation/uds-3) [collection/forms](https://naccdata.org/data-collection/forms-documentation/uds-3)     - documentation/uds     - 3. Accessed May,",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 187,
+    "content": "- documentation/uds     - 3. Accessed May, 2024.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 188,
+    "content": "33. The NHLBI-CONNECTS COVID-19 Therapeutic Trial Common Data Elements. [https://nhlbi](https://nhlbi-connects.org/common_data_elements) [connects.org/common](https://nhlbi-connects.org/common_data_elements) _ data _ elements . Accessed May, 2024.",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  },
+  {
+    "chunk_id": 189,
+    "content": "-----",
+    "metadata": {
+      "source": "2412.00491v1.md"
+    }
+  }
+]

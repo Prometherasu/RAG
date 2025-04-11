@@ -9,7 +9,7 @@ def main():
     first = True
     while not exit:
         if first:
-            init()
+            init(model)
             first = False
 
         query = input("Pose ta question :\n> ")
