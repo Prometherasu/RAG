@@ -14,10 +14,8 @@ model = AutoModelForCausalLM.from_pretrained(
     device_map="auto"
 )
 
-
 #device = "cuda" if torch.cuda.is_available() else "cpu"
 #model.to(device)
-
 
 def generate_answer(query, retrieved_chunks, max_tokens=512):
     context = "\n---\n".join(chunk["content"] for chunk in retrieved_chunks)
@@ -32,7 +30,13 @@ def generate_answer(query, retrieved_chunks, max_tokens=512):
     """
     print("="*100)
     print(prompt)
-    print("=" * 100)
+    #print(context)
+    print("="*100)
     inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=1024).to(model.device)
-    outputs = model.generate(**inputs, max_new_tokens=max_tokens, do_sample=False)
-    return tokenizer.decode(outputs[0], skip_special_tokens=True)
+    outputs = model.generate(**inputs, max_new_tokens=max_tokens, do_sample=True,# si on a les param suivant alors True
+        top_p=0.9, #pas obligatoire
+        temperature=0.7 #pas obligatoire
+    )
+    answer = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    print(answer)
+    return answer

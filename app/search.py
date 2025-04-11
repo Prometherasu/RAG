@@ -4,6 +4,7 @@ def search_chunks(query, model=None, index_name="rag_chunks", top_k=3):# top_k c
     if model!= None:
         return hybrid_query(query, model)
     else:
+        #probleme il me sort trois fois le meme chunk
         res = es.search(index=index_name, size=top_k, query={
             "match": {
                 "content": query

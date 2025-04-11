@@ -3,8 +3,9 @@ from app.index_elastic import delete_index
 from sentence_transformers import SentenceTransformer
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
+#model = None
 def main():
-    #delete_index()
+    delete_index()
     exit = False
     first = True
     while not exit:
