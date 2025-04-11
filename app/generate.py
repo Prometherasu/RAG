@@ -30,6 +30,9 @@ def generate_answer(query, retrieved_chunks, max_tokens=512):
 
     Question: {query}
     """
+    print("="*100)
+    print(prompt)
+    print("=" * 100)
     inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=1024).to(model.device)
     outputs = model.generate(**inputs, max_new_tokens=max_tokens, do_sample=False)
     return tokenizer.decode(outputs[0], skip_special_tokens=True)

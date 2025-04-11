@@ -1,6 +1,8 @@
 from app.pipeline import pipeline, init
 from app.index_elastic import delete_index
+from sentence_transformers import SentenceTransformer
 
+model = SentenceTransformer("all-MiniLM-L6-v2")
 def main():
     #delete_index()
     exit = False
@@ -14,7 +16,7 @@ def main():
         if query == "exit":
             exit = True
         else:
-            pipeline(query)
+            pipeline(query, model)
 
 
 if __name__ == "__main__":
